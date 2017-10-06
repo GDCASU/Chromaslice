@@ -15,7 +15,6 @@ using UnityEngine;
 
 public class RopePowerUp : PowerUp
 {
-
     private float maxRopeLength;
 
     // Use this for initialization
@@ -30,30 +29,36 @@ public class RopePowerUp : PowerUp
         base.Update();
     }
 
+    // Probably not needed anymore. We'll see ;)
+    public override void OnPowerUpCollect(Team t, int modifier)
+    {
+        base.OnPowerUpCollect(t, modifier);
+    }
+
     // When triggered, saves the original maxRopeLength field of the rope prefab/currentRope,
     // then calculates the length boost and updates the prefab/currentRope
-    protected override void OnTriggerEnter(Collider other)
+    public override void Activate()
     {
-        base.OnTriggerEnter(other);
-        maxRopeLength = team.ropePrefab.GetComponent<Rope>().maxRopeLength;
-        team.ropePrefab.GetComponent<Rope>().maxRopeLength = calculateNewValue(maxRopeLength, boostPercent);
+        base.Activate();
+        maxRopeLength = Team.ropePrefab.GetComponent<Rope>().maxRopeLength;
+        Team.ropePrefab.GetComponent<Rope>().maxRopeLength = CalculateNewValue(maxRopeLength, boostPercent);
         // Only update currentRope maxRopeLength if it is not null
-        if (team.currentRope)
+        if (Team.currentRope)
         {
-            team.currentRope.GetComponent<Rope>().maxRopeLength = calculateNewValue(maxRopeLength, boostPercent);
+            Team.currentRope.GetComponent<Rope>().maxRopeLength = CalculateNewValue(maxRopeLength, boostPercent);
         }
     }
 
     // Restores the original maxRopeLength field of the rope prefab/currentRope
     // and destroy the gameObject containing this script
-    protected override void removePowerUp()
+    protected override void RemovePowerUp()
     {
-        team.ropePrefab.GetComponent<Rope>().maxRopeLength = maxRopeLength;
+        Team.ropePrefab.GetComponent<Rope>().maxRopeLength = maxRopeLength;
         // Only update currentRope maxRopeLength if it is not null
-        if (team.currentRope)
+        if (Team.currentRope)
         {
-            team.currentRope.GetComponent<Rope>().maxRopeLength = maxRopeLength;
+            Team.currentRope.GetComponent<Rope>().maxRopeLength = maxRopeLength;
         }
-        base.removePowerUp();
+        base.RemovePowerUp();
     }
 }

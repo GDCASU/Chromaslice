@@ -32,7 +32,12 @@ public class MenuController_Paused : MonoBehaviour
 		}
 
 		canvasIndex = startingIndex; // At start, we set the currently rendered canvas to equal the starting canvas.
-	}
+        if (useCursorLock)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
 
 	void Update()
 	{

@@ -51,13 +51,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290ccd46ceb6b3840bb674ab890c5496, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstTeamLayer: 0
+  firstTeamLayer: 10
   singleControllerPerTeam: 0
   teamPrefab: {fileID: 1383037164253312, guid: e1233598747b4e1458f001328d9e98ba, type: 2}
   teams: []
-  timer: 30
+  matchTime: Infinity
   spawnPoints: []
   numberOfPlayers: 0
-  maxRounds: 0
+  maxRounds: 999
   currentRound: 0
   gameActive: 0
+  useTitleScreen: 1
+  timer: 0

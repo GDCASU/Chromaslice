@@ -1,11 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 // Developer:   Kyle Aycock
 // Date:        8/28/17
 // Description: This class represents the rope connection between two end points.
-//              
+//      
+
+/*
+* Version 1.1.0
+* Author: Zachary Schmalz
+* Date: September 27, 2017
+* Revisions: Added checks for collisions with PowerUps and Projectiles.
+*/    
 
 public class Rope : MonoBehaviour
 {
@@ -34,6 +42,17 @@ public class Rope : MonoBehaviour
     //renderer for the rope
     private LineRenderer line;
 
+    // Fields needed for collecting PowerUps
+    public GameObject powerUp;
+    private int rotations;
+    private bool collectedPowerUp;
+
+    // Fields needed for interacting with projectiles
+    private GameObject projectile;
+    private bool hitProjectile;
+
+    // The Team script that is attached to the parent
+    private Team team;
 
     // Use this for initialization
     void Start()
@@ -44,8 +63,13 @@ public class Rope : MonoBehaviour
         visiblePoints = new Vector3[2];
         visiblePoints[0] = endPoint1.position;
         visiblePoints[1] = endPoint2.position;
-
         gameObject.layer = transform.parent.gameObject.layer;
+        rotations = 0;
+        collectedPowerUp = false;
+        powerUp = null;
+        projectile = null;
+        hitProjectile = false;
+        team = gameObject.GetComponentInParent<Team>();
     }
 
     public void SetEndpoints(Transform first, Transform second)
@@ -92,6 +116,19 @@ public class Rope : MonoBehaviour
     public void BreakRope()
     {
         Debug.Log("Rope was destroyed.");
+
+        // If the rope was in a state of collecting a PowerUp when it breaks, activate the code in the PowerUp object
+        if (collectedPowerUp)
+            powerUp.GetComponent<PowerUp>().OnPowerUpCollect(team, rotations);
+
+        // If the rope was in a state of launching a projectile when it breaks, call the projectile code. Pass the vector containing all rope points
+        // Also set the Team that launches the projectile
+        if(hitProjectile && projectile != null)
+        {
+            projectile.GetComponent<Projectile>().Team = team;
+            projectile.GetComponent<Projectile>().LaunchProjectile(ropePoints);
+        }
+
         Destroy(gameObject);
     }
 
@@ -114,7 +151,12 @@ public class Rope : MonoBehaviour
             if (RaycastSegment(visiblePoints[i], visiblePoints[i + 1], out hits[i], gameObject.layer))
             {
                 if (hits[i].collider.GetComponent<PlayerController>())
-                    hits[i].collider.transform.parent.GetComponent<Team>().KillTeam();
+                {
+                    if (team.IsInvincibleOver())
+                    {
+                        hits[i].collider.transform.parent.GetComponent<Team>().KillTeam();
+                    }
+                }
                 else
                     results[i] = true;
             }
@@ -133,6 +175,26 @@ public class Rope : MonoBehaviour
                 ropePoints.Insert(0, newPoint);
                 anglesPositive.Insert(0, IsAnglePositive(start, newPoint, visiblePoints[1]));
                 //Debug.Log("Adding new catch point at index 0" + " (1)");
+
+                // If the hit point object is a PowerUp
+                if (hit.collider.gameObject.GetComponent<PowerUp>())
+                {
+                    powerUp = hit.collider.gameObject;
+                    CollisionWithPowerUp();
+                }
+
+                // If the hit point object is a Projectile
+                if (hit.collider.gameObject.GetComponent<Projectile>())
+                {
+                    projectile = hit.collider.gameObject;
+                    hitProjectile = true;
+                }
+                else
+                {
+                    projectile = null;
+                    hitProjectile = false;
+                }
+
                 return;
             }
             //it's better to have this one pointing backwards, requires extra raycast but oh well
@@ -176,10 +238,36 @@ public class Rope : MonoBehaviour
         Destroy(player.transform.parent.gameObject);
     }
 
+    // Function that determines how many times the rope is wrapped around a PowerUp
+    private void CollisionWithPowerUp()
+    {
+        if (visiblePoints.Length > 3)
+        {
+            float totalDist = 0.0f;
+            // Calculate the total distance between all the visiblePoints on the rope
+            for (int i = 1; i < visiblePoints.Length - 1; i++)
+            {
+                if (i + 1 != visiblePoints.Length - 1)
+                    totalDist += Vector3.Distance(visiblePoints[i], visiblePoints[i + 1]);
+            }
+            // Get the radius of the PowerUp object. For this to work, PowerUps must have a SphereCollider
+            float radius = powerUp.GetComponent<SphereCollider>().radius * powerUp.transform.localScale.y;
+
+            // Math MAGIC. Calcultes the number of rotations by dividing the total distance of all the rope points by the distance(circumference) of the SphereObject
+            // where the rope is colliding with the Sphere.
+            rotations = (int)(totalDist / (Math.PI * (2 * (Math.Sqrt(Math.Pow(radius, 2) - Math.Pow(radius - Math.Abs(powerUp.transform.position.y - radius - .5), 2))))));
+
+            // Need 1 rotation to collect the PowerUp
+            if (rotations > 0)
+                collectedPowerUp = true;
+        }
+    }
+
     private bool IsAnglePositive(Vector3 a, Vector3 b, Vector3 c)
     {
         Vector3 angle1 = (a - b).normalized;
         Vector3 angle2 = (c - b).normalized;
+
         return Mathf.Atan2(Vector3.Dot(Vector3.Cross(angle2, angle1), Vector3.up), Vector3.Dot(angle1, angle2)) > 0; //voodoo magic
     }
 

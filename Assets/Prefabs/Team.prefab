@@ -54,8 +54,11 @@ MonoBehaviour:
   playerPrefab: {fileID: 1692480771552320, guid: 5647b08476264db4788883791609c8ad,
     type: 2}
   ropePrefab: {fileID: 1618374010297264, guid: 7ab4d1e6b7e8c5542b530a950adfa081, type: 2}
+  invincibilityParticlePrefab: {fileID: 1260787253499360, guid: 6c58453193176ba4cbd4331e276601de,
+    type: 2}
   ropeFormTime: 1
   player1: {fileID: 0}
   player2: {fileID: 0}
   currentRope: {fileID: 0}
   points: 0
+  spawnTimer: 0

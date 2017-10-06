@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 4504406395389410}
   - component: {fileID: 33520519017555720}
   - component: {fileID: 23870116674699924}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Top Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 54034144816670216}
   - component: {fileID: 135663655920331068}
   - component: {fileID: 114811659349294926}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -540,7 +540,11 @@ MonoBehaviour:
   health: 100
   turnSpeed: 150
   acceleration: 5000
-  maxSpeed: 20
+  maxSpeed: 15
+  friction: 0
+  dashPower: 5
+  dashTime: 2
+  team: 0
   jumpPower: 5
   maxJumps: 1
   verticalAxis: 

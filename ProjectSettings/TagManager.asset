@@ -7,7 +7,9 @@ TagManager:
   - Player1
   - Player2
   - GameManager
-  - Player
+  - MaterialButtonLayer
+  - MaterialText
+  - MaterialRadioButton
   layers:
   - Default
   - TransparentFX

@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5f2609bce0acf1459f71efe076f7bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRopeLength: 40
+  maxRopeLength: 20
   maxRopeWidth: 0.4
   minRopeWidth: 0.05
   ropeStretchColor: {r: 1, g: 0, b: 0, a: 0.51}

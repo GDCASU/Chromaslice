@@ -11,12 +11,25 @@ using UnityEngine;
  * Author: Zachary Schmalz
  * Date: September 15, 2017
  * 
-*/
+ * Version 1.1.0
+ * Author: Zachary Schmalz
+ * Date: September 27, 2017
+ * Revisions: Added a boost multiplier field. Replaced collision with PowerUp with the method OnPowerUpCollect
+ * which is called when the team's rope is wrapped around the PowerUp and breaks around it.
+ * 
+ * Version 1.1.1
+ * Author: Zachary Schmalz
+ * Date: October 4, 2017
+ * Revisions: Added an Activate function so that PowerUp's can be activated with a button/key
+ */
 
 public class PowerUp : Interactable
 {
     public float boostPercent;
     public float boostDuration;
+    [HideInInspector]public bool isActive;
+
+    protected int boostMultiplier;
 
     private bool boostCollected;
     private float timeRemaining;
@@ -24,7 +37,9 @@ public class PowerUp : Interactable
     // Use this for initialization
     protected override void Start()
     {
+        boostMultiplier = 1;
         boostCollected = false;
+        isActive = false;
         timeRemaining = boostDuration;
     }
 
@@ -41,27 +56,43 @@ public class PowerUp : Interactable
 
             else
             {
-                removePowerUp();
+                RemovePowerUp();
             }
         }
     }
 
-    // Run base class code and signal that the PowerUp has been collected
-    protected override void OnTriggerEnter(Collider other)
+    // Set the Team and hide the object from the scene
+    public virtual void OnPowerUpCollect(Team t, int modifier)
     {
-        base.OnTriggerEnter(other);
-        boostCollected = true;
+        Team = t;
+        Team.CurrentPowerUp = gameObject;
+        gameObject.GetComponent<Collider>().enabled = false;
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        if(modifier != 0)
+            boostMultiplier = modifier;
+    }
+
+    // Trigger the powerUp
+    public virtual void Activate()
+    {
+        Debug.Log("PowerUp Activated");
+        if (isActive != true)
+        {
+            boostCollected = true;
+            isActive = true;
+        }
     }
 
     // Function that calcutes the boosted value of the PowerUp's attribute
-    protected float calculateNewValue(float original, float percentIncrease)
+    protected float CalculateNewValue(float original, float percentIncrease)
     {
-        return original + (original * (percentIncrease / 100));
+        return original + (original * ((boostMultiplier * percentIncrease) / 100));
     }
 
     // Deletes the game object from the scence
-    protected virtual void removePowerUp()
+    protected virtual void RemovePowerUp()
     {
+        Team.CurrentPowerUp = null;
         Destroy(gameObject);
     }
 }

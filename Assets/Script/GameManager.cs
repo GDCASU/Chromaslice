@@ -19,6 +19,11 @@ using UnityEngine.SceneManagement;
 //              Replaced IsDestroyed with KillTeam, which resets team positions and advances round counter by 1
 //              Added round counter, returns to title screen after a match (set of rounds) completes
 
+// Developer:   Paul Gellai
+// Date:        9/27/17
+// Description: Added matchStarted boolean to make sure that the game timer does not begin counting down until 
+// the countdown timer has finished. Added countdown timer for 3..2..1 at beginning of rounds.
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager singleton;
@@ -27,13 +32,23 @@ public class GameManager : MonoBehaviour
     public bool singleControllerPerTeam;
     public GameObject teamPrefab;
     public GameObject[] teams;
-    public float timer;
+    public float matchTime;
     public Vector3[] spawnPoints;
     public int numberOfPlayers;
-    public GameRules rules;
+    public DeathMatchRules deathMatch;
+    public KingOfTheHillRules hillRules;
     public int maxRounds;
     public int currentRound;
     public bool gameActive;
+    public bool matchStarted = false;
+    public bool useTitleScreen;
+    public bool countdownOver = false;
+    public float timer;
+    public float countdownTimer;
+    public float timeBeforeMatch;
+    public float spawnTimer;
+
+    public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
 
     private string outputPath;
 
@@ -51,7 +66,10 @@ public class GameManager : MonoBehaviour
         if (!File.Exists(outputPath)) File.Create(outputPath).Close();
         Debug.Log("Logging match results to: " + outputPath);
         gameActive = false;
-        //StartGame(SceneManager.GetActiveScene().name, maxRounds);
+        countdownTimer = timeBeforeMatch;
+        timer = matchTime;
+        if(!useTitleScreen)
+            StartGame(SceneManager.GetActiveScene().name, maxRounds);
     }
 
     // Update is called once per frame
@@ -60,16 +78,27 @@ public class GameManager : MonoBehaviour
         //Game.IsGameOver(scoreTeam1, scoreTeam2, time - from game start);
 
         //Simple temp timer. Need to change, but good for Friday
-        if (gameActive)
+        if (gameActive && matchStarted)
         {
+            countdownTimer -= Time.deltaTime;
             timer -= Time.deltaTime;
             if (timer < 0)
             {
                 KillTeam(null); //draw
                 writeToLog("Time ran out, it's a draw");
-                timer = 60;
+                timer = matchTime;
+            }
+            // if the game is active but match has not started (begins countdown timer)
+        } else if(gameActive)
+        {
+            countdownTimer -= Time.deltaTime;
+            if(countdownTimer < 1)
+            {
+                matchStarted = true;
             }
         }
+        if(countdownTimer < 0)
+            countdownOver = true;
             
     }
 
@@ -92,15 +121,21 @@ public class GameManager : MonoBehaviour
             }
         }
         currentRound++;
-        timer = 60;
+        timer = matchTime;
+        // added 3 new variables here:
+        countdownTimer = timeBeforeMatch;
+        // old boolean variables - Paul
         if (currentRound >= maxRounds)
         {
             if (teams[0].GetComponent<Team>().points > teams[1].GetComponent<Team>().points)
                 writeToLog("Match over. Winner: " + teams[0].name);
             else
                 writeToLog("Match over. Winner: " + teams[1].name);
-            SceneManager.LoadScene(0); //return to title screen
             gameActive = false;
+            if (useTitleScreen)
+                SceneManager.LoadScene(0); //return to title screen
+            else
+                StartGame(SceneManager.GetActiveScene().name, maxRounds);
         }
     }
 
@@ -130,6 +165,7 @@ public class GameManager : MonoBehaviour
         teams[num].layer = firstTeamLayer + num;
         teams[num].GetComponent<Team>().SetSpawnPoints(spawnPoints[num * 2], spawnPoints[num * 2 + 1]);
         teams[num].GetComponent<Team>().SetControls(""+(num*2+1),(singleControllerPerTeam ? (num * 2 + 1)+".5" : (num * 2 + 2)+""));
+        teams[num].GetComponent<Team>().SetColors(colorPairs[num, 0], colorPairs[num, 1]);
         teams[num].GetComponent<Team>().SpawnPlayer(1);
         teams[num].GetComponent<Team>().SpawnPlayer(2);
     }
@@ -146,8 +182,11 @@ public class GameManager : MonoBehaviour
         maxRounds = rounds;
         currentRound = 0;
         gameActive = true;
+        // New boolean variable position
+        matchStarted = false;
+        countdownOver = false;
         SceneManager.LoadScene(levelName);
-        writeToLog("Starting new game, level: " + levelName + " out of " + rounds + "rounds");
+        writeToLog("Starting new game, level: " + levelName + " out of " + rounds + " rounds");
     }
 
     public void writeToLog(string msg)

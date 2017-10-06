@@ -39,21 +39,26 @@ public class SpeedPowerUp : PowerUp
 
     // When triggered, saves the original speed of the teams' players,
     // then calculates the speed boost and updates players' speed
-    protected override void OnTriggerEnter(Collider other)
+    public override void OnPowerUpCollect(Team t, int modifier)
     {
-        base.OnTriggerEnter(other);
-        player1Speed = player1.GetComponent<PlayerController>().maxSpeed;
-        player2Speed = player2.GetComponent<PlayerController>().maxSpeed;
-        player1.GetComponent<PlayerController>().maxSpeed = calculateNewValue(player1Speed, boostPercent);
-        player2.GetComponent<PlayerController>().maxSpeed = calculateNewValue(player2Speed, boostPercent);
+        base.OnPowerUpCollect(t, modifier);
+    }
+
+    public override void Activate()
+    {
+        player1Speed = player1.GetComponent<PlayerController>().MaxSpeed;
+        player2Speed = player2.GetComponent<PlayerController>().MaxSpeed;
+        player1.GetComponent<PlayerController>().MaxSpeed = CalculateNewValue(player1Speed, boostPercent);
+        player2.GetComponent<PlayerController>().MaxSpeed = CalculateNewValue(player2Speed, boostPercent);
+        base.Activate();
     }
 
     // Restores the original speed when the boost expires
     // and destroy the gameObject containing this script
-    protected override void removePowerUp()
+    protected override void RemovePowerUp()
     {
-        player1.GetComponent<PlayerController>().maxSpeed = player1Speed;
-        player2.GetComponent<PlayerController>().maxSpeed = player2Speed;
-        base.removePowerUp();
+        player1.GetComponent<PlayerController>().MaxSpeed = player1Speed;
+        player2.GetComponent<PlayerController>().MaxSpeed = player2Speed;
+        base.RemovePowerUp();
     }
 }
