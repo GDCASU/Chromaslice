@@ -46,7 +46,7 @@ public class Team : MonoBehaviour
     private Color color2;
     private float rejoinTimer;
     private bool hasRope = false;
-    public GameObject currentPowerUp;
+    private GameObject currentPowerUp;
  
 
     // Use this for initialization
@@ -123,7 +123,6 @@ public class Team : MonoBehaviour
         var main = invinciblePrefab.GetComponent<ParticleSystem>().main;
         main.duration = spawnTimer;
         main.startLifetime = spawnTimer;
-        invinciblePrefab.GetComponent<ParticleSystem>().Play();
         Destroy(invinciblePrefab, spawnTimer);
 
         if (num == 1)
@@ -190,7 +189,7 @@ public class Team : MonoBehaviour
     public void KillTeam()
     {
         // Check if the team doesn't have invincibility
-        if(!(currentPowerUp != null && currentPowerUp.GetComponent<InvincibilityPowerUp>() && currentPowerUp.GetComponent<InvincibilityPowerUp>().isActive))
+        if(!(currentPowerUp != null && currentPowerUp.GetComponent<InvincibilityPowerUp>().isActive))
             GameManager.singleton.KillTeam(this);
     }
 }

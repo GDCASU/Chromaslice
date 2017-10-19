@@ -6,23 +6,17 @@ using UnityEngine;
 
 public class Hazard : MonoBehaviour
 {
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public virtual void PlayerInteract()
     {
         // insert code here to control behaviour upon interaction with player objects
 
         // override in children using "public override void PlayerInteract()"
+    }
+
+
+    // when player 
+    void OnTriggerEnter(Collider other)
+    {
+        other.transform.parent.GetComponent<Team>().KillTeam();
     }
 }

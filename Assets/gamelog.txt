@@ -1,0 +1,604 @@
+Starting new game, level: Demo_Level out of 3rounds
+Team 0 won the round with 21.52706 seconds remaining
+Team 0 won the round with 57.20583 seconds remaining
+Team 1 won the round with 58.34245 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Demo_Level out of 3rounds
+Team 1 won the round with 56.06386 seconds remaining
+Team 0 won the round with 57.10714 seconds remaining
+Team 1 won the round with 57.21355 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 5rounds
+Team 0 won the round with 54.75066 seconds remaining
+Team 1 won the round with 55.32026 seconds remaining
+Team 0 won the round with 57.27677 seconds remaining
+Team 1 won the round with 57.87624 seconds remaining
+Team 0 won the round with 57.77563 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Skatepark_Level out of 1rounds
+Team 0 won the round with 51.97905 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Skatepark_Level out of 3rounds
+Team 0 won the round with 47.10825 seconds remaining
+Team 1 won the round with 49.10622 seconds remaining
+Team 0 won the round with 51.89888 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Demo_Level out of 3rounds
+Team 0 won the round with 50.90655 seconds remaining
+Team 1 won the round with 53.39068 seconds remaining
+Team 1 won the round with 55.38494 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1rounds
+Team 1 won the round with 57.54749 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 5rounds
+Team 1 won the round with 55.01485 seconds remaining
+Team 1 won the round with 31.6684 seconds remaining
+Team 0 won the round with 8.317441 seconds remaining
+Team 0 won the round with 58.04419 seconds remaining
+Team 0 won the round with 53.3559 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Skatepark_Level out of 1rounds
+Team 0 won the round with 52.98825 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Skatepark_Level out of 5rounds
+Team 1 won the round with 53.48379 seconds remaining
+Team 0 won the round with 49.80576 seconds remaining
+Team 1 won the round with 25.089 seconds remaining
+Starting new game, level: Elevated_Level out of 3rounds
+Team 0 won the round with 2.757744 seconds remaining
+Team 0 won the round with 58.83669 seconds remaining
+Team 0 won the round with 55.87873 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Demo_Level out of 3rounds
+Team 0 won the round with 57.27696 seconds remaining
+Team 0 won the round with 3.214029 seconds remaining
+Team 1 won the round with 35.95465 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Donut_Level out of 3rounds
+Starting new game, level: Donut_Level out of 1rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 1rounds
+Team 1 won the round with 56.10308 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Pillar_Level out of 4rounds
+Team 1 won the round with 55.43752 seconds remaining
+Team 1 won the round with 48.6434 seconds remaining
+Team 0 won the round with 41.85603 seconds remaining
+Team 1 won the round with 55.55076 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Pillar_Level out of 3rounds
+Team 1 won the round with 52.05169 seconds remaining
+Team 0 won the round with 49.2398 seconds remaining
+Team 1 won the round with 56.53795 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 3rounds
+Team 1 won the round with 49.1577 seconds remaining
+Team 1 won the round with 49.27737 seconds remaining
+Team 0 won the round with 48.37605 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1rounds
+Team 1 won the round with 52.02409 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1rounds
+Team 1 won the round with 43.74748 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 5rounds
+Team 1 won the round with 47.17762 seconds remaining
+Team 1 won the round with 33.919 seconds remaining
+Team 1 won the round with 46.89515 seconds remaining
+Team 1 won the round with 47.87843 seconds remaining
+Team 1 won the round with 58.20727 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1rounds
+Team 1 won the round with 37.53658 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 5rounds
+Team 0 won the round with 43.61666 seconds remaining
+Team 1 won the round with 58.87366 seconds remaining
+Team 1 won the round with 56.01169 seconds remaining
+Team 1 won the round with 55.15193 seconds remaining
+Team 0 won the round with 58.14295 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1rounds
+Starting new game, level: Demo_Level out of 1rounds
+Team 1 won the round with 52.3368 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1rounds
+Team 0 won the round with 56.49596 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Demo_Level out of 1rounds
+Starting new game, level: Demo_Level out of 1rounds
+Starting new game, level: Demo_Level out of 1rounds
+Starting new game, level: Demo_Level out of 1rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 54.91534 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Skatepark_Level out of 4 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 3 rounds
+Team 1 won the round with 56.07567 seconds remaining
+Team 1 won the round with 57.89867 seconds remaining
+Team 1 won the round with 58.15755 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 3 rounds
+Team 0 won the round with 50.17397 seconds remaining
+Starting new game, level: Donut_Level out of 1 rounds
+Starting new game, level: Basic_Level out of 1 rounds
+Team 0 won the round with 55.6471 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Skatepark_Level out of 1 rounds
+Team 0 won the round with 54.04063 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Demo_Level out of 4 rounds
+Starting new game, level: Demo_Level out of 3 rounds
+Team 0 won the round with 56.60696 seconds remaining
+Team 0 won the round with 58.32291 seconds remaining
+Starting new game, level: Demo_Level out of 3 rounds
+Team 0 won the round with 58.50415 seconds remaining
+Starting new game, level: Demo_Level out of 3 rounds
+Team 0 won the round with 56.95736 seconds remaining
+Team 0 won the round with 58.4394 seconds remaining
+Team 0 won the round with 57.26446 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Demo_Level out of 4 rounds
+Team 0 won the round with 57.31044 seconds remaining
+Team 0 won the round with 57.84438 seconds remaining
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 56.43679 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 58.37341 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 51.62874 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 3 rounds
+Team 1 won the round with 51.1724 seconds remaining
+Starting new game, level: Basic_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 0 won the round with 42.0591 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Demo_Level out of 5 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 0 won the round with 39.98405 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 40.32091 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 4 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Basic_Level out of 4 rounds
+Team 1 won the round with 51.84673 seconds remaining
+Team 1 won the round with 47.60254 seconds remaining
+Team 1 won the round with 48.41631 seconds remaining
+Starting new game, level: Demo_Level out of 2 rounds
+Team 1 won the round with 58.63521 seconds remaining
+Team 1 won the round with 58.44903 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 3 rounds
+Team 1 won the round with 58.75076 seconds remaining
+Team 1 won the round with 51.17949 seconds remaining
+Team 1 won the round with 55.67601 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 4 rounds
+Team 1 won the round with 56.47391 seconds remaining
+Team 1 won the round with 58.5839 seconds remaining
+Team 1 won the round with 55.51709 seconds remaining
+Team 1 won the round with 55.80502 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 4 rounds
+Team 1 won the round with 56.40213 seconds remaining
+Starting new game, level: Demo_Level out of 4 rounds
+Team 1 won the round with 58.75174 seconds remaining
+Team 1 won the round with 56.74048 seconds remaining
+Team 1 won the round with 58.46968 seconds remaining
+Team 1 won the round with 56.11055 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 4 rounds
+Team 1 won the round with 58.60156 seconds remaining
+Team 1 won the round with 56.54595 seconds remaining
+Team 1 won the round with 58.76718 seconds remaining
+Team 1 won the round with 55.86375 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 2 rounds
+Team 1 won the round with 58.7192 seconds remaining
+Team 1 won the round with 56.11588 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 4 rounds
+Team 1 won the round with 58.71467 seconds remaining
+Team 1 won the round with 55.97141 seconds remaining
+Team 1 won the round with 56.50336 seconds remaining
+Team 1 won the round with 58.75316 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 4 rounds
+Team 1 won the round with 58.49927 seconds remaining
+Team 1 won the round with 53.86849 seconds remaining
+Team 1 won the round with 56.99995 seconds remaining
+Team 1 won the round with 57.25182 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 3 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 27.00203 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 3 rounds
+Starting new game, level: Demo_Level out of 3 rounds
+Starting new game, level: Demo_Level out of 3 rounds
+Team 1 won the round with 56.48721 seconds remaining
+Team 1 won the round with 56.65026 seconds remaining
+Starting new game, level: Demo_Level out of 3 rounds
+Starting new game, level: Demo_Level out of 5 rounds
+Starting new game, level: Demo_Level out of 2 rounds
+Starting new game, level: Demo_Level out of 3 rounds
+Starting new game, level: Demo_Level out of 3 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 54.52705 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 4 rounds
+Team 1 won the round with 56.76837 seconds remaining
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 2 rounds
+Starting new game, level: Demo_Level out of 2 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 48.89167 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 52.2301 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 58.27703 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 52.54131 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 34.84029 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 54.99938 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 33.15956 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 51.24783 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 49.84668 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 43.2891 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 57.21167 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 58.40662 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 54.27459 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 52.02889 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 49.69587 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 49.64031 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 50.49233 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 51.2333 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 54.3966 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 49.87136 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 52.99998 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 50.03677 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 54.13468 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 58.50586 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 54.30643 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 43.85701 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 31.75146 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 24.38808 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 53.45222 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 53.09779 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 1 rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 5 rounds
+Time ran out, it's a draw
+Time ran out, it's a draw
+Team 0 won the round with 4.420863 seconds remaining
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 5 rounds
+Team 0 won the round with 29.68372 seconds remaining
+Starting new game, level: Demo_Level out of 1 rounds
+Team 0 won the round with 29.66466 seconds remaining
+Match over. Winner: Team 0
+Starting new game, level: Demo_Level out of 5 rounds
+Team 0 won the round with 39.03122 seconds remaining
+Team 0 won the round with 55.77986 seconds remaining
+Team 0 won the round with 52.05157 seconds remaining
+Team 0 won the round with 55.84468 seconds remaining
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Basic_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 1 rounds
+Match over. Winner: Team 1
+Time ran out, it's a draw
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 3 rounds
+Team 1 won the round with 58.96675 seconds remaining
+Team 1 won the round with 56.3286 seconds remaining
+Team 1 won the round with 55.94914 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 3 rounds
+Starting new game, level: Demo_Level out of 3 rounds
+Starting new game, level: Demo_Level out of 2 rounds
+Time ran out, it's a draw
+Starting new game, level: Demo_Level out of 3 rounds
+Team 0 won the round with 42.38703 seconds remaining
+Team 1 won the round with 60 seconds remaining
+Team 0 won the round with 60 seconds remaining
+Match over. Winner: Team 0
+Team 1 won the round with 60 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Demo_Level out of 4 rounds
+Team 1 won the round with 26.49613 seconds remaining
+Starting new game, level: Basic_Level out of 1 rounds
+Team 1 won the round with 44.35995 seconds remaining
+Match over. Winner: Team 1
+Starting new game, level: Skatepark_Level out of 1 rounds
+Starting new game, level: Donut_Level out of 3 rounds
+Starting new game, level: Demo_Level out of 1 rounds
+Team 1 won the round with 36.69085 seconds remaining
+Match over. Winner: Team 1

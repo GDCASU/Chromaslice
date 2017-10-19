@@ -10,24 +10,46 @@ using UnityEngine.UI;
 
 public class TitleMenu : MonoBehaviour {
 
-    public Dropdown levelSelect;
-    public Dropdown roundSelect;
+    //public Dropdown levelSelect;
+    //public Dropdown roundSelect;
     public GameManager gameManager;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
+    public Toggle[] roundSelect;
+    public GameObject[] levelSelect;
+    private string selectedLevel;
+    private int rounds;
+    // Use this for initialization
+    void Start () {
+       
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
+        
 	}
 
     public void LoadLevel()
     {
-        string selectedLevel = levelSelect.transform.Find("Label").GetComponent<Text>().text;
-        int rounds = roundSelect.value + 1; // add 1 because 0 is the first option
+        
+        foreach (Toggle t in roundSelect)
+        {
+            if (t.isOn)
+            {
+                Debug.Log(t.transform.parent.name);
+                rounds = int.Parse(t.transform.parent.name);
+                break;
+            }
+        }
+        foreach (GameObject t in levelSelect)
+        {
+            if (t.GetComponentInChildren<Toggle>().isOn)
+            {
+
+                selectedLevel = t.GetComponentInChildren<Text>().text;
+                Debug.Log(t.GetComponentInChildren<Text>().text);
+                break;
+            }
+        }
+        
         GameManager.singleton.StartGame(selectedLevel + "_Level", rounds);
     }
 }

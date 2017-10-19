@@ -539,11 +539,12 @@ MonoBehaviour:
   numPlayers: 1
   health: 100
   turnSpeed: 150
-  acceleration: 5000
-  maxSpeed: 15
+  acceleration: 25000
+  maxSpeed: 20
   friction: 0
-  dashPower: 5
+  dashPower: 3
   dashTime: 2
+  decelerationRate: 0.18
   team: 0
   jumpPower: 5
   maxJumps: 1

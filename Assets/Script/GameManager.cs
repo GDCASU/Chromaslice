@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public int firstTeamLayer;
     public bool singleControllerPerTeam;
     public GameObject teamPrefab;
+    public GameObject Deathplane;
     public GameObject[] teams;
     public float matchTime;
     public Vector3[] spawnPoints;

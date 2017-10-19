@@ -33,6 +33,12 @@ using UnityEngine;
  *Description:    Added buttons/keys for activating a PowerUp that is currently held by the team
  */
 
+/*
+*Developer:      Ryan Black
+*Date:           10/11/2017
+*Description:    Added modifiable deceleration
+*/
+
 public class PlayerController : MonoBehaviour
 {
 
@@ -44,9 +50,10 @@ public class PlayerController : MonoBehaviour
     public float turnSpeed = 150.0f;
     public float acceleration;
     public float maxSpeed;
-    public float friction = 0;
+    public float friction = 0; //0 - 1
     public float dashPower = 5;
     public float dashTime = 2;
+    public float decelerationRate = 0.025f; // 0 - 1
     public int team;
 
     private float tempDashPower;
@@ -67,7 +74,7 @@ public class PlayerController : MonoBehaviour
     }
 
     //Jump stuff
-    public float jumpPower = 5.0f;
+    public float jumpPower = 25.0f;
     public int maxJumps = 1; //if we want double jump
     float distanceToGround; //to prevent jumping in the air
 
@@ -208,6 +215,9 @@ public class PlayerController : MonoBehaviour
             //Debug.Log(transform.parent.name + " " + team + ": " + tempDashPower + ", " + tempMaxSpeed + " | " + dashing + ", " + timeSinceDash.ToString("0.00"));
             GetComponent<Rigidbody>().AddForce(player1x * tempDashPower, 0, player1z * tempDashPower, ForceMode.Acceleration);
             GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, tempMaxSpeed);
+
+            //Slow down
+            GetComponent<Rigidbody>().velocity *= (1 - decelerationRate);
         }
     }
 
