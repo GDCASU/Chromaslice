@@ -53,9 +53,9 @@ public class KingOfTheHillRules : MonoBehaviour
     /// <param name="team">Name of the team that is on the point</param>
     public void ChangeOnPoint(string team)
     {
-        if (team == "Team 1")
+        if (team == "Team 0")
             onPointTeam1 = true;
-        else if (team == "Team 2")
+        else if (team == "Team 1")
             onPointTeam2 = true;
     }
 
@@ -65,9 +65,9 @@ public class KingOfTheHillRules : MonoBehaviour
     /// <param name="team">Name of the team that is off the point</param>
     public void ChangeOffPoint(string team)
     {
-        if (team == "Team 1")
+        if (team == "Team 0")
             onPointTeam1 = false;
-        else if (team == "Team 2")
+        else if (team == "Team 1")
             onPointTeam2 = false;
     }
 

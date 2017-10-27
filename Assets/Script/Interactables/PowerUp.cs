@@ -21,10 +21,16 @@ using UnityEngine;
  * Author: Zachary Schmalz
  * Date: October 4, 2017
  * Revisions: Added an Activate function so that PowerUp's can be activated with a button/key
+ * 
+ * Version 1.1.2
+ * Author: Zachary Schmalz
+ * Date: October 27, 2017
+ * Revisions: Added functionality to allow designers to collect powerUps with a collision instead
  */
 
 public class PowerUp : Interactable
 {
+    public bool collisionCollect;
     public float boostPercent;
     public float boostDuration;
     [HideInInspector]public bool isActive;
@@ -41,6 +47,7 @@ public class PowerUp : Interactable
         boostCollected = false;
         isActive = false;
         timeRemaining = boostDuration;
+        gameObject.GetComponent<Collider>().isTrigger = collisionCollect;
     }
 
     // When the PowerUp is collected, the timer begins counting down
@@ -59,6 +66,15 @@ public class PowerUp : Interactable
                 RemovePowerUp();
             }
         }
+    }
+
+    // If the designers want to use collisions to collect the powerUp
+    protected override void OnTriggerEnter(Collider other)
+    {
+        base.OnTriggerEnter(other);
+        Team.CurrentPowerUp = gameObject;
+        // Note that if the designers choose this route, there would be no boostmultiplier.
+        boostMultiplier = 1;
     }
 
     // Set the Team and hide the object from the scene

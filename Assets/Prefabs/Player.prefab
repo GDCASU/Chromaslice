@@ -106,6 +106,8 @@ GameObject:
   - component: {fileID: 54034144816670216}
   - component: {fileID: 135663655920331068}
   - component: {fileID: 114811659349294926}
+  - component: {fileID: 114324302618708288}
+  - component: {fileID: 114067804380606390}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -468,13 +470,13 @@ Rigidbody:
   m_GameObject: {fileID: 1692480771552320}
   serializedVersion: 2
   m_Mass: 5
-  m_Drag: 0.1
+  m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!108 &108269187253066686
 Light:
   m_ObjectHideFlags: 1
@@ -507,24 +509,63 @@ Light:
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 0
-  m_FalloffTable:
-    m_Table[0]: 0
-    m_Table[1]: 0
-    m_Table[2]: 0
-    m_Table[3]: 0
-    m_Table[4]: 0
-    m_Table[5]: 0
-    m_Table[6]: 0
-    m_Table[7]: 0
-    m_Table[8]: 0
-    m_Table[9]: 0
-    m_Table[10]: 0
-    m_Table[11]: 0
-    m_Table[12]: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &114067804380606390
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692480771552320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_TransformSyncMode: 3
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_SyncSpin: 0
+  m_MovementTheshold: 0.001
+  m_VelocityThreshold: 0.0001
+  m_SnapThreshold: 5
+  m_InterpolateRotation: 1
+  m_InterpolateMovement: 1
+--- !u!114 &114324302618708288
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1692480771552320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 86
+    i1: 71
+    i2: 176
+    i3: 132
+    i4: 118
+    i5: 38
+    i6: 77
+    i7: 180
+    i8: 120
+    i9: 136
+    i10: 131
+    i11: 121
+    i12: 22
+    i13: 9
+    i14: 200
+    i15: 173
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114811659349294926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -538,17 +579,61 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numPlayers: 1
   health: 100
-  turnSpeed: 150
-  acceleration: 5000
-  maxSpeed: 15
-  friction: 0
-  dashPower: 5
-  dashTime: 2
+  maxSpeed: 40
+  bounceFactor: 3
+  sprintPower: 2
+  sprintTime: 0.5
+  decelerationRate: 0.25
+  dashPower: 3
+  dashTime: 0.1
+  dashCooldown: 0
+  jumpCooldown: 2
   team: 0
-  jumpPower: 5
+  jumpPower: 400
   maxJumps: 1
-  verticalAxis: 
-  horizontalAxis: 
+  controls:
+    name: 
+    number: 0
+    horizAxis:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
+    horizAxisAlt:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
+    vertAxis:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
+    vertAxisAlt:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
+    jumpButton:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
+    jumpButtonAlt:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
+    dashButton:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
+    dashButtonAlt:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
+    powerUpButton:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
+    powerUpButtonAlt:
+      keyPos: 0
+      keyNeg: 0
+      axis: 
 --- !u!135 &135663655920331068
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -559,7 +644,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!205 &205307143371197310
 LODGroup:

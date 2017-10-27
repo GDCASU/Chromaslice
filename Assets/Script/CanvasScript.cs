@@ -35,21 +35,23 @@ public class CanvasScript : MonoBehaviour
             //Debug.Log("Key was pressd");
             //debugMenu.SetActive(!debugMenu.activeSelf);
         }
-        scorep1.text = GameManager.singleton.teams[0].GetComponent<Team>().points.ToString();
-        scorep2.text = GameManager.singleton.teams[1].GetComponent<Team>().points.ToString();
-        if (GameManager.singleton.matchStarted && GameManager.singleton.countdownOver)
+        if (GameManager.singleton.matchStarted)
         {
-
-            float time = GameManager.singleton.timer;
-            timer.text = Mathf.FloorToInt(time / 60).ToString("00") + ":" + Mathf.FloorToInt(time % 60).ToString("00");
-        } else
-        {
-            timer.text = Mathf.FloorToInt(GameManager.singleton.countdownTimer).ToString();
-            if(GameManager.singleton.countdownTimer <= 1 && GameManager.singleton.countdownTimer >= 0)
+            scorep1.text = GameManager.singleton.teams[0].GetComponent<Team>().points.ToString();
+            scorep2.text = GameManager.singleton.teams[1].GetComponent<Team>().points.ToString();
+            if (GameManager.singleton.countdownOver)
+            {
+                float time = GameManager.singleton.deathMatch.time;
+                timer.text = Mathf.FloorToInt(time / 60).ToString("00") + ":" + Mathf.FloorToInt(time % 60).ToString("00");
+            }
+            if (GameManager.singleton.countdownTimer <= 1 && GameManager.singleton.countdownTimer >= 0)
             {
                 timer.text = "FIGHT!!!";
-            } 
+            }
         }
-        
+        else
+        {
+            timer.text = Mathf.FloorToInt(GameManager.singleton.countdownTimer).ToString();
+        }
     }
 }

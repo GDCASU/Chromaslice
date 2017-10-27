@@ -2,20 +2,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 // Developer:   Kyle Aycock
 // Date:        8/28/17
 // Description: This class represents the rope connection between two end points.
-//      
 
 /*
 * Version 1.1.0
 * Author: Zachary Schmalz
 * Date: September 27, 2017
 * Revisions: Added checks for collisions with PowerUps and Projectiles.
-*/    
+*/
 
-public class Rope : MonoBehaviour
+// Developer:   Ryan Black
+// Date:        10/18/17
+// Description: Added Rope cooldown on breaking and some rope reform rules
+
+// Developer:   Kyle Aycock
+// Date:        10/27/17
+// Description: Added rope relaxation for vertically oriented catch points too
+//              
+
+public class Rope : NetworkBehaviour
 {
     //rope parameters
     public float maxRopeLength;
@@ -38,6 +47,7 @@ public class Rope : MonoBehaviour
 
     //list of booleans indicating whether that bend is CW/CCW
     private List<bool> anglesPositive;
+    private List<Vector3> ropeNormals;
 
     //renderer for the rope
     private LineRenderer line;
@@ -54,15 +64,22 @@ public class Rope : MonoBehaviour
     // The Team script that is attached to the parent
     private Team team;
 
+    //Rope Reforming variables
+    public float reformCooldown = 3;
+    private float timeSinceBreaking = 0;
+
     // Use this for initialization
     void Start()
     {
         ropePoints = new List<Vector3>();
         anglesPositive = new List<bool>();
+        ropeNormals = new List<Vector3>();
         line = GetComponent<LineRenderer>();
         visiblePoints = new Vector3[2];
-        visiblePoints[0] = endPoint1.position;
-        visiblePoints[1] = endPoint2.position;
+        visiblePoints[0] = endPoint1.transform.position;
+        visiblePoints[1] = endPoint2.transform.position;
+        oldPos1 = visiblePoints[0];
+        oldPos2 = visiblePoints[1];
         gameObject.layer = transform.parent.gameObject.layer;
         rotations = 0;
         collectedPowerUp = false;
@@ -83,12 +100,14 @@ public class Rope : MonoBehaviour
     {
         UpdateVisiblePoints();
         float dist = 0;
+
         for (int i = 1; i < visiblePoints.Length; i++)
             dist += Vector3.Distance(visiblePoints[i], visiblePoints[i - 1]);
+        UpdateRopeDisplay(dist);
         if (dist > maxRopeLength)
+        {
             BreakRope();
-        else
-            UpdateRopeDisplay(dist);
+        }
     }
 
     //Updates the actual line renderer with the current rope information
@@ -123,7 +142,7 @@ public class Rope : MonoBehaviour
 
         // If the rope was in a state of launching a projectile when it breaks, call the projectile code. Pass the vector containing all rope points
         // Also set the Team that launches the projectile
-        if(hitProjectile && projectile != null)
+        if (hitProjectile && projectile != null)
         {
             projectile.GetComponent<Projectile>().Team = team;
             projectile.GetComponent<Projectile>().LaunchProjectile(ropePoints);
@@ -138,97 +157,115 @@ public class Rope : MonoBehaviour
         //must check both directions
 
         //visiblePoints[] serves as an unchanging record of what the rope was like at the start of this physics frame
+
         UpdateVisiblePoints();
 
         Vector3 start = endPoint1.transform.position;
         Vector3 end = endPoint2.transform.position;
 
-        RaycastHit[] hits = new RaycastHit[visiblePoints.Length - 1];
-        bool[] results = new bool[hits.Length]; //true if hit terrain, false if otherwise (player/nothing)
+        RaycastHit hit;
 
         for (int i = 0; i < visiblePoints.Length - 1; i++)
-        {
-            if (RaycastSegment(visiblePoints[i], visiblePoints[i + 1], out hits[i], gameObject.layer))
-            {
-                if (hits[i].collider.GetComponent<PlayerController>())
-                {
+            if (RaycastSegment(visiblePoints[i], visiblePoints[i + 1], out hit, gameObject.layer))
+                if (hit.collider.GetComponent<PlayerController>())
                     if (team.IsInvincibleOver())
-                    {
-                        hits[i].collider.transform.parent.GetComponent<Team>().KillTeam();
-                    }
-                }
-                else
-                    results[i] = true;
-            }
-        }
+                        hit.collider.transform.parent.GetComponent<Team>().KillTeam();
+
+
+        //work in progress
+        /*for (int i = 0; i < ropePoints.Count; i++)
+        {
+            if (Physics.CheckSphere(ropePoints[i], 0.02f))
+                ropePoints[i] += Vector3.Project((Vector3.Project(ropePoints[i] - visiblePoints[i], (visiblePoints[i + 2] - visiblePoints[i]).normalized) + visiblePoints[i] - ropePoints[i]), ropeNormals[i]);
+            else
+                ropePoints[i] += (Vector3.Project(ropePoints[i] - visiblePoints[i], (visiblePoints[i + 2] - visiblePoints[i]).normalized) + visiblePoints[i] - ropePoints[i]);
+        }*/
+
 
         if (start != oldPos1 || end != oldPos2)
         {
-
-            RaycastHit hit;
-
-            if (results[0])
+            if (start != oldPos1)
             {
-                hit = hits[0];
-                Vector3 newPoint = hit.point;
-                newPoint += (hit.point - hit.collider.transform.position).normalized * 0.01f;
-                ropePoints.Insert(0, newPoint);
-                anglesPositive.Insert(0, IsAnglePositive(start, newPoint, visiblePoints[1]));
-                //Debug.Log("Adding new catch point at index 0" + " (1)");
-
-                // If the hit point object is a PowerUp
-                if (hit.collider.gameObject.GetComponent<PowerUp>())
+                float segments = Mathf.Ceil((start - oldPos1).magnitude * 4);
+                for (int i = 0; i < segments; i++)
                 {
-                    powerUp = hit.collider.gameObject;
-                    CollisionWithPowerUp();
-                }
+                    if (RaycastSegment(Vector3.Lerp(oldPos1, start, i / segments), visiblePoints[1], out hit, gameObject.layer))
+                    {
+                        Vector3 newPoint = hit.point;
+                        newPoint += (hit.point - hit.collider.transform.position).normalized * 0.01f;
+                        ropePoints.Insert(0, newPoint);
+                        Vector3 n = Vector3.Cross(newPoint - start, visiblePoints[1] - start).normalized;
+                        ropeNormals.Insert(0, n);
+                        anglesPositive.Insert(0, IsAnglePositive(start, newPoint, visiblePoints[1], n));
+                        Debug.Log("Adding new catch point at index 0" + " (1)");
 
-                // If the hit point object is a Projectile
-                if (hit.collider.gameObject.GetComponent<Projectile>())
-                {
-                    projectile = hit.collider.gameObject;
-                    hitProjectile = true;
-                }
-                else
-                {
-                    projectile = null;
-                    hitProjectile = false;
-                }
+                        // If the hit point object is a PowerUp
+                        if (hit.collider.gameObject.GetComponent<PowerUp>())
+                        {
+                            powerUp = hit.collider.gameObject;
+                            CollisionWithPowerUp();
+                        }
 
-                return;
+                        // If the hit point object is a Projectile
+                        if (hit.collider.gameObject.GetComponent<Projectile>())
+                        {
+                            projectile = hit.collider.gameObject;
+                            hitProjectile = true;
+                        }
+                        else
+                        {
+                            projectile = null;
+                            hitProjectile = false;
+                        }
+
+                        return;
+                    }
+                }
             }
-            //it's better to have this one pointing backwards, requires extra raycast but oh well
-            if (RaycastSegment(end, visiblePoints[visiblePoints.Length - 2], out hit, gameObject.layer))
+            if (end != oldPos2)
             {
-                Vector3 newPoint = hit.point;
-                newPoint += (hit.point - hit.collider.transform.position).normalized * 0.01f;
-                ropePoints.Add(newPoint);
-                anglesPositive.Add(IsAnglePositive(visiblePoints[visiblePoints.Length - 2], newPoint, end));
-                //Debug.Log("Adding new catch point at index " + (ropePoints.Count - 1) + " (2)");
-                return;
+                float segments = Mathf.Ceil((end - oldPos2).magnitude * 4);
+                for (int i = 0; i < segments; i++)
+                {
+                    if (RaycastSegment(Vector3.Lerp(oldPos2, end, i / segments), visiblePoints[visiblePoints.Length - 2], out hit, gameObject.layer))
+                    {
+                        Vector3 newPoint = hit.point;
+                        newPoint += (hit.point - hit.collider.transform.position).normalized * 0.01f;
+                        ropePoints.Add(newPoint);
+                        Vector3 n = Vector3.Cross(newPoint - end, visiblePoints[visiblePoints.Length - 2] - end).normalized;
+                        ropeNormals.Add(n);
+                        anglesPositive.Add(IsAnglePositive(visiblePoints[visiblePoints.Length - 2], newPoint, end, n));
+                        //Debug.Log("Adding new catch point at index " + (ropePoints.Count - 1) + " (2)");
+                        return;
+                    }
+                }
             }
 
             //check whether to relax rope
             if (visiblePoints.Length > 2)
             {
                 int len = visiblePoints.Length;
-                if (IsAnglePositive(start, visiblePoints[1], visiblePoints[2]) != anglesPositive[0])
+
+                if (IsAnglePositive(start, visiblePoints[1], visiblePoints[2], ropeNormals[0]) != anglesPositive[0])
                 {
                     ropePoints.RemoveAt(0);
-                    anglesPositive.RemoveAt(0); 
+                    anglesPositive.RemoveAt(0);
+                    ropeNormals.RemoveAt(0);
                     //Debug.Log("Relaxing rope at 0" + " (1)");
                 }
-                else if (IsAnglePositive(visiblePoints[len - 3], visiblePoints[len - 2], end) != anglesPositive[ropePoints.Count - 1])
+                else if (IsAnglePositive(visiblePoints[len - 3], visiblePoints[len - 2], end, ropeNormals[ropeNormals.Count - 1]) != anglesPositive[ropePoints.Count - 1])
                 {
                     ropePoints.RemoveAt(ropePoints.Count - 1);
                     anglesPositive.RemoveAt(anglesPositive.Count - 1);
+                    ropeNormals.RemoveAt(ropeNormals.Count - 1);
                     //Debug.Log("Relaxing rope at " + ropePoints.Count + " (2)");
                 }
             }
+
             oldPos1 = start;
             oldPos2 = end;
         }
-
+        
     }
 
     private void KillTeam(GameObject player)
@@ -263,12 +300,11 @@ public class Rope : MonoBehaviour
         }
     }
 
-    private bool IsAnglePositive(Vector3 a, Vector3 b, Vector3 c)
+    private bool IsAnglePositive(Vector3 a, Vector3 b, Vector3 c, Vector3 n)
     {
         Vector3 angle1 = (a - b).normalized;
         Vector3 angle2 = (c - b).normalized;
-
-        return Mathf.Atan2(Vector3.Dot(Vector3.Cross(angle2, angle1), Vector3.up), Vector3.Dot(angle1, angle2)) > 0; //voodoo magic
+        return Mathf.Atan2(Vector3.Dot(Vector3.Cross(angle2, angle1), n), Vector3.Dot(angle1, angle2)) > 0; //voodoo magic
     }
 
     public static bool RaycastSegment(Vector3 from, Vector3 to, out RaycastHit hit, int ignoreLayer = -1)

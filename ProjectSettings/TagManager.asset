@@ -4,12 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Player1
-  - Player2
   - GameManager
   - MaterialButtonLayer
-  - MaterialText
   - MaterialRadioButton
+  - MaterialText
+  - AIPlayer
   layers:
   - Default
   - TransparentFX
@@ -19,7 +18,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Terrain
   - 
   - Team1
   - Team2
