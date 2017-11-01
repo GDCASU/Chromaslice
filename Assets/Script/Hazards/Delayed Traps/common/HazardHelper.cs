@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FallingHazardHelper : MonoBehaviour {
+// Created by Paul Gellai - HazardHelper is a script used in all Delayed Traps
+
+public class HazardHelper : MonoBehaviour {
 
     GameObject projectile;
     GameObject plane;
@@ -20,6 +22,8 @@ public class FallingHazardHelper : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
+        // All this does: When the projectile hits the ground (or collides with something), it sets the plane (hazard area) to active, as well as its children if it has any.
+        // Afterwards, the projectile is destroyed. 
         plane.transform.SetPositionAndRotation(gameObject.transform.position, Quaternion.identity);
         plane.SetActive(true);
         for (int i = 0; i < plane.transform.childCount; i++)

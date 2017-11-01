@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FallingHazard : MonoBehaviour {
+// Created by Paul Gellai 10/31/17 - main script for Hammer Hazard 
+
+public class HammerHazard : MonoBehaviour {
 
 
     public GameObject projectile;
@@ -18,15 +20,15 @@ public class FallingHazard : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        // This method checks to see if the projectile has been destroyed or not - is destroyed in HazardHelper script
         if(projectile == null)
         {
+            // The below code ensures that the hazard stays in existence for the amount of time trapDuration is set to.
             if(!started)
             {
                 startTime = Time.time;
                 started = true;
             }
-            Debug.Log("Start time: " + startTime);
-            Debug.Log("Current time: " + Time.time);
             if (Time.time - trapDuration >= startTime)
             {
                 DestroyObject(gameObject);

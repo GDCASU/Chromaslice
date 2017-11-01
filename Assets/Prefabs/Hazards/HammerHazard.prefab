@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4118129959843962}
   m_Layer: 0
-  m_Name: FallingHazard
+  m_Name: HammerHazard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -235,7 +235,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47703d7db3302f447a7452b809c47bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectile: {fileID: 0}
   plane: {fileID: 1420560578057306}
+  trapDuration: 0
 --- !u!135 &135416176602051390
 SphereCollider:
   m_ObjectHideFlags: 1
