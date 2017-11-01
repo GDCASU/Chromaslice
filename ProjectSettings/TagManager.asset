@@ -9,6 +9,7 @@ TagManager:
   - MaterialRadioButton
   - MaterialText
   - AIPlayer
+  - FallingHazardDeathPlane
   layers:
   - Default
   - TransparentFX
