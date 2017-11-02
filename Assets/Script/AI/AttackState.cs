@@ -79,7 +79,6 @@ public class AttackState : State
                 point = point2;
             Debug.Log("Point 2");
         }
-        //distAiRopeToEnemy = Mathf.Min(dist1,dist2);
 
         // Set test object position (Not needed in final version)
         if (Vector3.Distance(point1, enemy1Pos) <= Vector3.Distance(point2, enemy2Pos))
@@ -90,8 +89,7 @@ public class AttackState : State
         distAi1ToEnemyRope = Vector3.Distance(AI1Pos, ClosestPointOnEnemyRope(AI1Pos));
         distAi2ToEnemyRope = Vector3.Distance(AI2Pos, ClosestPointOnEnemyRope(AI2Pos));
 
-
-
+        // Move the AI
         Vector3 dir1 = closer - point;
 
         Rigidbody rb = team.player1.GetComponent<Rigidbody>();
