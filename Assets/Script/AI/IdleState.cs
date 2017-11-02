@@ -14,16 +14,11 @@ using UnityEngine;
 public class IdleState : State
 {
     private float swapTimer;
-    private Team team;
-
-    public IdleState(Team t)
-    {
-        team = t;
-    }
 
     public override void Start(StateMachine sm)
     {
         Debug.Log("Entering State: Idle");
+        team = sm.GetTeam();
         swapTimer = 3.0f;
     }
 
@@ -44,7 +39,7 @@ public class IdleState : State
         Debug.Log("Evaluating Transitions...");
         if (swapTimer <= 0)
         {
-            return new PowerUpState(team);
+            return new PowerUpState();
         }
 
         else

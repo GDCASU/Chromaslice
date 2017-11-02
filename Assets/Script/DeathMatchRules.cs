@@ -10,22 +10,27 @@ using UnityEngine;
 // Date:            10/4/2017
 // Description:     Change to make game rules responsible for keeping track of score
 
+// Developer:       Nick Arnieri
+// Date:            10/20/2017
+// Description:     Seperate function calls to allow easier usage by GameManager
+
 public class DeathMatchRules : MonoBehaviour
 {
     public int scoreLimit;
     public float timeLimit;
-    private int scoreTeam1;
-    private int scoreTeam2;
-    private float time;
+    public int scoreTeam1;
+    public int scoreTeam2;
+    public float time;
     private bool gameActive;
 
     // Use this for initialization
     void Start()
     {
+        scoreTeam1 = 0;
+        scoreTeam2 = 0;
         scoreLimit = 5;
         timeLimit = 60f;
         time = timeLimit;
-        gameActive = true;
     }
 
     // Update is called once per frame
@@ -38,40 +43,50 @@ public class DeathMatchRules : MonoBehaviour
     /// <summary>
     /// Adds a point to the necessary team
     /// </summary>
-    /// <param name="team">Team that was killed</param>
-    /// <param name="teams">Array of all current teams</param>
-    public void AddScore(Team team, GameObject[] teams)
+    /// <param name="name">Name of team that needs a point</param>
+    public void AddScore(string name)
     {
-        for (int i = 0; i < teams.Length; i++)
-        {
-            Team t = teams[i].GetComponent<Team>();
-            if (t != team && team != null)
-            {
-                if (t.name == "Team 1")
-                    scoreTeam1++;
-                else
-                    scoreTeam2++;
-            }
-        }
-        // Reset timer
+        if (name == "Team 0")
+            scoreTeam1++;
+        else
+            scoreTeam2++;
+
+        gameActive = false;
+    }
+
+    /// <summary>
+    /// Resets values for next match
+    /// </summary>
+    public void Reset()
+    {
         time = timeLimit;
+        gameActive = true;
     }
 
     /// <summary>
     /// Checks to see if game has ended based on game rules
     /// </summary>
-    public bool IsGameOver()
+    public string GameWinner()
     {
-        bool gameOver = false;
+        string gameOver = "";
 
         // Check both teams score against score limit
-        if (scoreTeam1 >= scoreLimit || scoreTeam2 >= scoreLimit)
-            gameOver = true;
-
-        // Check if game time has ran out
-        if (time <= 0)
-            gameOver = true;
+        if (scoreTeam1 >= scoreLimit)
+            gameOver = "Team 0";
+        else if (scoreTeam2 >= scoreLimit)
+            gameOver = "Team 1";
 
         return gameOver;
+    }
+
+    /// <summary>
+    /// Checks to see whether the match time has run out
+    /// </summary>
+    public bool TimeLimit()
+    {
+        if (time <= 0)
+            return true;
+
+        return false;
     }
 }

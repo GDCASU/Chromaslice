@@ -11,14 +11,19 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
+    public GameObject test;
+
     public State currentState;
     private Team team;
+    private Team enemyTeam;
 
     // Initial state is Idle
     void Start()
     {
         team = gameObject.GetComponent<Team>();
-        currentState = new IdleState(team);
+        enemyTeam = GameObject.FindGameObjectWithTag("Player").GetComponentInParent<Team>();
+
+        currentState = new AttackState(test);
         currentState.Start(this);
     }
 
@@ -42,5 +47,17 @@ public class StateMachine : MonoBehaviour
         currentState.Exit(this);
         currentState = newState;
         currentState.Start(this);
+    }
+
+    // Returns the AI team
+    public Team GetTeam()
+    {
+        return team;
+    }
+
+    // Returns PlayerTeam
+    public Team GetEnemyTeam()
+    {
+        return enemyTeam;
     }
 }

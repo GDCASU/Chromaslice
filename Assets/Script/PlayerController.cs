@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 //Developer:    Ryan Black
 //Date:         9/21/2017
@@ -39,7 +40,20 @@ using UnityEngine;
 *Description:    Added modifiable deceleration
 */
 
-public class PlayerController : MonoBehaviour
+/*
+*Developer:      Ryan Black
+*Date:           10/18/2017
+*Description:    Changed Dash to Sprint and created new Dash functions
+*/
+
+// Developer:   Kyle Aycock
+// Date:        10/27/2017
+// Description: Reworked movement from acceleration to velocity based
+//              Made tops stick to ground regardless of slopes and such
+//              Added "Beyblade Effect" - tops bounce off each other
+//              violently when colliding
+
+public class PlayerController : NetworkBehaviour
 {
 
     //Game attributes
@@ -47,20 +61,25 @@ public class PlayerController : MonoBehaviour
 
     //Player attributes
     public float health = 100;
-    public float turnSpeed = 150.0f;
-    public float acceleration;
     public float maxSpeed;
-    public float friction = 0; //0 - 1
+    public float bounceFactor;
+    public float sprintPower = 5;
+    public float sprintTime = 2;
+    public float decelerationRate = 0.2f;
     public float dashPower = 5;
-    public float dashTime = 2;
-    public float decelerationRate = 0.025f; // 0 - 1
+    public float dashTime = 1;
+    public float dashCooldown = 3;
+    public float jumpCooldown = 3;
     public int team;
 
-    private float tempDashPower;
+    private float tempMovementPower;
     private float tempMaxSpeed;
 
+    private bool sprinting = false;
     private bool dashing = false;
+    private float timeSinceSprint = 0;
     private float timeSinceDash = 0;
+    private float timeSinceJump = 0;
 
     // Property for affecting the maxSpeed of the players
     public float MaxSpeed
@@ -78,153 +97,82 @@ public class PlayerController : MonoBehaviour
     public int maxJumps = 1; //if we want double jump
     float distanceToGround; //to prevent jumping in the air
 
-    //CONTROLLER CONFIG
-    public string verticalAxis;
-    public string horizontalAxis;
-
-    string playerOneJumpController;
-    KeyCode playerOneJumpKeyboard;
-    string playerOneDashController;
-    KeyCode playerOneDashKeyboard;
-    string playerOnePowerUpController;
-    KeyCode playerOnePowerUpKeyboard;
-
-    string playerTwoJumpController;
-    KeyCode playerTwoJumpKeyboard;
-    string playerTwoDashController;
-    KeyCode playerTwoDashKeyboard;
-    string playerTwoPowerUpController;
-    KeyCode playerTwoPowerUpKeyboard;
-
-    string playerThreeJumpController;
-    KeyCode playerThreeJumpKeyboard;
-    string playerThreeDashController;
-    KeyCode playerThreeDashKeyboard;
-    string playerThreePowerUpController;
-    KeyCode playerThreePowerUpKeyboard;
-
-    string playerFourJumpController;
-    KeyCode playerFourJumpKeyboard;
-    string playerFourDashController;
-    KeyCode playerFourDashKeyboard;
-    string playerFourPowerUpController;
-    KeyCode playerFourPowerUpKeyboard;
-
-    float player1x;
-    float player1z;
+    public Controls controls;
 
     void Start()
     {
-        distanceToGround = transform.position.y;
+        distanceToGround = GetComponent<SphereCollider>().radius;
         tempMaxSpeed = maxSpeed;
-        tempDashPower = 1;
-
-        //Player One
-        playerOneJumpController = "joystick 1 button 4"; //Left bumper controller 1
-        playerOneJumpKeyboard = KeyCode.Space;
-        playerOneDashController = "joystick 1 button 8"; //Left stick pushed down controller 1
-        playerOneDashKeyboard = KeyCode.Q;
-        playerOnePowerUpController = "joystick 1 button 2";
-        playerOnePowerUpKeyboard = KeyCode.Z;
-
-        //Player Two
-        playerTwoJumpController = "joystick 1 button 5"; //Right bumper controller 1
-        playerTwoJumpKeyboard = KeyCode.RightControl;
-        playerTwoDashController = "joystick 1 button 9"; //Right stick pushed down controller 1
-        playerTwoDashKeyboard = KeyCode.E;
-        playerTwoPowerUpController = playerOnePowerUpController;
-        playerTwoPowerUpKeyboard = KeyCode.P;
-
-        //Player Three
-        playerThreeJumpController = "joystick 2 button 4"; //Left bumper controller 2
-        playerThreeJumpKeyboard = KeyCode.Space;
-        playerThreeDashController = "joystick 2 button 8"; //Left stick pushed down controller 2
-        playerThreeDashKeyboard = KeyCode.Period;
-        playerThreePowerUpController = "joystick 2 button 2";
-        playerThreePowerUpKeyboard = KeyCode.Comma;
-
-        //Player Four
-        playerFourJumpController = "joystick 2 button 5"; //Right bumper controller 2
-        playerFourJumpKeyboard = KeyCode.Space;
-        playerFourDashController = "joystick 2 button 9"; //Right stick pushed down controller 2
-        playerFourDashKeyboard = KeyCode.Slash;
-        playerFourPowerUpController = playerThreePowerUpController;
-        playerFourPowerUpKeyboard = KeyCode.RightShift;
+        tempMovementPower = 1;
     }
 
-    void Update()
+    void LateUpdate()
     {
-        if(GameManager.singleton.matchStarted)
+        //Sticks player to terrain
+        RaycastHit ground = new RaycastHit();
+        if (Physics.SphereCast(new Ray(transform.position + Vector3.up, Vector3.down), distanceToGround, out ground, 10f, LayerMask.GetMask("Terrain")))
+            transform.position = new Vector3(transform.position.x, transform.position.y - ground.distance + 1, transform.position.z);
+    }
+
+    void FixedUpdate()
+    {
+        if (GameManager.singleton.matchStarted && isLocalPlayer)
         {
-            player1x = Input.GetAxis(horizontalAxis) * Time.deltaTime * acceleration * (1- friction);
-            player1z = Input.GetAxis(verticalAxis) * Time.deltaTime * acceleration * (1 - friction);
+            Rigidbody rb = GetComponent<Rigidbody>();
 
-            //Actions
-            if (transform.parent.name == "Team 0")
+            if (controls.GetJump() && isGrounded() && timeSinceJump >= jumpCooldown) { Jump(); timeSinceJump = 0; }
+            if (controls.GetDash() && !dashing && timeSinceDash >= dashCooldown) { Dash(); timeSinceDash = 0; }
+
+            // Active powerUp if Team has one
+            if (controls.GetPowerUp())
             {
-                //Player 1
-                if ((Input.GetKeyDown(playerOneJumpController) || Input.GetKeyDown(playerOneJumpKeyboard)) && isGrounded() && team == 1) { Jump(); }
-                if (Input.GetKeyDown(playerOneDashController) || Input.GetKeyDown(playerOneDashKeyboard) && team == 1) { Dash(); }
-
-                //Player 2
-                if ((Input.GetKeyDown(playerTwoJumpController) || Input.GetKeyDown(playerTwoJumpKeyboard)) && isGrounded() && team == 2) { Jump(); }
-                if (Input.GetKeyDown(playerTwoDashController) || Input.GetKeyDown(playerTwoDashKeyboard) && team == 2) { Dash(); }
-
-                // Active powerUp if Team has one
-                if (Input.GetKeyDown(playerOnePowerUpKeyboard) || Input.GetKeyDown(playerTwoPowerUpKeyboard) ||
-                    Input.GetKeyDown(playerOnePowerUpController) || Input.GetKeyDown(playerTwoPowerUpController))
+                GameObject powerUp = gameObject.GetComponentInParent<Team>().CurrentPowerUp;
+                if (powerUp != null && powerUp.GetComponent<PowerUp>().isActive != true)
                 {
-                    GameObject powerUp = gameObject.GetComponentInParent<Team>().CurrentPowerUp;
-                    if (powerUp != null && powerUp.GetComponent<PowerUp>().isActive != true)
-                    {
-                        powerUp.GetComponent<PowerUp>().Activate();
-                    }
-                }
-            }
-            if (transform.parent.name == "Team 1")
-            {
-                //Player 3
-                if ((Input.GetKeyDown(playerThreeJumpController) || Input.GetKeyDown(playerThreeJumpKeyboard)) && isGrounded() && team == 1) { Jump(); }
-                if (Input.GetKeyDown(playerThreeDashController) || Input.GetKeyDown(playerThreeDashKeyboard) && team == 1) { Dash(); }
-
-                //Player 4
-                if ((Input.GetKeyDown(playerFourJumpController) || Input.GetKeyDown(playerFourJumpKeyboard)) && isGrounded() && team == 2) { Jump(); }
-                if (Input.GetKeyDown(playerFourDashController) || Input.GetKeyDown(playerFourDashKeyboard) && team == 2) { Dash(); }
-
-                // Activate powerUp if Team has one
-                if (Input.GetKeyDown(playerThreePowerUpKeyboard) || Input.GetKeyDown(playerFourPowerUpKeyboard) ||
-                    Input.GetKeyDown(playerThreePowerUpController) || Input.GetKeyDown(playerFourPowerUpController))
-                {
-                    GameObject powerUp = gameObject.GetComponentInParent<Team>().CurrentPowerUp;
-                    if (powerUp != null && powerUp.GetComponent<PowerUp>().isActive != true)
-                    {
-                        powerUp.GetComponent<PowerUp>().Activate();
-                    }
+                    powerUp.GetComponent<PowerUp>().Activate();
                 }
             }
 
-            if (dashing)
+            if (sprinting)
             {
-                timeSinceDash += Time.deltaTime;
+                timeSinceSprint += Time.deltaTime;
             }
+            if (timeSinceSprint >= sprintTime)
+            {
+                UnSprint();
+            }
+
+            timeSinceDash += Time.deltaTime;
+            timeSinceJump += Time.deltaTime;
+
             if (timeSinceDash >= dashTime)
             {
                 UnDash();
             }
 
-            //Debug.Log(transform.parent.name + " " + team + ": " + tempDashPower + ", " + tempMaxSpeed + " | " + dashing + ", " + timeSinceDash.ToString("0.00"));
-            GetComponent<Rigidbody>().AddForce(player1x * tempDashPower, 0, player1z * tempDashPower, ForceMode.Acceleration);
-            GetComponent<Rigidbody>().velocity = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, tempMaxSpeed);
 
-            //Slow down
-            GetComponent<Rigidbody>().velocity *= (1 - decelerationRate);
+            Vector3 target = new Vector3(controls.GetHorizontal(), 0, controls.GetVertical()).normalized * maxSpeed;
+            Vector3 accel;
+            if (dashing)
+                accel = target * dashPower - rb.velocity;
+            else
+                accel = new Vector3((target.x - rb.velocity.x) * decelerationRate, 0, (target.z - rb.velocity.z) * decelerationRate);
+            accel.y = 0;
+
+            rb.AddForce(accel, ForceMode.VelocityChange);
         }
     }
 
-    public void SetControls(string vertical, string horizontal)
+    public void OnCollisionEnter(Collision collision)
     {
-        verticalAxis = vertical;
-        horizontalAxis = horizontal;
+        //Beyblade effect - sends both tops flying in the direction of the normal they collided with based on bounceFactor
+        if (collision.gameObject.tag == "Player")
+            GetComponent<Rigidbody>().AddForce((collision.relativeVelocity * bounceFactor).magnitude * collision.contacts[0].normal, ForceMode.VelocityChange);
+    }
+
+    public void SetControls(int controller)
+    {
+        controls = Controls.LoadFromConfig(controller);
     }
 
     public void SetTeam(int num)
@@ -239,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetDashPower(float n)
     {
-        dashPower = n;
+        sprintPower = n;
     }
 
     bool isGrounded()
@@ -258,17 +206,36 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        Debug.Log(dashing);
 
-        tempDashPower = dashPower;
-        tempMaxSpeed = maxSpeed * 2;
         dashing = true;
+        timeSinceDash = 0;
     }
 
     void UnDash()
     {
-        tempDashPower = 1;
+        tempMovementPower = 1;
         tempMaxSpeed = maxSpeed;
         dashing = false;
-        timeSinceDash = 0;
+    }
+
+    void Sprint()
+    {
+        if (sprinting)
+        {
+            return;
+        }
+
+        tempMovementPower = sprintPower;
+        tempMaxSpeed = maxSpeed * 2;
+        sprinting = true;
+    }
+
+    void UnSprint()
+    {
+        tempMovementPower = 1;
+        tempMaxSpeed = maxSpeed;
+        sprinting = false;
+        timeSinceSprint = 0;
     }
 }

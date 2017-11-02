@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
 /*
@@ -24,7 +25,11 @@ using UnityEngine.SceneManagement;
 // Description: Added matchStarted boolean to make sure that the game timer does not begin counting down until 
 // the countdown timer has finished. Added countdown timer for 3..2..1 at beginning of rounds.
 
-public class GameManager : MonoBehaviour
+// Developer:   Nick Arnieri
+// Date:        10/20/2017
+// Description: Switch usage of game rules to DeathMatchRules instead of hard coded determination
+
+public class GameManager : NetworkBehaviour
 {
     public static GameManager singleton;
 
@@ -33,7 +38,6 @@ public class GameManager : MonoBehaviour
     public GameObject teamPrefab;
     public GameObject Deathplane;
     public GameObject[] teams;
-    public float matchTime;
     public Vector3[] spawnPoints;
     public int numberOfPlayers;
     public DeathMatchRules deathMatch;
@@ -44,7 +48,6 @@ public class GameManager : MonoBehaviour
     public bool matchStarted = false;
     public bool useTitleScreen;
     public bool countdownOver = false;
-    public float timer;
     public float countdownTimer;
     public float timeBeforeMatch;
     public float spawnTimer;
@@ -52,6 +55,8 @@ public class GameManager : MonoBehaviour
     public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
 
     private string outputPath;
+
+    private int activePlayers;
 
     // Use this for initialization
     void Awake()
@@ -68,41 +73,43 @@ public class GameManager : MonoBehaviour
         Debug.Log("Logging match results to: " + outputPath);
         gameActive = false;
         countdownTimer = timeBeforeMatch;
-        timer = matchTime;
-        if(!useTitleScreen)
+        deathMatch = GetComponent<DeathMatchRules>();
+        if (!useTitleScreen)
             StartGame(SceneManager.GetActiveScene().name, maxRounds);
+        activePlayers = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Game.IsGameOver(scoreTeam1, scoreTeam2, time - from game start);
-
         //Simple temp timer. Need to change, but good for Friday
-        if (gameActive && matchStarted)
+        if (useTitleScreen)
         {
-            countdownTimer -= Time.deltaTime;
-            timer -= Time.deltaTime;
-            if (timer < 0)
+            if (gameActive && matchStarted)
             {
-                KillTeam(null); //draw
-                writeToLog("Time ran out, it's a draw");
-                timer = matchTime;
+                countdownTimer -= Time.deltaTime;
+                if (deathMatch.TimeLimit())
+                {
+                    KillTeam(null); //draw
+                    WriteToLog("Time ran out, it's a draw");
+                }
+                // if the game is active but match has not started (begins countdown timer)
             }
-            // if the game is active but match has not started (begins countdown timer)
-        } else if(gameActive)
-        {
-            countdownTimer -= Time.deltaTime;
-            if(countdownTimer < 1)
+            else if (gameActive)
             {
-                matchStarted = true;
+                countdownTimer -= Time.deltaTime;
+                if (countdownTimer < 1)
+                {
+                    matchStarted = true;
+                    deathMatch.Reset();
+                }
             }
+            if (countdownTimer < 0)
+                countdownOver = true;
         }
-        if(countdownTimer < 0)
-            countdownOver = true;
-            
+        else
+            matchStarted = true;
     }
-
 
     /// <summary>
     /// Performs necessary actions when one team is defeated
@@ -117,26 +124,28 @@ public class GameManager : MonoBehaviour
             t.ResetTeam();
             if (t != team && team != null)
             {
-                t.AddPoints(); //only reasonable for 2-team situations (which is probably all we're gonna have)
-                writeToLog(t.name + " won the round with " + timer + " seconds remaining");
+                t.AddPoints();
+                if(deathMatch)
+                    deathMatch.AddScore(t.name); //only reasonable for 2-team situations (which is probably all we're gonna have)
+                WriteToLog(t.name + " won the round with " + "timer" + " seconds remaining");
             }
         }
         currentRound++;
-        timer = matchTime;
         // added 3 new variables here:
         countdownTimer = timeBeforeMatch;
+        matchStarted = false;
         // old boolean variables - Paul
         if (currentRound >= maxRounds)
         {
-            if (teams[0].GetComponent<Team>().points > teams[1].GetComponent<Team>().points)
-                writeToLog("Match over. Winner: " + teams[0].name);
+            string winner = deathMatch.GameWinner();
+            if (winner == "")
+                WriteToLog("Match over. It's a tie");
             else
-                writeToLog("Match over. Winner: " + teams[1].name);
+                WriteToLog("Match over. Winner: " + winner);
+
             gameActive = false;
-            if (useTitleScreen)
-                SceneManager.LoadScene(0); //return to title screen
-            else
-                StartGame(SceneManager.GetActiveScene().name, maxRounds);
+            NetManager.GetInstance().StopHost();
+            activePlayers = 0;
         }
     }
 
@@ -158,6 +167,7 @@ public class GameManager : MonoBehaviour
     /// Spawns the given team object, passing it necessary info
     /// </summary>
     /// <param name="num">Which team to spawn/param>
+    [Server]
     public void SpawnTeam(int num)
     {
         Debug.Log("Spawning team " + num);
@@ -165,10 +175,9 @@ public class GameManager : MonoBehaviour
         teams[num].name = "Team " + num;
         teams[num].layer = firstTeamLayer + num;
         teams[num].GetComponent<Team>().SetSpawnPoints(spawnPoints[num * 2], spawnPoints[num * 2 + 1]);
-        teams[num].GetComponent<Team>().SetControls(""+(num*2+1),(singleControllerPerTeam ? (num * 2 + 1)+".5" : (num * 2 + 2)+""));
+        teams[num].GetComponent<Team>().SetControls(num*2+1,num*2+2);
         teams[num].GetComponent<Team>().SetColors(colorPairs[num, 0], colorPairs[num, 1]);
-        teams[num].GetComponent<Team>().SpawnPlayer(1);
-        teams[num].GetComponent<Team>().SpawnPlayer(2);
+        NetworkServer.Spawn(teams[num]);
     }
 
     public void SetNumberOfPlayers(int num)
@@ -186,11 +195,16 @@ public class GameManager : MonoBehaviour
         // New boolean variable position
         matchStarted = false;
         countdownOver = false;
-        SceneManager.LoadScene(levelName);
-        writeToLog("Starting new game, level: " + levelName + " out of " + rounds + " rounds");
+        NetManager.GetInstance().ServerChangeScene(levelName);
+        WriteToLog("Starting new game, level: " + levelName + " out of " + rounds + " rounds");
     }
 
-    public void writeToLog(string msg)
+    public GameObject SpawnPlayer()
+    {
+        return teams[activePlayers/2].GetComponent<Team>().SpawnPlayer(activePlayers++%2+1);
+    }
+
+    public void WriteToLog(string msg)
     {
         Debug.Log("Game Output: " + msg);
         StreamWriter sw = new StreamWriter(File.Open(outputPath, FileMode.Append));

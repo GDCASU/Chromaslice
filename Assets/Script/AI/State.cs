@@ -10,6 +10,9 @@ using UnityEngine;
 
 public abstract class State
 {
+    protected Team team;
+    protected Team enemyTeam;
+
     // Code to execute when entering the state
     public abstract void Start(StateMachine sm);
 

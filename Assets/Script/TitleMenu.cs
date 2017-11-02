@@ -5,6 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -15,6 +16,7 @@ public class TitleMenu : MonoBehaviour {
     public GameManager gameManager;
     public Toggle[] roundSelect;
     public GameObject[] levelSelect;
+    public string lobbySceneName;
     private string selectedLevel;
     private int rounds;
     // Use this for initialization
@@ -27,7 +29,7 @@ public class TitleMenu : MonoBehaviour {
         
 	}
 
-    public void LoadLevel()
+    public void StartLocal()
     {
         
         foreach (Toggle t in roundSelect)
@@ -49,7 +51,13 @@ public class TitleMenu : MonoBehaviour {
                 break;
             }
         }
-        
+
+        NetManager.GetInstance().StartLocalGame();
         GameManager.singleton.StartGame(selectedLevel + "_Level", rounds);
+    }
+
+    public void StartOnline()
+    {
+        SceneManager.LoadScene(lobbySceneName);
     }
 }

@@ -59,8 +59,6 @@ public class Interactable : MonoBehaviour
         // Save the team and player references to be used in subclasses
         Debug.Log(other.GetComponentInParent<Rigidbody>().gameObject.name + " collided with Interactable");
         Team = other.GetComponentInParent<Team>();
-        player1 = Team.player1;
-        player2 = Team.player2;
         // Once a player triggers an Interactable, hide the Interactable from the scene and prevent other GameObjects from triggering it
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<MeshRenderer>().enabled = false;

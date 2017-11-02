@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Title.unity
     guid: 221ad9fe71fcce040b4edb7674bf404d
   - enabled: 1
+    path: Assets/Scenes/Online_Lobby.unity
+    guid: 5a2daff9337e6c94fab1563701d6f224
+  - enabled: 1
     path: Assets/Scenes/Basic_Level.unity
     guid: c5574741d5fa74f4a8f35cb9906c8d38
   - enabled: 1
@@ -29,3 +32,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Demo_Level.unity
     guid: 24ffa2d5634cbb74cb218cf73318969c
+  - enabled: 1
+    path: Assets/Scenes/AI_Level.unity
+    guid: e00e5f0b675bbd24fb37ae321d7215b9
