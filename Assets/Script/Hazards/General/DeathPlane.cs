@@ -4,7 +4,9 @@ using UnityEngine;
 
 //Created by Ava Warfield 9/20/17
 
-public class Hazard : MonoBehaviour
+// Modified by Paul Gellai - This is a simple script that simply ensures that any player that touches an object with this script to it attached dies.
+
+public class DeathPlane : MonoBehaviour
 {
     public virtual void PlayerInteract()
     {
