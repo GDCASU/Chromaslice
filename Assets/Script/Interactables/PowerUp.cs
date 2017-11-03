@@ -80,12 +80,15 @@ public class PowerUp : Interactable
     // Set the Team and hide the object from the scene
     public virtual void OnPowerUpCollect(Team t, int modifier)
     {
-        Team = t;
-        Team.CurrentPowerUp = gameObject;
-        gameObject.GetComponent<Collider>().enabled = false;
-        gameObject.GetComponent<MeshRenderer>().enabled = false;
-        if(modifier != 0)
-            boostMultiplier = modifier;
+        if (collisionCollect == false)
+        {
+            Team = t;
+            Team.CurrentPowerUp = gameObject;
+            gameObject.GetComponent<Collider>().enabled = false;
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+            if (modifier != 0)
+                boostMultiplier = modifier;
+        }
     }
 
     // Trigger the powerUp
