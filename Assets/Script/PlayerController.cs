@@ -77,6 +77,7 @@ public class PlayerController : NetworkBehaviour
 
     private bool sprinting = false;
     private bool dashing = false;
+    private Vector3 targetLock;
     private float timeSinceSprint = 0;
     private float timeSinceDash = 0;
     private float timeSinceJump = 0;
@@ -104,6 +105,7 @@ public class PlayerController : NetworkBehaviour
         distanceToGround = GetComponent<SphereCollider>().radius;
         tempMaxSpeed = maxSpeed;
         tempMovementPower = 1;
+        targetLock = Vector3.zero;
     }
 
     void LateUpdate()
@@ -154,7 +156,7 @@ public class PlayerController : NetworkBehaviour
             Vector3 target = new Vector3(controls.GetHorizontal(), 0, controls.GetVertical()).normalized * maxSpeed;
             Vector3 accel;
             if (dashing)
-                accel = target * dashPower - rb.velocity;
+                accel = targetLock - rb.velocity;
             else
                 accel = new Vector3((target.x - rb.velocity.x) * decelerationRate, 0, (target.z - rb.velocity.z) * decelerationRate);
             accel.y = 0;
@@ -210,6 +212,7 @@ public class PlayerController : NetworkBehaviour
 
         dashing = true;
         timeSinceDash = 0;
+        targetLock = new Vector3(controls.GetHorizontal(), 0, controls.GetVertical()).normalized * maxSpeed * dashPower;
     }
 
     void UnDash()
