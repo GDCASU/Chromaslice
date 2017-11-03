@@ -80,6 +80,17 @@ public class PlayerController : NetworkBehaviour
     private float timeSinceSprint = 0;
     private float timeSinceDash = 0;
 
+    // Property for affecting the maxSpeed of the players
+    public float MaxSpeed
+    {
+        get { return maxSpeed; }
+        set
+        {
+            maxSpeed = value;
+            tempMaxSpeed = maxSpeed;
+        }
+    }
+
     float distanceToGround; //to prevent jumping in the air
     public Controls controls;
 
