@@ -69,7 +69,6 @@ public class PlayerController : NetworkBehaviour
     public float dashPower = 5;
     public float dashTime = 1;
     public float dashCooldown = 3;
-    public float jumpCooldown = 3;
     public int team;
 
     private float tempMovementPower;
@@ -80,24 +79,8 @@ public class PlayerController : NetworkBehaviour
     private Vector3 targetLock;
     private float timeSinceSprint = 0;
     private float timeSinceDash = 0;
-    private float timeSinceJump = 0;
 
-    // Property for affecting the maxSpeed of the players
-    public float MaxSpeed
-    {
-        get { return maxSpeed; }
-        set
-        {
-            maxSpeed = value;
-            tempMaxSpeed = maxSpeed;
-        }
-    }
-
-    //Jump stuff
-    public float jumpPower = 25.0f;
-    public int maxJumps = 1; //if we want double jump
     float distanceToGround; //to prevent jumping in the air
-
     public Controls controls;
 
     void Start()
@@ -122,7 +105,6 @@ public class PlayerController : NetworkBehaviour
         {
             Rigidbody rb = GetComponent<Rigidbody>();
 
-            if (controls.GetJump() && isGrounded() && timeSinceJump >= jumpCooldown) { Jump(); timeSinceJump = 0; }
             if (controls.GetDash() && !dashing && timeSinceDash >= dashCooldown) { Dash(); timeSinceDash = 0; }
 
             // Active powerUp if Team has one
@@ -145,7 +127,6 @@ public class PlayerController : NetworkBehaviour
             }
 
             timeSinceDash += Time.deltaTime;
-            timeSinceJump += Time.deltaTime;
 
             if (timeSinceDash >= dashTime)
             {
@@ -182,24 +163,10 @@ public class PlayerController : NetworkBehaviour
         team = num;
     }
 
-    public void SetJumpPower(float n)
-    {
-        jumpPower = n;
-    }
 
     public void SetDashPower(float n)
     {
         sprintPower = n;
-    }
-
-    bool isGrounded()
-    {
-        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
-    }
-
-    void Jump()
-    {
-        GetComponent<Rigidbody>().velocity = Vector3.up * jumpPower;
     }
 
     void Dash()
