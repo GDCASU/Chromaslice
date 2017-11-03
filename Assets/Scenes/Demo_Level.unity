@@ -363,7 +363,7 @@ Prefab:
     - target: {fileID: 114307006290813502, guid: b7f5e8cc77cd169408c2213e4f47515f,
         type: 2}
       propertyPath: collisionCollect
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b7f5e8cc77cd169408c2213e4f47515f, type: 2}
