@@ -73,7 +73,8 @@ public class GameManager : NetworkBehaviour
         Debug.Log("Logging match results to: " + outputPath);
         gameActive = false;
         countdownTimer = timeBeforeMatch;
-        deathMatch = GetComponent<DeathMatchRules>();
+        //deathMatch = GetComponent<DeathMatchRules>();
+        hillRules = GetComponent<KingOfTheHillRules>();
         if (!useTitleScreen)
             StartGame(SceneManager.GetActiveScene().name, maxRounds);
         activePlayers = 0;
@@ -88,10 +89,13 @@ public class GameManager : NetworkBehaviour
             if (gameActive && matchStarted)
             {
                 countdownTimer -= Time.deltaTime;
-                if (deathMatch.TimeLimit())
+                if (deathMatch)
                 {
-                    KillTeam(null); //draw
-                    WriteToLog("Time ran out, it's a draw");
+                    if (deathMatch.TimeLimit())
+                    {
+                        KillTeam(null); //draw
+                        WriteToLog("Time ran out, it's a draw");
+                    }
                 }
                 // if the game is active but match has not started (begins countdown timer)
             }
@@ -101,7 +105,10 @@ public class GameManager : NetworkBehaviour
                 if (countdownTimer < 1)
                 {
                     matchStarted = true;
-                    deathMatch.Reset();
+                    if (deathMatch)
+                    {
+                        deathMatch.Reset();
+                    }
                 }
             }
             if (countdownTimer < 0)
