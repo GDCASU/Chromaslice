@@ -40,6 +40,27 @@ public class ObjectDetection : MonoBehaviour {
         return distance;
     }
 
+    // same as above, but returns nearest object with the given tag; null if none are found
+    public GameObject NearestObjectfromPoint(Vector3 point, string tag)
+    {
+        float distance = Mathf.Infinity;
+        float tempDist = Mathf.Infinity;
+        GameObject nearestOb = null;
+        GameObject[] objects = GameObject.FindGameObjectsWithTag(tag);
+        foreach (GameObject thing in objects)
+        {
+            float thingX = thing.transform.position.x;
+            float thingY = thing.transform.position.y;
+            float thingZ = thing.transform.position.z;
+            tempDist = Mathf.Sqrt(Mathf.Pow(point.x - thingX, 2) + Mathf.Pow(point.y - thingY, 2) + Mathf.Pow(point.z - thingZ, 2));
+            if (tempDist < distance){
+                distance = tempDist;
+                nearestOb = thing;
+            }
+        }
+        return nearestOb;
+    }
+
     // This is pretty much the same method from CameraControl
     private Vector3 getAverageAIPlayerPos(){
         Vector3 midPlayerPoint;
