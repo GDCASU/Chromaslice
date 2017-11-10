@@ -73,8 +73,8 @@ public class GameManager : NetworkBehaviour
         Debug.Log("Logging match results to: " + outputPath);
         gameActive = false;
         countdownTimer = timeBeforeMatch;
-        //deathMatch = GetComponent<DeathMatchRules>();
-        hillRules = GetComponent<KingOfTheHillRules>();
+        deathMatch = GetComponent<DeathMatchRules>();
+        //hillRules = GetComponent<KingOfTheHillRules>();
         if (!useTitleScreen)
             StartGame(SceneManager.GetActiveScene().name, maxRounds);
         activePlayers = 0;
