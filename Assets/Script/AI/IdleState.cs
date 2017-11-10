@@ -7,35 +7,25 @@ using UnityEngine;
  * Description:     This class is the base/default state for the AI.
  *                  I have provided a swapTimer to demonstrate how evaluating conditions 
  *                  swaps between the different states. 
- * Version:         1.0.0
  * Author:          Zachary Schmalz
  * Date:            10/18/2017
- * 
- * 
- * Description:     Updated the State to accomodate the new Transitioning system
- * Version:         1.1.0
- * Author:          Zachary Schmalz
- * Date:            11/9/2017
  */
-
-// Create the Scriptable Object
-[CreateAssetMenu (menuName = "AI/States/Idle")]
 
 public class IdleState : State
 {
-    public override void Enter(StateMachine sm)
+    private float swapTimer;
+
+    public override void Start(StateMachine sm)
     {
         Debug.Log("Entering State: Idle");
-
-        // Add the methods for evaluating conditions to a list
-        Conditions = new List<Func<bool>>() { Condition1, Condition2, Condition3 };
-        // Set the data required for creating the transitions between the states
-        StateTransitions.CreateStateTransitions(this, sm.AllStates, Conditions);
+        team = sm.GetTeam();
+        swapTimer = 3.0f;
     }
 
-    public override void Execute(StateMachine sm)
+    public override void Update(StateMachine sm)
     {
-        
+        Debug.Log("Current State: Idle");
+        swapTimer -= Time.deltaTime;
     }
 
     public override void Exit(StateMachine sm)
@@ -43,24 +33,16 @@ public class IdleState : State
         Debug.Log("Exiting State: Idle");
     }
 
-    // Condition for transitioning to IDLE STATE
-    protected override bool Condition1()
+    // Example of how evaluating transitions could work
+    public override State EvaluateTransitions(StateMachine sm)
     {
-        Debug.Log("Evaluating Condition 1");
-        return true;
-    }
+        Debug.Log("Evaluating Transitions...");
+        if (swapTimer <= 0)
+        {
+            return new PowerUpState();
+        }
 
-    // Condition for transitioning to ATTACK STATE
-    protected override bool Condition2()
-    {
-        Debug.Log("Evaluating Condition 2");
-        return true;
-    }
-    
-    // Condition for transitioning to POWERUP STATE
-    protected override bool Condition3()
-    {
-        Debug.Log("Evaluating Condition 3");
-        return true;
+        else
+            return null;
     }
 }

@@ -72,8 +72,7 @@ public class PowerUp : Interactable
     protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
-        gameObject.GetComponent<Collider>().enabled = false;
-        gameObject.GetComponent<MeshRenderer>().enabled = false;
+        Team.CurrentPowerUp = gameObject;
         // Note that if the designers choose this route, there would be no boostmultiplier.
         boostMultiplier = 1;
     }
