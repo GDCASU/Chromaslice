@@ -124,7 +124,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edfff51bad3a5834baff980d4e931664, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: {fileID: 752135251}
+  AllStates:
+  - {fileID: 11400000, guid: 3108f2810b9dca940924ac71ac96f187, type: 2}
+  - {fileID: 11400000, guid: ce17dafa01323104fb073166a2787f2c, type: 2}
+  - {fileID: 11400000, guid: a2e77344ce09c8045826b3f544b47c98, type: 2}
+  currentState: {fileID: 0}
 --- !u!1 &442082195 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1692480771552320, guid: 5647b08476264db4788883791609c8ad,
@@ -382,7 +386,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &752135252
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1009,7 +1013,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1431161690092774, guid: da76c2114b4dac2459456aa6416e30c0, type: 2}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: da76c2114b4dac2459456aa6416e30c0, type: 2}
