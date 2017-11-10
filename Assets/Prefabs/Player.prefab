@@ -580,13 +580,13 @@ MonoBehaviour:
   numPlayers: 1
   health: 100
   maxSpeed: 40
-  bounceFactor: 3
+  bounceFactor: 2
   sprintPower: 2
   sprintTime: 0.5
   decelerationRate: 0.25
   dashPower: 3
-  dashTime: 0.1
-  dashCooldown: 0
+  dashTime: 0.2
+  dashCooldown: 1
   jumpCooldown: 2
   team: 0
   jumpPower: 400
