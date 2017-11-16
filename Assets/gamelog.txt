@@ -1,181 +1,171 @@
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Team 0 won the round with timer seconds remaining
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
+Starting new game, level: Demo_Level out of 3 rounds
 Team 1 won the round with timer seconds remaining
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
+Starting new game, level: Basic_Level out of 3 rounds
 Team 1 won the round with timer seconds remaining
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Elevated_Level out of 999 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Team 0 won the round with timer seconds remaining
-Match over. It's a tie
-Starting new game, level: Selected Text (UnityEngine.UI.Text)_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Elevated_Level out of 3 rounds
 Starting new game, level: Pillar_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
 Team 1 won the round with timer seconds remaining
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Basic_Level out of 3 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Team 1 won the round with timer seconds remaining
+Starting new game, level: AI_Level out of 3 rounds
+Starting new game, level: AI_Level out of 1 rounds
 Match over. It's a tie
 Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Team 1 won the round with timer seconds remaining
+Starting new game, level: AI_Level out of 1 rounds
 Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Team 1 won the round with timer seconds remaining
+Starting new game, level: AI_Level out of 1 rounds
 Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Team 1 won the round with timer seconds remaining
+Starting new game, level: AI_Level out of 1 rounds
 Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Team 1 won the round with timer seconds remaining
+Starting new game, level: AI_Level out of 1 rounds
 Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
-Team 1 won the round with timer seconds remaining
+Starting new game, level: AI_Level out of 1 rounds
 Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
-Team 1 won the round with timer seconds remaining
+Starting new game, level: AI_Level out of 1 rounds
 Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Team 1 won the round with timer seconds remaining
+Starting new game, level: AI_Level out of 1 rounds
 Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
 Team 0 won the round with timer seconds remaining
-Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
 Team 1 won the round with timer seconds remaining
 Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
 Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
 Match over. It's a tie
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
 Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
 Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
 Starting new game, level: Demo_Level out of 1 rounds
-Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
 Team 1 won the round with timer seconds remaining
 Match over. It's a tie
 Starting new game, level: Demo_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
 Team 1 won the round with timer seconds remaining
 Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Team 0 won the round with timer seconds remaining
+Team 1 won the round with timer seconds remaining
+Match over. It's a tie
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
+Starting new game, level: AI_Level out of 1 rounds
