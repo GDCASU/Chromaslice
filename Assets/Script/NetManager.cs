@@ -37,7 +37,7 @@ public class NetManager : NetworkManager
     void OnReceivePlayerInfo(NetworkMessage netMsg)
     {
         PlayerInfoMessage msg = netMsg.ReadMessage<PlayerInfoMessage>();
-        if (IsGameJoinable(msg.players.Count))
+        if (IsGameJoinable(msg.players.Count) || msg.players.Count == 4)
         {
             playerList.AddRange(msg.players);
             for (int i = 0; i < playerList.Count; i++)
@@ -134,8 +134,7 @@ public class NetManager : NetworkManager
 
     public override void OnServerReady(NetworkConnection conn)
     {
-        if(networkSceneName == onlineScene)
-            NetworkServer.SendToClient(conn.connectionId, ExtMsgType.Ping, new PingMessage() { connectionId = conn.connectionId });
+        NetworkServer.SendToClient(conn.connectionId, ExtMsgType.Ping, new PingMessage() { connectionId = conn.connectionId });
         base.OnServerReady(conn);
     }
 
