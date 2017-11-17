@@ -19,7 +19,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4507787461879284}
-  - component: {fileID: 114617112288123574}
+  - component: {fileID: 114440145144625850}
+  - component: {fileID: 114326207767300574}
+  - component: {fileID: 114264062695441664}
+  - component: {fileID: 114628163154690540}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameController
@@ -40,7 +43,72 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114617112288123574
+--- !u!114 &114264062695441664
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1748261167873404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 5
+    i1: 87
+    i2: 110
+    i3: 91
+    i4: 79
+    i5: 141
+    i6: 80
+    i7: 228
+    i8: 217
+    i9: 131
+    i10: 88
+    i11: 178
+    i12: 10
+    i13: 63
+    i14: 135
+    i15: 85
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
+--- !u!114 &114326207767300574
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1748261167873404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0472557aaa54f346b1bf659ce7b3dc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scoreLimit: 0
+  timeLimit: 0
+  scoreTeam1: 0
+  scoreTeam2: 0
+  time: 0
+--- !u!114 &114440145144625850
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1748261167873404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f226f6ec209db0429051b6f04129c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeLimit: 0
+  capTime: 0
+  timeTeam0: 0
+  timeTeam1: 0
+  capTimeTeam0: 0
+  capTimeTeam1: 0
+--- !u!114 &114628163154690540
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -52,14 +120,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstTeamLayer: 10
-  singleControllerPerTeam: 0
   teamPrefab: {fileID: 1383037164253312, guid: e1233598747b4e1458f001328d9e98ba, type: 2}
   teams: []
-  matchTime: Infinity
   spawnPoints: []
   numberOfPlayers: 0
+  deathMatch: {fileID: 0}
+  hillRules: {fileID: 0}
   maxRounds: 999
   currentRound: 0
   gameActive: 0
+  matchStarted: 0
   useTitleScreen: 1
-  timer: 0
+  countdownOver: 0
+  countdownTimer: 0
+  timeBeforeMatch: 4
+  spawnTimer: 3
