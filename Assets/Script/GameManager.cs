@@ -29,6 +29,11 @@ using UnityEngine.SceneManagement;
 // Date:        10/20/2017
 // Description: Switch usage of game rules to DeathMatchRules instead of hard coded determination
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Changed spawning system & controls to work with networking, added documentation and
+//              rearranged update method. Need to fix titlescreen-skip functionality
+
 public class GameManager : NetworkBehaviour
 {
     public static GameManager singleton;
@@ -36,6 +41,8 @@ public class GameManager : NetworkBehaviour
     public int firstTeamLayer;
     public GameObject teamPrefab;
     public GameObject[] teams;
+    public int team1Score;
+    public int team2Score;
     public Vector3[] spawnPoints;
     public int numberOfPlayers;
     public DeathMatchRules deathMatch;
@@ -91,7 +98,6 @@ public class GameManager : NetworkBehaviour
             countdownTimer -= Time.deltaTime;
         if (gameActive)
         {
-            Debug.Log("GAME. ACTIVE.");
             if (matchStarted)
             {
                 if (countdownTimer < 0)
@@ -129,11 +135,13 @@ public class GameManager : NetworkBehaviour
         {
             Team t = teams[i].GetComponent<Team>();
             t.ResetTeam();
+            t.RpcResetTeam();
             if (t != team && team != null)
             {
                 t.AddPoints();
                 if (deathMatch)
                     deathMatch.AddScore(t.name);
+                NetManager.GetInstance().SendScoreUpdate();
                 WriteToLog(t.name + " won the round with " + deathMatch.time + " seconds remaining");
             }
         }
@@ -198,6 +206,7 @@ public class GameManager : NetworkBehaviour
     [Server]
     public void StartGame(string levelName, int rounds)
     {
+        NetworkServer.Spawn(gameObject);
         maxRounds = rounds;
         currentRound = 0;
         gameActive = true;
@@ -205,9 +214,19 @@ public class GameManager : NetworkBehaviour
         matchStarted = false;
         countdownTimer = timeBeforeMatch;
         countdownOver = false;
-        RpcStartGame();
+        NetworkServer.SendToAll(NetManager.ExtMsgType.StartGame, new NetManager.PingMessage());
         NetManager.GetInstance().ServerChangeScene(levelName);
         WriteToLog("Starting new game, level: " + levelName + " out of " + rounds + " rounds");
+    }
+
+    [Client]
+    public void OnStartGame(NetworkMessage netMsg)
+    {
+        gameActive = true;
+        // New boolean variable position
+        matchStarted = false;
+        countdownTimer = timeBeforeMatch;
+        countdownOver = false;
     }
 
     [Server]

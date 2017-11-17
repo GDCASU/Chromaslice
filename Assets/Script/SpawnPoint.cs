@@ -13,6 +13,10 @@ using UnityEngine.Networking;
 
 //revised 9/21/17 by Kyle Aycock: modified to use new spawn system
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Networking update
+
 public class SpawnPoint : NetworkBehaviour
 {
     public GameManager game;

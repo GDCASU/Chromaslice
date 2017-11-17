@@ -22,7 +22,10 @@ using UnityEngine.Networking;
 // Developer:   Kyle Aycock
 // Date:        10/27/17
 // Description: Added rope relaxation for vertically oriented catch points too
-//              
+
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Networked the endpoints so the rope works properly on clients
 
 public class Rope : NetworkBehaviour
 {

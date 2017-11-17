@@ -11,6 +11,10 @@ using UnityEngine.Networking;
 
 //revised 9/21/17 by Kyle Aycock: modified to work with new spawn system
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Networking update
+
 public class GetPosition : NetworkBehaviour
 {
     public SpawnPoint spawn;

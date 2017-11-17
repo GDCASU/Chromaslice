@@ -20,6 +20,10 @@ using UnityEngine.Networking;
 // Date:        9/24/17
 // Description: Team now has a invincibility delay in the spawnTimer
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Changed variables to syncvars and reworked spawning/respawning
+//              to work with networking
 
 public class Team : NetworkBehaviour
 {
@@ -39,7 +43,9 @@ public class Team : NetworkBehaviour
     public GameObject player1;
     public GameObject player2;
 
+    [SyncVar]
     private Vector3 spawn1;
+    [SyncVar]
     private Vector3 spawn2;
     private float rejoinTimer;
     private bool hasRope = false;
@@ -178,7 +184,7 @@ public class Team : NetworkBehaviour
             controller1 = control;
             player1 = ClientScene.FindLocalObject(ply);
             ApplyColor(player1, color1);
-            player1.GetComponent<PlayerController>().SetControls(controller1+1);
+            player1.GetComponent<PlayerController>().SetControls(controller1 + 1);
             player1.transform.SetParent(transform);
         }
         else
@@ -187,7 +193,7 @@ public class Team : NetworkBehaviour
             controller2 = control;
             player2 = ClientScene.FindLocalObject(ply);
             ApplyColor(player2, color2);
-            player2.GetComponent<PlayerController>().SetControls(controller2+1);
+            player2.GetComponent<PlayerController>().SetControls(controller2 + 1);
             player2.transform.SetParent(transform);
         }
     }
@@ -221,12 +227,24 @@ public class Team : NetworkBehaviour
     public void ResetTeam()
     {
         if (currentRope) Destroy(currentRope);
-        if (player1) Destroy(player1);
-        if (player2) Destroy(player2);
-        player1 = null;
-        player2 = null;
-        //SpawnPlayer(1);
-        //SpawnPlayer(2);
+        if (player1)
+        {
+            player1.transform.position = spawn1;
+            player1.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            player1.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+        if (player2)
+        {
+            player2.transform.position = spawn2;
+            player2.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            player2.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+    }
+
+    [ClientRpc]
+    public void RpcResetTeam()
+    {
+        ResetTeam();
     }
 
     public void AddPoints()

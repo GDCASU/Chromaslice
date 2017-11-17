@@ -6,6 +6,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Handles I/O for the online lobby
+
 public class Lobby : MonoBehaviour {
 
     public NetManager nm;
@@ -18,6 +22,8 @@ public class Lobby : MonoBehaviour {
     public InputField ipField;
 
     public Text[] playerNameTexts;
+    public Button startButton;
+    public Text playerText;
 
     private bool started = false;
 
@@ -61,8 +67,18 @@ public class Lobby : MonoBehaviour {
 
     public void UpdatePlayerDisplay()
     {
-        for (int i = 0; i < NetManager.GetInstance().playerList.Count; i++)
-            playerNameTexts[i].text = NetManager.GetInstance().playerList[i].name;
+        List<Player> list = NetManager.GetInstance().playerList;
+        if (list.Count > 4)
+            Debug.LogWarning("More than 4 players somehow!");
+        for (int i = 0; i < list.Count; i++)
+            playerNameTexts[i].text = list[i].name;
+        if (list.Count == 4)
+        {
+            startButton.interactable = true;
+            playerText.text = "Ready to Start!";
+        }
+        else
+            startButton.interactable = false;
     }
 
     //only callable by host = server

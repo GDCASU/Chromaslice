@@ -53,6 +53,10 @@ using UnityEngine.Networking;
 //              Added "Beyblade Effect" - tops bounce off each other
 //              violently when colliding
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Networking update
+
 public class PlayerController : NetworkBehaviour
 {
 
