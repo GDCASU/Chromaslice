@@ -73,6 +73,7 @@ public class CameraControl : MonoBehaviour {
     private float getNearestPlayerZPos(){
         float farPoint = Mathf.Infinity;
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        if (players.Length == 0) return 0;
         foreach (GameObject player in players)
             if (player.transform.position.z < farPoint)
                 farPoint = player.transform.position.z;

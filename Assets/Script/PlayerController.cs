@@ -60,7 +60,6 @@ public class PlayerController : NetworkBehaviour
     public float numPlayers = 1; //is this even needed anymore?
 
     //Player attributes
-    public float health = 100;
     public float maxSpeed;
     public float bounceFactor;
     public float sprintPower = 5;
@@ -102,6 +101,7 @@ public class PlayerController : NetworkBehaviour
         targetLock = Vector3.zero;
     }
 
+
     void LateUpdate()
     {
         //Sticks player to terrain
@@ -112,7 +112,7 @@ public class PlayerController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (GameManager.singleton.matchStarted && isLocalPlayer)
+        if (isLocalPlayer && GameManager.singleton.matchStarted)
         {
             Rigidbody rb = GetComponent<Rigidbody>();
 
@@ -166,6 +166,7 @@ public class PlayerController : NetworkBehaviour
 
     public void SetControls(int controller)
     {
+        Debug.Log("Setting controls to " + controller);
         controls = Controls.LoadFromConfig(controller);
     }
 
