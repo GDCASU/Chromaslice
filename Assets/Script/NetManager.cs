@@ -37,13 +37,14 @@ public class NetManager : NetworkManager
     void OnReceivePlayerInfo(NetworkMessage netMsg)
     {
         PlayerInfoMessage msg = netMsg.ReadMessage<PlayerInfoMessage>();
-        if (IsGameJoinable(msg.players.Count) || msg.players.Count == 4)
+        if ((IsGameJoinable(msg.players.Count) || msg.players.Count == 4) && GetPlayer(msg.players[0].connectionId, msg.players[0].controllerId) == null)
         {
             playerList.AddRange(msg.players);
             for (int i = 0; i < playerList.Count; i++)
                 playerList[i].playerId = i;
             NetworkServer.SendToAll(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
-        } else
+        }
+        else if(networkSceneName == onlineScene)
         {
             GetConnection(msg.players[0].connectionId).Disconnect();
         }
@@ -66,10 +67,18 @@ public class NetManager : NetworkManager
 
     public void SendScoreUpdate()
     {
-        NetworkServer.SendToAll(ExtMsgType.Score, new ScoreMessage() {
+        NetworkServer.SendToAll(ExtMsgType.Score, new ScoreMessage()
+        {
             team1Score = GameManager.singleton.teams[0].GetComponent<Team>().points,
             team2Score = GameManager.singleton.teams[1].GetComponent<Team>().points
         });
+    }
+
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        playerList.RemoveAll(p => p.connectionId == conn.connectionId);
+        Debug.Log("serverdisconnect");
+        base.OnServerDisconnect(conn);
     }
 
     public override void OnServerConnect(NetworkConnection conn)
@@ -126,7 +135,7 @@ public class NetManager : NetworkManager
         if (!ClientScene.ready) ClientScene.Ready(conn);
         for (short i = 0; i < localPlayers.Count; i++)
         {
-            if (ClientScene.localPlayers.Count >= i+1 && ClientScene.localPlayers[i].IsValid && ClientScene.localPlayers[i].gameObject)
+            if (ClientScene.localPlayers.Count >= i + 1 && ClientScene.localPlayers[i].IsValid && ClientScene.localPlayers[i].gameObject)
                 Destroy(ClientScene.localPlayers[i].gameObject);
             ClientScene.AddPlayer(conn, i);
         }
