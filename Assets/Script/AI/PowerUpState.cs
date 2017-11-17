@@ -5,35 +5,33 @@ using UnityEngine;
 
 /*
  * Description:     This class is a state for gathering powerUps. I have partially implemented the functional code.
+ * Version:         1.0.0
  * Author:          Zachary Schmalz
  * Date:            10/18/2017
+ * 
+ * 
+ * Description:     Updated the State to accomodate the new Transitioning system
+ * Version:         1.1.0
+ * Author:          Zachary Schmalz
+ * Date:            11/9/2017
  */
+
+// Create the Scriptable Object
+[CreateAssetMenu(menuName = "AI/States/PowerUp")]
 
 public class PowerUpState : State
 {
-    private float radius = 20f;
-    private GameObject powerUp;
-    private float orbitDist = 5.0f;
-
-    public override void Start(StateMachine sm)
+    public override void Enter(StateMachine sm)
     {
         Debug.Log("Entering State: PowerUp");
-        team = sm.GetTeam();
-        Collider[] collidersInRange = Physics.OverlapSphere((team.player1.transform.position + team.player2.transform.position) / 2, radius);
-        foreach (Collider obj in collidersInRange)
-        {
-            if (obj.gameObject.GetComponent<PowerUp>())
-            {
-                powerUp = obj.gameObject;
-                break;
-            }
-        }
-        team.player1.GetComponent<AIController>().MoveToPoint(new Vector3(powerUp.transform.position.x, 1.5f, powerUp.transform.position.z + orbitDist));
+
+        Conditions = new List<Func<bool>>() { Condition1, Condition2, Condition3 };
+        StateTransitions.CreateStateTransitions(this, sm.AllStates, Conditions);
     }
 
-    public override void Update(StateMachine sm)
+    public override void Execute(StateMachine sm)
     {
-        Debug.Log("Current State: PowerUp");
+        
     }
 
     public override void Exit(StateMachine sm)
@@ -41,9 +39,24 @@ public class PowerUpState : State
         Debug.Log("Exiting State: PowerUp");
     }
 
-    public override State EvaluateTransitions(StateMachine sm)
+    // Condition for transitioning to IDLE STATE
+    protected override bool Condition1()
     {
-        Debug.Log("Evaluating Transitions...");
-        return null;
+        Debug.Log("Evaluating Condition 1");
+        return true;
+    }
+
+    // Condition for transitioning to ATTACK STATE
+    protected override bool Condition2()
+    {
+        Debug.Log("Evaluating Condition 2");
+        return true;
+    }
+
+    // Condition for transitioning to POWERUP STATE
+    protected override bool Condition3()
+    {
+        Debug.Log("Evaluating Condition 3");
+        return true;
     }
 }

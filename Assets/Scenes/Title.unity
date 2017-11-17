@@ -122,7 +122,7 @@ GameObject:
   - component: {fileID: 15554782}
   m_Layer: 5
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: MainCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18e41a8b7ff7fc4c83c04193734dc09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 323172611}
+  gameManager: {fileID: 0}
   roundSelect:
   - {fileID: 932816057}
   - {fileID: 1816981335}
@@ -1066,12 +1066,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 248866649}
---- !u!114 &323172611 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114617112288123574, guid: 05576e5b4f8d50e4d98358b20a3f8755,
-    type: 2}
-  m_PrefabInternal: {fileID: 571115480}
-  m_Script: {fileID: 11500000, guid: 290ccd46ceb6b3840bb674ab890c5496, type: 3}
 --- !u!1 &332355964
 GameObject:
   m_ObjectHideFlags: 0
@@ -1624,27 +1618,6 @@ RectTransform:
   m_AnchoredPosition: {x: 58, y: 0}
   m_SizeDelta: {x: 132, y: 40}
   m_Pivot: {x: 0, y: 0.5}
---- !u!1 &453161937 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1748261167873404, guid: 05576e5b4f8d50e4d98358b20a3f8755,
-    type: 2}
-  m_PrefabInternal: {fileID: 571115480}
---- !u!114 &453161939
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 453161937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0472557aaa54f346b1bf659ce7b3dc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scoreLimit: 0
-  timeLimit: 0
-  scoreTeam1: 0
-  scoreTeam2: 0
-  time: 0
 --- !u!1 &490244804
 GameObject:
   m_ObjectHideFlags: 0
@@ -2669,37 +2642,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 114617112288123574, guid: 05576e5b4f8d50e4d98358b20a3f8755,
-        type: 2}
-      propertyPath: matchTime
-      value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 114617112288123574, guid: 05576e5b4f8d50e4d98358b20a3f8755,
-        type: 2}
-      propertyPath: gameActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114617112288123574, guid: 05576e5b4f8d50e4d98358b20a3f8755,
-        type: 2}
-      propertyPath: timeBeforeMatch
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 114617112288123574, guid: 05576e5b4f8d50e4d98358b20a3f8755,
-        type: 2}
-      propertyPath: singleControllerPerTeam
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114617112288123574, guid: 05576e5b4f8d50e4d98358b20a3f8755,
-        type: 2}
-      propertyPath: spawnTimer
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 114617112288123574, guid: 05576e5b4f8d50e4d98358b20a3f8755,
-        type: 2}
-      propertyPath: Deathplane
-      value: 
-      objectReference: {fileID: 1037465877095792, guid: 85dabfe0276a80043bfdcf305b7ea150,
-        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 05576e5b4f8d50e4d98358b20a3f8755, type: 2}
   m_IsPrefabParent: 0
@@ -3775,7 +3717,7 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 888628047}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
@@ -4013,7 +3955,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -131.3}
-  m_SizeDelta: {x: 185.38983, y: 96.1017}
+  m_SizeDelta: {x: 184.66666, y: 95.86667}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &944967451
 GameObject:
@@ -4465,6 +4407,20 @@ Light:
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
+  m_FalloffTable:
+    m_Table[0]: 0
+    m_Table[1]: 0
+    m_Table[2]: 0
+    m_Table[3]: 0
+    m_Table[4]: 0
+    m_Table[5]: 0
+    m_Table[6]: 0
+    m_Table[7]: 0
+    m_Table[8]: 0
+    m_Table[9]: 0
+    m_Table[10]: 0
+    m_Table[11]: 0
+    m_Table[12]: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
@@ -8994,6 +8950,7 @@ MonoBehaviour:
   m_SpawnPrefabs:
   - {fileID: 1383037164253312, guid: e1233598747b4e1458f001328d9e98ba, type: 2}
   - {fileID: 1618374010297264, guid: 7ab4d1e6b7e8c5542b530a950adfa081, type: 2}
+  - {fileID: 1748261167873404, guid: 05576e5b4f8d50e4d98358b20a3f8755, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -9440,9 +9397,9 @@ CanvasGroup:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1973623328}
   m_Enabled: 1
-  m_Alpha: 0.5
+  m_Alpha: 1
   m_Interactable: 1
-  m_BlocksRaycasts: 0
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!114 &1973623332
 MonoBehaviour:
@@ -9534,7 +9491,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1973623336}
   m_OnClick:
     m_PersistentCalls:
@@ -10230,7 +10187,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0.00012207031, y: -200}
-  m_SizeDelta: {x: 185.38983, y: 90.67796}
+  m_SizeDelta: {x: 185.73334, y: 91.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2085616106
 GameObject:

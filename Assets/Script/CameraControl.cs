@@ -7,6 +7,9 @@ using UnityEngine;
  * @description: This script should function to keep all players within
  *               the main view at all times during the game.
  */
+
+// Kyle Aycock 11/17/17 - fixed an error having to do with unhandled zero-player case
+
 public class CameraControl : MonoBehaviour {
 
     private Camera cam;
@@ -73,6 +76,7 @@ public class CameraControl : MonoBehaviour {
     private float getNearestPlayerZPos(){
         float farPoint = Mathf.Infinity;
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        if (players.Length == 0) return 0;
         foreach (GameObject player in players)
             if (player.transform.position.z < farPoint)
                 farPoint = player.transform.position.z;
