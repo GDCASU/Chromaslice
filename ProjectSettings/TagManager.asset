@@ -10,6 +10,7 @@ TagManager:
   - MaterialText
   - AIPlayer
   - FallingHazardDeathPlane
+  - MainCanvas
   layers:
   - Default
   - TransparentFX
