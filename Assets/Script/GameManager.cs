@@ -29,15 +29,20 @@ using UnityEngine.SceneManagement;
 // Date:        10/20/2017
 // Description: Switch usage of game rules to DeathMatchRules instead of hard coded determination
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Changed spawning system & controls to work with networking, added documentation and
+//              rearranged update method. Need to fix titlescreen-skip functionality
+
 public class GameManager : NetworkBehaviour
 {
     public static GameManager singleton;
 
     public int firstTeamLayer;
-    public bool singleControllerPerTeam;
     public GameObject teamPrefab;
-    public GameObject Deathplane;
     public GameObject[] teams;
+    public int team1Score;
+    public int team2Score;
     public Vector3[] spawnPoints;
     public int numberOfPlayers;
     public DeathMatchRules deathMatch;
@@ -54,13 +59,15 @@ public class GameManager : NetworkBehaviour
 
     public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
 
+    //game log path
     private string outputPath;
-
+    //used for knowing which player to spawn
     private int activePlayers;
 
     // Use this for initialization
     void Awake()
     {
+        //make singleton
         if (singleton)
         {
             Destroy(gameObject);
@@ -68,47 +75,52 @@ public class GameManager : NetworkBehaviour
         }
         singleton = this;
         DontDestroyOnLoad(this);
+
+        //setup logging
         outputPath = Application.dataPath + "/gamelog.txt";
         if (!File.Exists(outputPath)) File.Create(outputPath).Close();
         Debug.Log("Logging match results to: " + outputPath);
-        gameActive = false;
-        countdownTimer = timeBeforeMatch;
+
+        //initialize variables
         deathMatch = GetComponent<DeathMatchRules>();
-        if (!useTitleScreen)
-            StartGame(SceneManager.GetActiveScene().name, maxRounds);
+        //hillRules = GetComponent<KingOfTheHillRules>();
         activePlayers = 0;
+
+        //handle title screen skip in editor (currently unsupported until i get around to fixing it)
+        //if (!useTitleScreen)
+            //StartGame(SceneManager.GetActiveScene().name, maxRounds);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Simple temp timer. Need to change, but good for Friday
-        if (useTitleScreen)
+        if(countdownTimer > 0)
+            countdownTimer -= Time.deltaTime;
+        if (gameActive)
         {
-            if (gameActive && matchStarted)
+            if (matchStarted)
             {
-                countdownTimer -= Time.deltaTime;
-                if (deathMatch.TimeLimit())
+                if (countdownTimer < 0)
+                    countdownOver = true;
+                if (NetworkServer.active && deathMatch)
                 {
-                    KillTeam(null); //draw
-                    WriteToLog("Time ran out, it's a draw");
+                    if (deathMatch.TimeLimit())
+                    {
+                        KillTeam(null); //draw
+                        WriteToLog("Time ran out, it's a draw");
+                    }
                 }
-                // if the game is active but match has not started (begins countdown timer)
             }
-            else if (gameActive)
+            else if (countdownTimer < 1)
             {
-                countdownTimer -= Time.deltaTime;
-                if (countdownTimer < 1)
+                matchStarted = true;
+
+                if (deathMatch)
                 {
-                    matchStarted = true;
                     deathMatch.Reset();
                 }
             }
-            if (countdownTimer < 0)
-                countdownOver = true;
         }
-        else
-            matchStarted = true;
     }
 
     /// <summary>
@@ -116,18 +128,21 @@ public class GameManager : NetworkBehaviour
     /// Adds points, advances current round, returns to title if rounds are over
     /// </summary>
     /// <param name="team">Team that got killed</param>
+    [Server]
     public void KillTeam(Team team)
     {
         for (int i = 0; i < teams.Length; i++)
         {
             Team t = teams[i].GetComponent<Team>();
             t.ResetTeam();
+            t.RpcResetTeam();
             if (t != team && team != null)
             {
                 t.AddPoints();
-                if(deathMatch)
-                    deathMatch.AddScore(t.name); //only reasonable for 2-team situations (which is probably all we're gonna have)
-                WriteToLog(t.name + " won the round with " + "timer" + " seconds remaining");
+                if (deathMatch)
+                    deathMatch.AddScore(t.name);
+                NetManager.GetInstance().SendScoreUpdate();
+                WriteToLog(t.name + " won the round with " + deathMatch.time + " seconds remaining");
             }
         }
         currentRound++;
@@ -156,6 +171,7 @@ public class GameManager : NetworkBehaviour
     /// <param name="team">Team number</param>
     /// <param name="spawn1">Spawn point for player 1</param>
     /// <param name="spawn2">Spawn point for player 2</param>
+    [Server]
     public void SetSpawn(int team, Vector3 spawn1, Vector3 spawn2)
     {
         spawnPoints[team * 2] = spawn1;
@@ -175,11 +191,11 @@ public class GameManager : NetworkBehaviour
         teams[num].name = "Team " + num;
         teams[num].layer = firstTeamLayer + num;
         teams[num].GetComponent<Team>().SetSpawnPoints(spawnPoints[num * 2], spawnPoints[num * 2 + 1]);
-        teams[num].GetComponent<Team>().SetControls(num*2+1,num*2+2);
         teams[num].GetComponent<Team>().SetColors(colorPairs[num, 0], colorPairs[num, 1]);
         NetworkServer.Spawn(teams[num]);
     }
 
+    [Server]
     public void SetNumberOfPlayers(int num)
     {
         numberOfPlayers = num;
@@ -187,21 +203,36 @@ public class GameManager : NetworkBehaviour
         spawnPoints = new Vector3[num * 2];
     }
 
+    [Server]
     public void StartGame(string levelName, int rounds)
     {
+        NetworkServer.Spawn(gameObject);
         maxRounds = rounds;
         currentRound = 0;
         gameActive = true;
         // New boolean variable position
         matchStarted = false;
+        countdownTimer = timeBeforeMatch;
         countdownOver = false;
+        NetworkServer.SendToAll(NetManager.ExtMsgType.StartGame, new NetManager.PingMessage());
         NetManager.GetInstance().ServerChangeScene(levelName);
         WriteToLog("Starting new game, level: " + levelName + " out of " + rounds + " rounds");
     }
 
-    public GameObject SpawnPlayer()
+    [Client]
+    public void OnStartGame(NetworkMessage netMsg)
     {
-        return teams[activePlayers/2].GetComponent<Team>().SpawnPlayer(activePlayers++%2+1);
+        gameActive = true;
+        // New boolean variable position
+        matchStarted = false;
+        countdownTimer = timeBeforeMatch;
+        countdownOver = false;
+    }
+
+    [Server]
+    public GameObject SpawnPlayer(Player ply)
+    {
+        return teams[ply.playerId/2].GetComponent<Team>().SpawnPlayer(ply);
     }
 
     public void WriteToLog(string msg)
