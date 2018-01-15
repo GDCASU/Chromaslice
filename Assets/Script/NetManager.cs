@@ -20,6 +20,9 @@ public class NetManager : NetworkManager
 
     public List<Player> localPlayers;
 
+
+    public string lobbyScene;
+
     public void Start()
     {
         playerList = new List<Player>();
@@ -37,6 +40,7 @@ public class NetManager : NetworkManager
     void OnReceivePlayerInfo(NetworkMessage netMsg)
     {
         PlayerInfoMessage msg = netMsg.ReadMessage<PlayerInfoMessage>();
+
         if ((IsGameJoinable(msg.players.Count) || msg.players.Count == 4) && GetPlayer(msg.players[0].connectionId, msg.players[0].controllerId) == null)
         {
             playerList.AddRange(msg.players);
@@ -44,8 +48,9 @@ public class NetManager : NetworkManager
                 playerList[i].playerId = i;
             NetworkServer.SendToAll(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
         }
-        else if(networkSceneName == onlineScene)
+        else if(networkSceneName == lobbyScene)
         {
+            Debug.Log("Disconnecting player");
             GetConnection(msg.players[0].connectionId).Disconnect();
         }
     }
@@ -53,6 +58,7 @@ public class NetManager : NetworkManager
     public override void OnStartServer()
     {
         NetworkServer.RegisterHandler(ExtMsgType.PlayerInfo, OnReceivePlayerInfo);
+        base.OnStartServer();
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
@@ -77,7 +83,6 @@ public class NetManager : NetworkManager
     public override void OnServerDisconnect(NetworkConnection conn)
     {
         playerList.RemoveAll(p => p.connectionId == conn.connectionId);
-        Debug.Log("serverdisconnect");
         base.OnServerDisconnect(conn);
     }
 
@@ -91,12 +96,14 @@ public class NetManager : NetworkManager
     {
         localPlayers = new List<Player>();
         playerList = new List<Player>();
+        base.OnStopServer();
     }
 
     public override void OnStopClient()
     {
         localPlayers = new List<Player>();
         playerList = new List<Player>();
+        base.OnStopClient();
     }
 
     public static NetManager GetInstance()
@@ -127,12 +134,12 @@ public class NetManager : NetworkManager
 
     public bool IsGameJoinable(int playersJoining)
     {
-        return (networkSceneName == onlineScene && (playersJoining + playerList.Count <= 4));
+        return (networkSceneName == lobbyScene && (playersJoining + playerList.Count <= 4));
     }
 
     public override void OnClientSceneChanged(NetworkConnection conn)
     {
-        if (!ClientScene.ready) ClientScene.Ready(conn);
+        if (!ClientScene.ready) { ClientScene.Ready(conn); }
         for (short i = 0; i < localPlayers.Count; i++)
         {
             if (ClientScene.localPlayers.Count >= i + 1 && ClientScene.localPlayers[i].IsValid && ClientScene.localPlayers[i].gameObject)
@@ -176,6 +183,7 @@ public class NetManager : NetworkManager
         PingMessage msg = netMsg.ReadMessage<PingMessage>();
         foreach (Player p in localPlayers)
             p.connectionId = msg.connectionId;
+        Debug.Log("Received ping");
         client.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(localPlayers));
     }
 
