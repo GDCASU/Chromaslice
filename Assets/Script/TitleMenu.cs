@@ -45,7 +45,6 @@ public class TitleMenu : MonoBehaviour {
         {
             if (t.GetComponentInChildren<Toggle>().isOn)
             {
-
                 selectedLevel = t.GetComponentInChildren<Text>().text;
                 Debug.Log(t.GetComponentInChildren<Text>().text);
                 break;
@@ -58,6 +57,6 @@ public class TitleMenu : MonoBehaviour {
 
     public void StartOnline()
     {
-        SceneManager.LoadScene(lobbySceneName);
+        NetManager.GetInstance().ServerChangeScene(NetManager.GetInstance().lobbyScene);
     }
 }

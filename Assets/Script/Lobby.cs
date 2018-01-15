@@ -90,6 +90,7 @@ public class Lobby : MonoBehaviour {
     public void Exit()
     {
         NetManager.GetInstance().StopHost();
+        Destroy(NetManager.GetInstance().gameObject);
         SceneManager.LoadScene(0);
     }
 }

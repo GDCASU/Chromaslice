@@ -4069,7 +4069,7 @@ MonoBehaviour:
   autoSize: 1
   sizePercentage: 75
   rippleSize: 0
-  rippleSpeed: 6
+  rippleSpeed: 6.53
   rippleColor: {r: 0, g: 0, b: 0, a: 1}
   rippleStartAlpha: 0.5
   rippleEndAlpha: 0.3
@@ -8945,7 +8945,7 @@ MonoBehaviour:
     type: 2}
   m_AutoCreatePlayer: 0
   m_PlayerSpawnMethod: 0
-  m_OfflineScene: Title
+  m_OfflineScene: 
   m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 1383037164253312, guid: e1233598747b4e1458f001328d9e98ba, type: 2}
@@ -9006,6 +9006,7 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
+  lobbyScene: Online_Lobby
 --- !u!4 &1961532812
 Transform:
   m_ObjectHideFlags: 0
