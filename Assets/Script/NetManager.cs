@@ -253,6 +253,7 @@ public class NetManager : NetworkManager
         }
     }
 
+    // creates extra message types used for derived message objects
     public class ExtMsgType
     {
         public static short PlayerInfo = MsgType.Highest + 1;
