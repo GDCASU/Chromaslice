@@ -12,7 +12,7 @@ using UnityEngine.UI;
 
 public class Lobby : MonoBehaviour {
 
-    public NetManager nm;
+    public NetManager netManager;
 
     public InputField player1Name;
     public InputField player2Name;
@@ -29,7 +29,7 @@ public class Lobby : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        nm = NetManager.GetInstance();
+        netManager = NetManager.GetInstance();
 	}
 
     public void SetPlayers(bool two)
@@ -42,7 +42,7 @@ public class Lobby : MonoBehaviour {
         if (!started)
         {
             UpdateInfo();
-            nm.StartHost();
+            netManager.StartHost();
             started = true;
         }
     }
@@ -52,17 +52,17 @@ public class Lobby : MonoBehaviour {
         if (!started)
         {
             UpdateInfo();
-            nm.networkAddress = ipField.text;
-            nm.StartClient();
+            netManager.networkAddress = ipField.text;
+            netManager.StartClient();
             started = true;
         }
     }
 
     public void UpdateInfo()
     {
-        nm.localPlayers.Add(new Player() { name = player1Name.text, controllerId = 0 });
+        netManager.localPlayers.Add(new Player() { name = player1Name.text, controllerId = 0 });
         if(twoPlayers)
-            nm.localPlayers.Add(new Player() { name = player2Name.text, controllerId = 1 });
+            netManager.localPlayers.Add(new Player() { name = player2Name.text, controllerId = 1 });
     }
 
     public void UpdatePlayerDisplay()
