@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 //Created by Paul G 9/16/17
 
+//Kyle Aycock 11/17/17 - Changed score fetching to play nicer with networking
+
 public class CanvasScript : MonoBehaviour
 {
 
@@ -35,10 +37,10 @@ public class CanvasScript : MonoBehaviour
             //Debug.Log("Key was pressd");
             //debugMenu.SetActive(!debugMenu.activeSelf);
         }
+        scorep1.text = GameManager.singleton.team1Score.ToString();
+        scorep2.text = GameManager.singleton.team2Score.ToString();
         if (GameManager.singleton.matchStarted)
         {
-            scorep1.text = GameManager.singleton.teams[0].GetComponent<Team>().points.ToString();
-            scorep2.text = GameManager.singleton.teams[1].GetComponent<Team>().points.ToString();
             if (GameManager.singleton.countdownOver)
             {
                 float time = GameManager.singleton.deathMatch.time;

@@ -2,40 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Developer:       Nick Arnieri
+// Date:            11/3/2017
+// Description:     Responsible for spawning and detecting collisions for the control point
+
 public class ControlPoint : MonoBehaviour
 {
     public GameObject pointPrefab;
     public GameObject point;
+    public Vector3 position;
+    public int width, length, height;
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
+        if (GameManager.singleton.hillRules)
+        {
+            GameObject newObject = Instantiate(pointPrefab, position, Quaternion.identity, transform);
+            point = newObject;
+            point.AddComponent<PointCollision>();
+            point.transform.localScale = new Vector3(width, height, length);
+        }
+    }
+}
 
-    /// <summary>
-    /// Setup cap point
-    /// </summary>
-    public void Setup(Vector3 position)
+public class PointCollision : MonoBehaviour
+{
+    private void OnTriggerEnter(Collider collision)
     {
-        GameObject newPoint = Instantiate(pointPrefab, position, Quaternion.identity, transform);
-        newPoint.layer = gameObject.layer;
-        point = newPoint;
+        if (GameManager.singleton.hillRules)
+        {
+            GameManager.singleton.hillRules.ChangeOnPoint(collision.gameObject.transform.parent.gameObject.name);
+        }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerExit(Collider collision)
     {
-        GameManager.singleton.hillRules.ChangeOnPoint(collision.gameObject.name);
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        GameManager.singleton.hillRules.ChangeOffPoint(collision.gameObject.name);
+        if (GameManager.singleton.hillRules)
+        {
+            GameManager.singleton.hillRules.ChangeOffPoint(collision.gameObject.transform.parent.gameObject.name);
+        }
     }
 }
