@@ -31,6 +31,7 @@ public class NetManager : NetworkManager
 
     public void StartLocalGame()
     {
+        Log("Starting local game");
         maxConnections = 0;
         for (short i = 0; i < 4; i++)
             localPlayers.Add(new Player() { name = "Player " + i, controllerId = i });
@@ -48,9 +49,9 @@ public class NetManager : NetworkManager
                 playerList[i].playerId = i;
             NetworkServer.SendToAll(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
         }
-        else if(networkSceneName == lobbyScene)
+        else
         {
-            Debug.Log("Disconnecting player");
+            Log("Game not joinable, disconnecting player " + msg.players[0].connectionId);
             GetConnection(msg.players[0].connectionId).Disconnect();
         }
     }
@@ -68,7 +69,7 @@ public class NetManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
     {
-        Debug.Log("Adding player from client");
+        Log("Adding player from client");
         NetworkServer.AddPlayerForConnection(conn, GameManager.singleton.SpawnPlayer(GetPlayer(conn.connectionId, playerControllerId)), playerControllerId);
     }
 
@@ -83,6 +84,7 @@ public class NetManager : NetworkManager
 
     public override void OnServerDisconnect(NetworkConnection conn)
     {
+        Log("Player " + conn.connectionId + " disconnected.");
         playerList.RemoveAll(p => p.connectionId == conn.connectionId);
         base.OnServerDisconnect(conn);
     }
@@ -90,7 +92,7 @@ public class NetManager : NetworkManager
     // Called on the server when a new client connects
     public override void OnServerConnect(NetworkConnection conn)
     {
-        Debug.Log("Player: " + conn.connectionId + " has connected.");
+        Log("Player " + conn.connectionId + " has connected.");
         conn.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
         base.OnServerConnect(conn);
     }
@@ -99,6 +101,7 @@ public class NetManager : NetworkManager
     {
         localPlayers = new List<Player>();
         playerList = new List<Player>();
+        Log("Stopping server...");
         base.OnStopServer();
     }
 
@@ -106,6 +109,7 @@ public class NetManager : NetworkManager
     {
         localPlayers = new List<Player>();
         playerList = new List<Player>();
+        Log("Stopping client...");
         base.OnStopClient();
     }
 
@@ -142,6 +146,8 @@ public class NetManager : NetworkManager
 
     public override void OnClientSceneChanged(NetworkConnection conn)
     {
+        Log("Client scene changed to " + networkSceneName);
+        if (networkSceneName == lobbyScene) return;
         if (!ClientScene.ready) { ClientScene.Ready(conn); }
         for (short i = 0; i < localPlayers.Count; i++)
         {
@@ -153,6 +159,7 @@ public class NetManager : NetworkManager
 
     public override void OnServerReady(NetworkConnection conn)
     {
+        Log("Received 'Ready' from player " + conn.connectionId);
         NetworkServer.SendToClient(conn.connectionId, ExtMsgType.Ping, new PingMessage() { connectionId = conn.connectionId });
         base.OnServerReady(conn);
     }
@@ -160,7 +167,8 @@ public class NetManager : NetworkManager
     // Called on the client when connected to a server
     public override void OnClientConnect(NetworkConnection conn)
     {
-        CanvasLog.instance.Log("Connecting to the server!");
+        Log(conn.ToString());
+        Log("Connecting to the server!");
         client.RegisterHandler(ExtMsgType.Ping, OnPing);
         client.RegisterHandler(ExtMsgType.PlayerInfo, OnReceivePlayerInfoClient);
         client.RegisterHandler(ExtMsgType.StartGame, GameManager.singleton.OnStartGame);
@@ -188,8 +196,14 @@ public class NetManager : NetworkManager
         PingMessage msg = netMsg.ReadMessage<PingMessage>();
         foreach (Player p in localPlayers)
             p.connectionId = msg.connectionId;
-        Debug.Log("Received ping");
+        Log("Received ping");
         client.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(localPlayers));    
+    }
+
+    public static void Log(string msg)
+    {
+        Debug.Log(msg);
+        CanvasLog.instance.Log(msg);
     }
 
     class PlayerInfoMessage : MessageBase
