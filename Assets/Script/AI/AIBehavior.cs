@@ -29,17 +29,18 @@ public class AIBehavior : MonoBehaviour
         player1 = Players[0];
         player2 = Players[1];
         playerRadius = AI1.GetComponent<SphereCollider>().radius;
-        maxRopeLength = 5; //get max rope length
+        maxRopeLength = 30; //get max rope length
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(1.0f / Time.deltaTime);
+        Debug.Log(maxRopeLength);
+        //Debug.Log(1.0f / Time.deltaTime);
         currentEvaluation = Mathf.NegativeInfinity;
         currentAI1Direction = Vector3.zero;
         currentAI2Direction = Vector3.zero;
-        maxSpeed = player1.GetComponent<PlayerController>().maxSpeed;
+        maxSpeed = 20;//player1.GetComponent<PlayerController>().maxSpeed;
 
         //Calculate next step for enemy players
         futurePlayer1Position = player1.transform.position + player1.GetComponent<Rigidbody>().velocity * Time.deltaTime;
@@ -175,8 +176,12 @@ public class AIBehavior : MonoBehaviour
         float AI1DistanceToMidpoint = Vector3.Distance((closestPlayerPosition + farthestPlayerPosition) / 2, AI1Position);
         float AI2DistanceToMidpoint = Vector3.Distance((closestPlayerPosition + farthestPlayerPosition) / 2, AI1Position);
         float closestPlayerDistanceToMidpoint = Vector3.Distance((AI1Position + AI2Position) / 2, closestPlayerPosition);
+        float AIRopeLength = Vector3.Distance(AI1Position, AI2Position);
         float angle = Mathf.Abs(90 - Mathf.Abs(Vector3.Angle((AI1Position + AI2Position) / 2 - closestPlayerPosition, AI1Position - AI2Position)));
-        return 50 / closestPlayerDistanceToRope + 100 / closestPlayerDistanceToMidpoint + ((Vector3.Magnitude(AI1Position - AI2Position) < maxRopeLength) ? 0.1f * (AI1DistanceToRope + AI2DistanceToRope + AI1DistanceToMidpoint + AI2DistanceToMidpoint) : -20 * Vector3.Magnitude(AI1Position - AI2Position)) - angle;
+
+        //AI Evaluation Function
+        //Change this function to alter the behavior of the AI
+        return ((AIRopeLength > maxRopeLength) ? Mathf.NegativeInfinity : (AIRopeLength >= 8 && AIRopeLength <= 22) ? 1 : 0) - angle/90 + 10/closestPlayerDistanceToMidpoint;
     }
 
     float DistanceFromPointToLine(Vector3 point, Vector3 pointOnLine, Vector3 line)
