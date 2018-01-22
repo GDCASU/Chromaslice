@@ -18,8 +18,8 @@ public class NetManager : NetworkManager
 {
     public List<Player> playerList;
 
+    // players that are on the same machine but can have different controllers
     public List<Player> localPlayers;
-
 
     public string lobbyScene;
 
@@ -68,6 +68,7 @@ public class NetManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
     {
+        Debug.Log("Adding player from client");
         NetworkServer.AddPlayerForConnection(conn, GameManager.singleton.SpawnPlayer(GetPlayer(conn.connectionId, playerControllerId)), playerControllerId);
     }
 
@@ -86,8 +87,10 @@ public class NetManager : NetworkManager
         base.OnServerDisconnect(conn);
     }
 
+    // Called on the server when a new client connects
     public override void OnServerConnect(NetworkConnection conn)
     {
+        Debug.Log("Player: " + conn.connectionId + " has connected.");
         conn.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
         base.OnServerConnect(conn);
     }
@@ -154,8 +157,10 @@ public class NetManager : NetworkManager
         base.OnServerReady(conn);
     }
 
+    // Called on the client when connected to a server
     public override void OnClientConnect(NetworkConnection conn)
     {
+        CanvasLog.instance.Log("Connecting to the server!");
         client.RegisterHandler(ExtMsgType.Ping, OnPing);
         client.RegisterHandler(ExtMsgType.PlayerInfo, OnReceivePlayerInfoClient);
         client.RegisterHandler(ExtMsgType.StartGame, GameManager.singleton.OnStartGame);
@@ -184,7 +189,7 @@ public class NetManager : NetworkManager
         foreach (Player p in localPlayers)
             p.connectionId = msg.connectionId;
         Debug.Log("Received ping");
-        client.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(localPlayers));
+        client.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(localPlayers));    
     }
 
     class PlayerInfoMessage : MessageBase

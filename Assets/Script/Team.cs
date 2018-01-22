@@ -136,7 +136,8 @@ public class Team : NetworkBehaviour
     [Server]
     public GameObject SpawnPlayer(Player ply)
     {
-        Debug.Log(ply.controllerId);
+        Debug.Log("Spawning player " + ply.controllerId + " on team " + ply.team);
+        CanvasLog.instance.Log("Spawning player " + ply.controllerId + " on team " + ply.team);
         int num = ply.playerId % 2 + 1;
         if ((num == 1 && player1) || (num == 2 && player2)) return null;
         Vector3 pos = (num == 1 ? spawn1 : spawn2);
