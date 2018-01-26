@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Developer:   Nick Arnieri
+// Date:        1/26/2017
+// Description: Base class for hazards
+
 public class Hazard : MonoBehaviour
 {
     public float timerLength;
-    private float timer;
-    private bool isActive;
-    GameObject hazardPrefab;
+    protected float timer;
+    protected bool isActive;
 
     public virtual void Start()
     {
@@ -16,6 +19,7 @@ public class Hazard : MonoBehaviour
 
     public virtual void Update()
     {
+        // Handles the timer and toggling the hazard on and off
         if (timer > 0)
         {
             timer -= Time.deltaTime;
@@ -50,18 +54,30 @@ public class Hazard : MonoBehaviour
         isActive = false;
     }
 
-    public virtual void OnCollisionEnter(Collision other)
+    public virtual void OnTriggerEnter(Collider other)
     {
-
+        // Only do the collison event if the hazard is active
+        if (!isActive)
+        {
+            return;
+        }
     }
 
-    public virtual void OnCollisionExit(Collision other)
+    public virtual void OnTriggerExit(Collider other)
     {
-
+        // Only do the collison event if the hazard is active
+        if (!isActive)
+        {
+            return;
+        }
     }
 
-    public virtual void OnCollisionStay(Collision other)
+    public virtual void OnTriggerStay(Collider other)
     {
-
+        // Only do the collison event if the hazard is active
+        if (!isActive)
+        {
+            return;
+        }
     }
 }
