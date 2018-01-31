@@ -168,7 +168,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1692480771552320}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4615995792579864}
@@ -272,7 +272,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: c53ce90ad4e008741a56997aedcde47e, type: 2}
+  - {fileID: 2100000, guid: 6877e0e134f65904b91eb75d5faf29c4, type: 2}
   - {fileID: 2100000, guid: a3ed3b0be3d55704f950213539f2959e, type: 2}
   - {fileID: 2100000, guid: e91cf63c0d79b224f8b4c81b94c7c602, type: 2}
   m_StaticBatchInfo:
@@ -307,7 +307,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 0
   m_Materials:
   - {fileID: 2100000, guid: a3ed3b0be3d55704f950213539f2959e, type: 2}
-  - {fileID: 2100000, guid: c53ce90ad4e008741a56997aedcde47e, type: 2}
+  - {fileID: 2100000, guid: 6877e0e134f65904b91eb75d5faf29c4, type: 2}
   - {fileID: 2100000, guid: e91cf63c0d79b224f8b4c81b94c7c602, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -340,7 +340,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: c53ce90ad4e008741a56997aedcde47e, type: 2}
+  - {fileID: 2100000, guid: 6877e0e134f65904b91eb75d5faf29c4, type: 2}
   - {fileID: 2100000, guid: a3ed3b0be3d55704f950213539f2959e, type: 2}
   - {fileID: 2100000, guid: e91cf63c0d79b224f8b4c81b94c7c602, type: 2}
   m_StaticBatchInfo:
@@ -374,7 +374,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: c53ce90ad4e008741a56997aedcde47e, type: 2}
+  - {fileID: 2100000, guid: 6877e0e134f65904b91eb75d5faf29c4, type: 2}
   - {fileID: 2100000, guid: a3ed3b0be3d55704f950213539f2959e, type: 2}
   - {fileID: 2100000, guid: e91cf63c0d79b224f8b4c81b94c7c602, type: 2}
   m_StaticBatchInfo:
@@ -509,6 +509,20 @@ Light:
   m_Lightmapping: 4
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 0
+  m_FalloffTable:
+    m_Table[0]: 0
+    m_Table[1]: 0
+    m_Table[2]: 0
+    m_Table[3]: 0
+    m_Table[4]: 0
+    m_Table[5]: 0
+    m_Table[6]: 0
+    m_Table[7]: 0
+    m_Table[8]: 0
+    m_Table[9]: 0
+    m_Table[10]: 0
+    m_Table[11]: 0
+    m_Table[12]: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
@@ -578,7 +592,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numPlayers: 1
-  health: 100
   maxSpeed: 40
   bounceFactor: 2
   sprintPower: 2
@@ -587,10 +600,7 @@ MonoBehaviour:
   dashPower: 3
   dashTime: 0.2
   dashCooldown: 1
-  jumpCooldown: 2
   team: 0
-  jumpPower: 400
-  maxJumps: 1
   controls:
     name: 
     number: 0

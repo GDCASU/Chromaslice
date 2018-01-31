@@ -56,22 +56,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
+    i0: 122
+    i1: 180
+    i2: 209
+    i3: 230
+    i4: 183
+    i5: 232
+    i6: 197
+    i7: 84
+    i8: 43
+    i9: 83
+    i10: 10
+    i11: 149
+    i12: 10
+    i13: 223
+    i14: 160
+    i15: 129
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114555425187237238
@@ -105,7 +105,7 @@ LineRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: e833382afe4fd99429e4bbf11d570514, type: 2}
+  - {fileID: 2100000, guid: 6877e0e134f65904b91eb75d5faf29c4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
