@@ -19,6 +19,10 @@ public class DeathPlane : MonoBehaviour
     // when player 
     void OnTriggerEnter(Collider other)
     {
-        other.transform.parent.GetComponent<Team>().KillTeam();
+        if(other.transform.GetComponentInParent<Team>())
+            other.transform.parent.GetComponentInParent<Team>().KillTeam();
+
+        else if(other.GetComponent<Rigidbody>())
+            Destroy(other);
     }
 }
