@@ -255,8 +255,8 @@ public class Team : NetworkBehaviour
 
     public void KillTeam()
     {
-        // Check if the team doesn't have invincibility
-        if (!(currentPowerUp != null && currentPowerUp.GetComponent<InvincibilityPowerUp>().isActive))
+        // Do not kill if invincible
+        if(IsInvincibleOver())
             GameManager.singleton.KillTeam(this);
     }
 }
