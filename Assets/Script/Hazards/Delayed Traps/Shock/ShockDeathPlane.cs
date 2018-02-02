@@ -4,52 +4,58 @@ using UnityEngine;
 
 // Created by Paul Gellai - 10/31/17 - custom death plane script for Shock trap
 
-public class ShockDeathPlane : MonoBehaviour {
+// Developer:   Nick Arnieri
+// Date:        1/26/2017
+// Description: Changed to inherit from base hazard class
 
-    float killStartTime;
-    float lifeTime;
-    public float durationUntilKillable;
-    public float lifetimeAfterKillable;
-    bool canKill = false;
-    bool lifeTimeStarted = false;
+public class ShockDeathPlane : Hazard
+{
+    private Renderer rend;
 
-	// Use this for initialization
-	void Start () {
-        killStartTime = Time.time;
+    // Use this for initialization
+	public override void Start()
+    {
+        base.Start();
+        rend = gameObject.GetComponent<Renderer>();
     }
 	
 	// Update is called once per frame
-	void Update () {
-
-        // this script makes the plane kill players after a certain duration, and then it is destroyed after a certain duration 
-        // the color of the shock death plane changes to a screwed up color once it can kill (this is very temporary)
-
-		if(Time.time - durationUntilKillable >= killStartTime)
-        {
-            canKill = true;
-        }
-        if(canKill)
-        {
-
-            if(!lifeTimeStarted)
-            {
-                Renderer rend = GetComponent<Renderer>();
-                rend.material.color = new Color(255f, 0f, 255f);
-                lifeTime = Time.time;
-                lifeTimeStarted = true;
-            }
-            if(Time.time - lifetimeAfterKillable >= lifeTime)
-            {
-                DestroyObject(gameObject);
-            }
-        }
+	public override void Update()
+    {
+        base.Update();
 	}
 
-    void OnTriggerEnter(Collider c)
+    public override void ActivateTrap()
     {
-        if(canKill)
-        {
-            c.transform.parent.GetComponent<Team>().KillTeam();
-        }
+        base.ActivateTrap();
+        // Change color to indicate active
+        rend.material.color = new Color(255, 0, 255);
+    }
+
+    public override void DeactivateTrap()
+    {
+        base.DeactivateTrap();
+        // Change back to normal color
+        rend.material.color = new Color(0, 0, 0);
+    }
+
+    /// <summary>
+    /// Kill team that collides if active
+    /// </summary>
+    /// <param name="other">Game object colliding with</param>
+    public override void OnTriggerEnter(Collider other)
+    {
+        base.OnTriggerEnter(other);
+        other.transform.parent.GetComponent<Team>().KillTeam();
+    }
+
+    /// <summary>
+    /// Kill team that collides if active
+    /// </summary>
+    /// <param name="other">Game object colliding with</param>
+    public override void OnTriggerStay(Collider other)
+    {
+        base.OnTriggerStay(other);
+        other.transform.parent.GetComponent<Team>().KillTeam();
     }
 }

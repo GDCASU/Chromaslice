@@ -6,18 +6,33 @@ using UnityEngine;
 
 // Modified by Paul Gellai - This is a simple script that simply ensures that any player that touches an object with this script to it attached dies.
 
-public class DeathPlane : MonoBehaviour
-{
-    public virtual void PlayerInteract()
-    {
-        // insert code here to control behaviour upon interaction with player objects
+// Developer:   Nick Arnieri
+// Date:        1/26/2018
+// Description: Changed to inherit from base hazard class
 
-        // override in children using "public override void PlayerInteract()"
+public class DeathPlane : Hazard
+{
+    /// <summary>
+    /// Doesn't call base since DeathPlane doesn't need to use the timer
+    /// </summary>
+    public override void Start()
+    {
+
     }
 
+    /// <summary>
+    /// Doesn't call base since DeathPlane doesn't need to use the timer
+    /// </summary>
+    public override void Update()
+    {
+        
+    }
 
-    // when player 
-    void OnTriggerEnter(Collider other)
+    /// <summary>
+    /// Kill team that collides
+    /// </summary>
+    /// <param name="other">Game object colliding with</param>
+    public override void OnTriggerEnter(Collider other)
     {
         if(other.transform.GetComponentInParent<Team>())
             other.transform.parent.GetComponentInParent<Team>().KillTeam();
