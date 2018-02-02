@@ -32,3 +32,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Demo_Level.unity
     guid: 24ffa2d5634cbb74cb218cf73318969c
+  - enabled: 1
+    path: Assets/Scenes/AI_Level.unity
+    guid: e00e5f0b675bbd24fb37ae321d7215b9
+  - enabled: 1
+    path: Assets/Scenes/Blimp_Level.unity
+    guid: 8390578b41240c041aceb426b4024740

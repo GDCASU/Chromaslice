@@ -19,7 +19,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4756255640572304}
-  - component: {fileID: 114756352772469910}
   m_Layer: 0
   m_Name: Team2
   m_TagString: Untagged
@@ -96,7 +95,6 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4238255624289406}
-  - component: {fileID: 114692048600497876}
   m_Layer: 0
   m_Name: Team1
   m_TagString: Untagged
@@ -228,27 +226,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   game: {fileID: 114617112288123574, guid: 05576e5b4f8d50e4d98358b20a3f8755, type: 2}
---- !u!114 &114692048600497876
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1676952615848824}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 334b8216d2e3ed346a717c2b0f02c857, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawn: {fileID: 114289918000951084}
---- !u!114 &114756352772469910
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1019537277762350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 334b8216d2e3ed346a717c2b0f02c857, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawn: {fileID: 114289918000951084}

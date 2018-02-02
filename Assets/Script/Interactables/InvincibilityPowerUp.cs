@@ -10,20 +10,37 @@ using UnityEngine;
  * Version 1.0.0
  * Author: Zachary Schmalz
  * Date: October 6, 2017
+ * 
+ * Version 2.0.0
+ * Author: Zachary Schmalz
+ * Date January 26, 2018
+ * Revisions: Improved process of how Invincibility is triggered and added particle effects for the duration of the power-up
  */
 
 public class InvincibilityPowerUp : PowerUp
 {
+    // Assign PowerUp data
+    public override void SetData(float delay = 0, float duration = 0, float param3 = 0)
+    {
+        spawnDelay = delay;
+        activeLength = duration;
+    }
 
-	// Use this for initialization
-	protected override void Start ()
+    public override void Activate()
     {
-        base.Start();	
-	}
-	
-	// Update is called once per frame
-	protected override void Update ()
-    {
-        base.Update();
-	}
+        // Add more time to the spawn timer which prevents death
+        Team.spawnTimer = activeLength;
+
+        // Add particle effects to the players
+        GameObject invincibilityEffect1 = Instantiate(Team.invincibilityParticlePrefab, Player1.transform.position, Quaternion.identity, Player1.transform);
+        GameObject invincibilityEffect2 = Instantiate(Team.invincibilityParticlePrefab, Player2.transform.position, Quaternion.identity, Player2.transform);
+        var main1 = invincibilityEffect1.GetComponent<ParticleSystem>().main;
+        var main2 = invincibilityEffect1.GetComponent<ParticleSystem>().main;
+        main1.startLifetime = activeLength;
+        main2.startLifetime = activeLength;
+        Destroy(invincibilityEffect1, activeLength);
+        Destroy(invincibilityEffect2, activeLength);
+
+        base.Activate();
+    }
 }

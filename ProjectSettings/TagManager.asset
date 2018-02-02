@@ -9,6 +9,10 @@ TagManager:
   - MaterialRadioButton
   - MaterialText
   - AIPlayer
+  - FallingHazardDeathPlane
+  - MainCanvas
+  - Wall
+  - Hazzard
   layers:
   - Default
   - TransparentFX

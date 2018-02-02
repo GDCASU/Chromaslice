@@ -22,7 +22,10 @@ using UnityEngine.Networking;
 // Developer:   Kyle Aycock
 // Date:        10/27/17
 // Description: Added rope relaxation for vertically oriented catch points too
-//              
+
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Networked the endpoints so the rope works properly on clients
 
 public class Rope : NetworkBehaviour
 {
@@ -34,6 +37,11 @@ public class Rope : NetworkBehaviour
     public Color ropeLaxColor;
 
     //transforms that each end of rope is anchored to
+    [SyncVar(hook = "SetEndPoint1")]
+    private NetworkInstanceId endPoint1Id;
+    [SyncVar(hook = "SetEndPoint2")]
+    private NetworkInstanceId endPoint2Id;
+
     private Transform endPoint1;
     private Transform endPoint2;
 
@@ -68,6 +76,9 @@ public class Rope : NetworkBehaviour
     public float reformCooldown = 3;
     private float timeSinceBreaking = 0;
 
+    [SyncVar]
+    public NetworkInstanceId parentId;
+
     // Use this for initialization
     void Start()
     {
@@ -76,10 +87,16 @@ public class Rope : NetworkBehaviour
         ropeNormals = new List<Vector3>();
         line = GetComponent<LineRenderer>();
         visiblePoints = new Vector3[2];
-        visiblePoints[0] = endPoint1.transform.position;
-        visiblePoints[1] = endPoint2.transform.position;
-        oldPos1 = visiblePoints[0];
-        oldPos2 = visiblePoints[1];
+        if (endPoint1)
+        {
+            visiblePoints[0] = endPoint1.transform.position;
+            oldPos1 = visiblePoints[0];
+        }
+        if (endPoint2)
+        {
+            visiblePoints[1] = endPoint2.transform.position;
+            oldPos2 = visiblePoints[1];
+        }
         gameObject.layer = transform.parent.gameObject.layer;
         rotations = 0;
         collectedPowerUp = false;
@@ -89,10 +106,34 @@ public class Rope : NetworkBehaviour
         team = gameObject.GetComponentInParent<Team>();
     }
 
+    public override void OnStartClient()
+    {
+        if (!endPoint1Id.IsEmpty()) SetEndPoint1(endPoint1Id);
+        if (!endPoint2Id.IsEmpty()) SetEndPoint2(endPoint2Id);
+        if (!parentId.IsEmpty()) transform.SetParent(ClientScene.FindLocalObject(parentId).transform);
+    }
+
+    [Server]
     public void SetEndpoints(Transform first, Transform second)
     {
         endPoint1 = first;
         endPoint2 = second;
+        endPoint1Id = first.GetComponent<NetworkIdentity>().netId;
+        endPoint2Id = second.GetComponent<NetworkIdentity>().netId;
+    }
+
+    public void SetEndPoint1(NetworkInstanceId id)
+    {
+        endPoint1Id = id;
+        endPoint1 = ClientScene.FindLocalObject(id).transform;
+        oldPos1 = endPoint1.transform.position;
+    }
+
+    public void SetEndPoint2(NetworkInstanceId id)
+    {
+        endPoint2Id = id;
+        endPoint2 = ClientScene.FindLocalObject(id).transform;
+        oldPos2 = endPoint2.transform.position;
     }
 
     // Update is called once per frame
@@ -136,10 +177,6 @@ public class Rope : NetworkBehaviour
     {
         Debug.Log("Rope was destroyed.");
 
-        // If the rope was in a state of collecting a PowerUp when it breaks, activate the code in the PowerUp object
-        if (collectedPowerUp)
-            powerUp.GetComponent<PowerUp>().OnPowerUpCollect(team, rotations);
-
         // If the rope was in a state of launching a projectile when it breaks, call the projectile code. Pass the vector containing all rope points
         // Also set the Team that launches the projectile
         if (hitProjectile && projectile != null)
@@ -165,11 +202,13 @@ public class Rope : NetworkBehaviour
 
         RaycastHit hit;
 
-        for (int i = 0; i < visiblePoints.Length - 1; i++)
-            if (RaycastSegment(visiblePoints[i], visiblePoints[i + 1], out hit, gameObject.layer))
-                if (hit.collider.GetComponent<PlayerController>())
-                    if (team.IsInvincibleOver())
+        if (isServer)
+        {
+            for (int i = 0; i < visiblePoints.Length - 1; i++)
+                if (RaycastSegment(visiblePoints[i], visiblePoints[i + 1], out hit, gameObject.layer))
+                    if (hit.collider.GetComponent<PlayerController>())
                         hit.collider.transform.parent.GetComponent<Team>().KillTeam();
+        }
 
 
         //work in progress
@@ -197,7 +236,7 @@ public class Rope : NetworkBehaviour
                         Vector3 n = Vector3.Cross(newPoint - start, visiblePoints[1] - start).normalized;
                         ropeNormals.Insert(0, n);
                         anglesPositive.Insert(0, IsAnglePositive(start, newPoint, visiblePoints[1], n));
-                        Debug.Log("Adding new catch point at index 0" + " (1)");
+                        //Debug.Log("Adding new catch point at index 0" + " (1)");
 
                         // If the hit point object is a PowerUp
                         if (hit.collider.gameObject.GetComponent<PowerUp>())
@@ -266,13 +305,6 @@ public class Rope : NetworkBehaviour
             oldPos2 = end;
         }
         
-    }
-
-    private void KillTeam(GameObject player)
-    {
-        Debug.Log("KillTeam is working");
-        gameObject.transform.parent.gameObject.GetComponent<Team>().AddPoints();
-        Destroy(player.transform.parent.gameObject);
     }
 
     // Function that determines how many times the rope is wrapped around a PowerUp

@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1562279197030180}
+  m_IsPrefabParent: 1
+--- !u!1 &1562279197030180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4397975446570706}
+  - component: {fileID: 114274181641823878}
+  m_Layer: 0
+  m_Name: PowerUpSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4397975446570706
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1562279197030180}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114274181641823878
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1562279197030180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3b2b7cbdcbc60a4185540d35fe03317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  method: 0
+  powerUpPrefabs:
+  - {fileID: 1115685166643496, guid: ae03c7b72e1d50e4fa62cf913acf3276, type: 2}
+  - {fileID: 1991271190471360, guid: 5f3da6eab2b5c9545bb0e9aabcd031de, type: 2}
+  - {fileID: 1627938274008060, guid: 3283e3b9b91c09247b995a7a63215284, type: 2}
+  - {fileID: 1566928358093644, guid: b7f5e8cc77cd169408c2213e4f47515f, type: 2}
+  continuousSpawn: 1
+  spawnInterval: 5
+  speedSelect: 1
+  ropeSelect: 1
+  knockbackSelect: 1
+  invincibilitySelect: 1
+  speedStruct:
+    flag: 1
+    param1: 3
+    param2: 10
+    param3: 50
+  ropeStruct:
+    flag: 1
+    param1: 3
+    param2: 10
+    param3: 50
+  knockbackStruct:
+    flag: 1
+    param1: 3
+    param2: 25
+    param3: 10000
+  invincibilityStruct:
+    flag: 1
+    param1: 3
+    param2: 10
+    param3: 23
+  selection: 0

@@ -26,89 +26,111 @@ using UnityEngine;
  * Author: Zachary Schmalz
  * Date: October 27, 2017
  * Revisions: Added functionality to allow designers to collect powerUps with a collision instead
+ * 
+ * Version 2.0.0
+ * Author: Zachary Schmalz
+ * Date: January 26, 2018
+ * Revisions: Added functionality to work with PowerUpSpawners and optimized code
  */
 
 public class PowerUp : Interactable
 {
-    public bool collisionCollect;
-    public float boostPercent;
-    public float boostDuration;
-    [HideInInspector]public bool isActive;
+    [HideInInspector] public bool isActive;
+    protected float spawnDelay;
+    protected float activeLength;
 
-    protected int boostMultiplier;
-
-    private bool boostCollected;
+    private float spawnTimer;
     private float timeRemaining;
 
-    // Use this for initialization
     protected override void Start()
     {
-        boostMultiplier = 1;
-        boostCollected = false;
         isActive = false;
-        timeRemaining = boostDuration;
-        gameObject.GetComponent<Collider>().isTrigger = collisionCollect;
+        timeRemaining = activeLength;
+        spawnTimer = spawnDelay;
+
+        // Hide object on start
+        gameObject.GetComponent<Collider>().enabled = false;
+        gameObject.GetComponent<MeshRenderer>().enabled = false;
     }
 
-    // When the PowerUp is collected, the timer begins counting down
-    // When time expires, the PowerUp is removed
+    // First calculate the spawn delay, then make the power-up visisble, then count down activationg length when activated
     protected override void Update()
     {
-        if (boostCollected)
+        // Subtract from the spawn delay
+        if (spawnTimer > .1f)
         {
-            if (timeRemaining > 0)
-            {
-                timeRemaining -= Time.deltaTime;
-            }
+            spawnTimer -= Time.deltaTime;
+        }
 
-            else
+        // Delay timer is over, activate the components
+        else if (spawnTimer <= .1f && spawnTimer > 0)
+        {
+            gameObject.GetComponent<Collider>().enabled = true;
+            gameObject.GetComponent<MeshRenderer>().enabled = true;
+            spawnTimer = -1;
+        }
+
+        // Subtract from time remaining on power-up when activated
+        else
+        {
+            if (isActive)
             {
-                RemovePowerUp();
+                if (timeRemaining > 0)
+                {
+                    timeRemaining -= Time.deltaTime;
+                }
+
+                else
+                {
+                    RemovePowerUp();
+                }
             }
         }
     }
 
-    // If the designers want to use collisions to collect the powerUp
-    protected override void OnTriggerEnter(Collider other)
+    // When triggered
+    protected void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(other);
-        Team.CurrentPowerUp = gameObject;
-        // Note that if the designers choose this route, there would be no boostmultiplier.
-        boostMultiplier = 1;
-    }
-
-    // Set the Team and hide the object from the scene
-    public virtual void OnPowerUpCollect(Team t, int modifier)
-    {
-        Team = t;
+        Team = other.GetComponentInParent<Team>();
         Team.CurrentPowerUp = gameObject;
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<MeshRenderer>().enabled = false;
-        if(modifier != 0)
-            boostMultiplier = modifier;
     }
 
-    // Trigger the powerUp
+    // Activate the powerUp
     public virtual void Activate()
     {
         Debug.Log("PowerUp Activated");
         if (isActive != true)
         {
-            boostCollected = true;
             isActive = true;
         }
+    }
+
+    // Assign power-up data. 3 parameters is provided to pass in all required data for the powerup.
+    // Some use all of them, some do not, and all of the current power-ups ovveride this method.
+    public virtual void SetData(float param1 = 0, float param2 = 0, float param3 = 0)
+    {
+        spawnDelay = param1;
+        activeLength = param2;
     }
 
     // Function that calcutes the boosted value of the PowerUp's attribute
     protected float CalculateNewValue(float original, float percentIncrease)
     {
-        return original + (original * ((boostMultiplier * percentIncrease) / 100));
+        return original + ((original * percentIncrease) / 100);
     }
 
     // Deletes the game object from the scence
     protected virtual void RemovePowerUp()
     {
         Team.CurrentPowerUp = null;
+
+        // If the spawner is not continuous, delete the spawner
+        if (GetComponentInParent<PowerUpSpawner>())
+            if (GetComponentInParent<PowerUpSpawner>().continuousSpawn == false)
+                Destroy(transform.parent.gameObject);
+
         Destroy(gameObject);
     }
 }
