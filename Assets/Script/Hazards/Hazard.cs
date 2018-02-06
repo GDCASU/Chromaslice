@@ -6,15 +6,21 @@ using UnityEngine;
 // Date:        1/26/2017
 // Description: Base class for hazards
 
+// Developer:   Nick Arnieri
+// Date:        2/22/2017
+// Description: Add collision events
+
 public class Hazard : MonoBehaviour
 {
-    public float timerLength;
+    public float activeLength;
+    public float inactiveLength;
     protected float timer;
     protected bool isActive;
 
     public virtual void Start()
     {
-        timer = timerLength;
+        timer = inactiveLength;
+        isActive = false;
     }
 
     public virtual void Update()
@@ -41,7 +47,7 @@ public class Hazard : MonoBehaviour
 
     public virtual void ResetTimer()
     {
-        timer = timerLength;
+        timer = isActive ? activeLength : inactiveLength;
     }
 
     public virtual void ActivateTrap()
@@ -54,30 +60,33 @@ public class Hazard : MonoBehaviour
         isActive = false;
     }
 
+    public virtual void OnCollisionEnter(Collision other)
+    {
+
+    }
+
+    public virtual void OnCollisionExit(Collision other)
+    {
+
+    }
+
+    public virtual void OnCollisionStay(Collision other)
+    {
+
+    }
+
     public virtual void OnTriggerEnter(Collider other)
     {
-        // Only do the collison event if the hazard is active
-        if (!isActive)
-        {
-            return;
-        }
+        
     }
 
     public virtual void OnTriggerExit(Collider other)
     {
-        // Only do the collison event if the hazard is active
-        if (!isActive)
-        {
-            return;
-        }
+        
     }
 
     public virtual void OnTriggerStay(Collider other)
     {
-        // Only do the collison event if the hazard is active
-        if (!isActive)
-        {
-            return;
-        }
+        
     }
 }

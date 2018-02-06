@@ -8,6 +8,10 @@ using UnityEngine;
 // Date:        1/26/2017
 // Description: Changed to inherit from base hazard class
 
+// Developer:   Nick Arnieri
+// Date:        2/22/2017
+// Description: Change trigger events to check if active
+
 public class ShockDeathPlane : Hazard
 {
     private Renderer rend;
@@ -45,8 +49,10 @@ public class ShockDeathPlane : Hazard
     /// <param name="other">Game object colliding with</param>
     public override void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(other);
-        other.transform.parent.GetComponent<Team>().KillTeam();
+        if (isActive)
+        {
+            other.transform.parent.GetComponent<Team>().KillTeam();
+        }
     }
 
     /// <summary>
@@ -55,7 +61,9 @@ public class ShockDeathPlane : Hazard
     /// <param name="other">Game object colliding with</param>
     public override void OnTriggerStay(Collider other)
     {
-        base.OnTriggerStay(other);
-        other.transform.parent.GetComponent<Team>().KillTeam();
+        if (isActive)
+        {
+            other.transform.parent.GetComponent<Team>().KillTeam();
+        }
     }
 }
