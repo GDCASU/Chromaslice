@@ -16,11 +16,21 @@ using UnityEngine;
  * Date:            11/9/2017
  */
 
+/* @author:         Diego Wilde
+ * @date:           Feb 2, 2018
+ * @description:    moved priorities directly to the state script
+ * 
+ **/
+
 public abstract class State : ScriptableObject
 {
     // Add the field for setting the StateTransitions ScriptableObject
     // Make sure to add the reference in the inspector for each state
     public StateTransitions StateTransitions;
+
+    public int[] priorities;
+
+
 
     // A list containing the Method Conditions used for evaluating transitions
     protected List<Func<bool>> Conditions;

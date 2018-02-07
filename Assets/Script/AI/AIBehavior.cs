@@ -35,7 +35,7 @@ public class AIBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(maxRopeLength);
+        //Debug.Log(maxRopeLength);
         //Debug.Log(1.0f / Time.deltaTime);
         currentEvaluation = Mathf.NegativeInfinity;
         currentAI1Direction = Vector3.zero;

@@ -14,6 +14,12 @@ using UnityEngine;
  * Author:          Zachary Schmalz
  * Date:            11/9/2017
  */
+/* @author:         Diego Wilde
+ * @date:           Feb 2, 2018
+ * @description:    Changed priorities to now be controllable through the editor. Also, I moved the 
+ *                  priority array to the state.cs script from the stateTransitions.cs
+ * 
+ **/
 
 public class StateMachine : MonoBehaviour
 {
@@ -24,28 +30,47 @@ public class StateMachine : MonoBehaviour
     private Team team;
     private Team enemyTeam;
 
+    // DW: Priority controls; now editable through editor
+    public int[] idleStatePrty = { 10, 1, 3 };
+    public int[] attkStatePrty = { 10, 5, 3 };
+    public int[] pwupStatePrty = { 1 , 3, 5 };
+
+
     // Initial state is Idle
     void Start()
     {
         team = gameObject.GetComponent<Team>();
         enemyTeam = GameObject.FindGameObjectWithTag("Player").GetComponentInParent<Team>();
 
+        //DW: Set priorities with respect to state
+        foreach (State s in AllStates)
+        {
+            if(s is IdleState)            
+                s.priorities = idleStatePrty;
+             else if (s is AttackState)            
+                s.priorities = attkStatePrty;
+             else if ( s is PowerUpState)
+                s.priorities = pwupStatePrty;            
+        }
         currentState = AllStates[0];
         currentState.Enter(this);
     }
+
 
     // Run the update code for the current state
 	void Update ()
     {
         if (currentState != null)
         {
+            
             // Get the state to transition to
             State nextState = currentState.StateTransitions.EvaluateTransitions();
 
             // Null state means no valid transition, and do not swap to the same state
             if (nextState != null && nextState.GetType() != currentState.GetType())
+            {
                 SwitchState(nextState);
-
+            }
             currentState.Execute(this);
         }
 	}
