@@ -34,6 +34,10 @@ using UnityEngine.SceneManagement;
 // Description: Changed spawning system & controls to work with networking, added documentation and
 //              rearranged update method. Need to fix titlescreen-skip functionality
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Turns out this wasn't networked properly, dunno why I thought it was
+
 public class GameManager : NetworkBehaviour
 {
     public static GameManager singleton;
@@ -41,21 +45,21 @@ public class GameManager : NetworkBehaviour
     public int firstTeamLayer;
     public GameObject teamPrefab;
     public GameObject[] teams;
-    public int team1Score;
-    public int team2Score;
+    
     public Vector3[] spawnPoints;
     public int numberOfPlayers;
-    public DeathMatchRules deathMatch;
-    public KingOfTheHillRules hillRules;
     public int maxRounds;
     public int currentRound;
-    public bool gameActive;
-    public bool matchStarted = false;
+    
+    
     public bool useTitleScreen;
-    public bool countdownOver = false;
-    public float countdownTimer;
-    public float timeBeforeMatch;
-    public float spawnTimer;
+
+    public Scorekeeper score;
+    public GameObject scorePrefab;
+    public Rules rules;
+    
+
+    public string level;
 
     public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
 
@@ -67,6 +71,7 @@ public class GameManager : NetworkBehaviour
     // Use this for initialization
     void Awake()
     {
+        Debug.Log("GameManager is Awake. NetID: " + GetComponent<NetworkIdentity>().netId);
         //make singleton
         if (singleton)
         {
@@ -80,10 +85,6 @@ public class GameManager : NetworkBehaviour
         outputPath = Application.dataPath + "/gamelog.txt";
         if (!File.Exists(outputPath)) File.Create(outputPath).Close();
         Debug.Log("Logging match results to: " + outputPath);
-
-        //initialize variables
-        deathMatch = GetComponent<DeathMatchRules>();
-        //hillRules = GetComponent<KingOfTheHillRules>();
         activePlayers = 0;
 
         //handle title screen skip in editor (currently unsupported until i get around to fixing it)
@@ -91,36 +92,9 @@ public class GameManager : NetworkBehaviour
             //StartGame(SceneManager.GetActiveScene().name, maxRounds);
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void OnStartClient()
     {
-        if(countdownTimer > 0)
-            countdownTimer -= Time.deltaTime;
-        if (gameActive)
-        {
-            if (matchStarted)
-            {
-                if (countdownTimer < 0)
-                    countdownOver = true;
-                if (NetworkServer.active && deathMatch)
-                {
-                    if (deathMatch.TimeLimit())
-                    {
-                        KillTeam(null); //draw
-                        WriteToLog("Time ran out, it's a draw");
-                    }
-                }
-            }
-            else if (countdownTimer < 1)
-            {
-                matchStarted = true;
-
-                if (deathMatch)
-                {
-                    deathMatch.Reset();
-                }
-            }
-        }
+        Debug.Log("Spawned on client. NetID: " + GetComponent<NetworkIdentity>().netId);
     }
 
     /// <summary>
@@ -139,26 +113,18 @@ public class GameManager : NetworkBehaviour
             if (t != team && team != null)
             {
                 t.AddPoints();
-                if (deathMatch)
-                    deathMatch.AddScore(t.name);
+                rules.AddScore(t.name);
                 NetManager.GetInstance().SendScoreUpdate();
-                WriteToLog(t.name + " won the round with " + deathMatch.time + " seconds remaining");
             }
         }
         currentRound++;
-        // added 3 new variables here:
-        countdownTimer = timeBeforeMatch;
-        matchStarted = false;
-        // old boolean variables - Paul
         if (currentRound >= maxRounds)
         {
-            string winner = deathMatch.GameWinner();
+            string winner = rules.GameWinner();
             if (winner == "")
                 WriteToLog("Match over. It's a tie");
             else
                 WriteToLog("Match over. Winner: " + winner);
-
-            gameActive = false;
             NetManager.GetInstance().StopHost();
             activePlayers = 0;
         }
@@ -204,30 +170,16 @@ public class GameManager : NetworkBehaviour
     }
 
     [Server]
-    public void StartGame(string levelName, int rounds)
+    public void StartGame()
     {
         NetworkServer.Spawn(gameObject);
-        maxRounds = rounds;
         currentRound = 0;
-        gameActive = true;
-        // New boolean variable position
-        matchStarted = false;
-        countdownTimer = timeBeforeMatch;
-        countdownOver = false;
-        NetworkServer.SendToAll(NetManager.ExtMsgType.StartGame, new NetManager.PingMessage());
-        NetManager.GetInstance().ServerChangeScene(levelName);
-        WriteToLog("Starting new game, level: " + levelName + " out of " + rounds + " rounds");
+        NetManager.GetInstance().ServerChangeScene(level);
+        rules.StartGame();
+        WriteToLog("Starting new game, level: " + level + " out of " + maxRounds + " rounds");
     }
 
-    [Client]
-    public void OnStartGame(NetworkMessage netMsg)
-    {
-        gameActive = true;
-        // New boolean variable position
-        matchStarted = false;
-        countdownTimer = timeBeforeMatch;
-        countdownOver = false;
-    }
+    
 
     [Server]
     public GameObject SpawnPlayer(Player ply)

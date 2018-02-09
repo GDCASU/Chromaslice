@@ -21,7 +21,8 @@ public class NetManager : NetworkManager
     // players that are on the same machine but can have different controllers
     public List<Player> localPlayers;
 
-    public string lobbyScene;
+    public string lobbySceneOnline;
+    public string lobbySceneOffline;
 
     public void Start()
     {
@@ -32,7 +33,7 @@ public class NetManager : NetworkManager
     public void StartLocalGame()
     {
         Log("Starting local game");
-        maxConnections = 0;
+        maxConnections = 1;
         for (short i = 0; i < 4; i++)
             localPlayers.Add(new Player() { name = "Player " + i, controllerId = i });
         StartHost();
@@ -41,18 +42,20 @@ public class NetManager : NetworkManager
     void OnReceivePlayerInfo(NetworkMessage netMsg)
     {
         PlayerInfoMessage msg = netMsg.ReadMessage<PlayerInfoMessage>();
-
-        if ((IsGameJoinable(msg.players.Count) || msg.players.Count == 4) && GetPlayer(msg.players[0].connectionId, msg.players[0].controllerId) == null)
+        if (GetPlayer(msg.players[0].connectionId, msg.players[0].controllerId) == null) //ignore player info for players that already spawned
         {
-            playerList.AddRange(msg.players);
-            for (int i = 0; i < playerList.Count; i++)
-                playerList[i].playerId = i;
-            NetworkServer.SendToAll(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
-        }
-        else
-        {
-            Log("Game not joinable, disconnecting player " + msg.players[0].connectionId);
-            GetConnection(msg.players[0].connectionId).Disconnect();
+            if ((IsGameJoinable(msg.players.Count) || msg.players.Count == 4) && GetPlayer(msg.players[0].connectionId, msg.players[0].controllerId) == null)
+            {
+                playerList.AddRange(msg.players);
+                for (int i = 0; i < playerList.Count; i++)
+                    playerList[i].playerId = i;
+                NetworkServer.SendToAll(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
+            }
+            else
+            {
+                Log("Game not joinable, disconnecting player " + msg.players[0].connectionId);
+                GetConnection(msg.players[0].connectionId).Disconnect();
+            }
         }
     }
 
@@ -141,13 +144,13 @@ public class NetManager : NetworkManager
 
     public bool IsGameJoinable(int playersJoining)
     {
-        return (networkSceneName == lobbyScene && (playersJoining + playerList.Count <= 4));
+        return (networkSceneName == lobbySceneOnline && (playersJoining + playerList.Count <= 4));
     }
 
     public override void OnClientSceneChanged(NetworkConnection conn)
     {
-        Log("Client scene changed to " + networkSceneName);
-        if (networkSceneName == lobbyScene) return;
+        Log("Client scene changed to " + networkSceneName + " local players " + localPlayers.Count);
+        if (networkSceneName == lobbySceneOnline || networkSceneName == lobbySceneOffline) return;
         if (!ClientScene.ready) { ClientScene.Ready(conn); }
         for (short i = 0; i < localPlayers.Count; i++)
         {
@@ -167,11 +170,9 @@ public class NetManager : NetworkManager
     // Called on the client when connected to a server
     public override void OnClientConnect(NetworkConnection conn)
     {
-        Log(conn.ToString());
         Log("Connecting to the server!");
         client.RegisterHandler(ExtMsgType.Ping, OnPing);
         client.RegisterHandler(ExtMsgType.PlayerInfo, OnReceivePlayerInfoClient);
-        client.RegisterHandler(ExtMsgType.StartGame, GameManager.singleton.OnStartGame);
         client.RegisterHandler(ExtMsgType.Score, OnReceiveScore);
         base.OnClientConnect(conn);
     }
@@ -179,8 +180,8 @@ public class NetManager : NetworkManager
     public void OnReceiveScore(NetworkMessage netMsg)
     {
         ScoreMessage msg = netMsg.ReadMessage<ScoreMessage>();
-        GameManager.singleton.team1Score = msg.team1Score;
-        GameManager.singleton.team2Score = msg.team2Score;
+        GameManager.singleton.score.team1Score = msg.team1Score;
+        GameManager.singleton.score.team2Score = msg.team2Score;
     }
 
     public void OnReceivePlayerInfoClient(NetworkMessage netMsg)
@@ -203,7 +204,7 @@ public class NetManager : NetworkManager
     public static void Log(string msg)
     {
         Debug.Log(msg);
-        CanvasLog.instance.Log(msg);
+        if(CanvasLog.instance) CanvasLog.instance.Log(msg);
     }
 
     class PlayerInfoMessage : MessageBase
@@ -277,7 +278,6 @@ public class NetManager : NetworkManager
     {
         public static short PlayerInfo = MsgType.Highest + 1;
         public static short Ping = MsgType.Highest + 2;
-        public static short StartGame = MsgType.Highest + 3;
-        public static short Score = MsgType.Highest + 4;
+        public static short Score = MsgType.Highest + 3;
     }
 }

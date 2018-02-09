@@ -19,15 +19,6 @@ public class TitleMenu : MonoBehaviour {
     public string lobbySceneName;
     private string selectedLevel;
     private int rounds;
-    // Use this for initialization
-    void Start () {
-       
-    }
-	
-	// Update is called once per frame
-	void Update () {
-        
-	}
 
     public void StartLocal()
     {
@@ -52,11 +43,13 @@ public class TitleMenu : MonoBehaviour {
         }
 
         NetManager.GetInstance().StartLocalGame();
-        GameManager.singleton.StartGame(selectedLevel + "_Level", rounds);
+        GameManager.singleton.level = selectedLevel + "_Level";
+        GameManager.singleton.maxRounds = rounds;
+        GameManager.singleton.StartGame();
     }
 
     public void StartOnline()
     {
-        NetManager.GetInstance().ServerChangeScene(NetManager.GetInstance().lobbyScene);
+        NetManager.GetInstance().ServerChangeScene(NetManager.GetInstance().lobbySceneOffline);
     }
 }

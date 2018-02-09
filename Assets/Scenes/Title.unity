@@ -2645,6 +2645,15 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114264062695441664, guid: 05576e5b4f8d50e4d98358b20a3f8755,
+        type: 2}
+      propertyPath: m_ServerOnly
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1748261167873404, guid: 05576e5b4f8d50e4d98358b20a3f8755, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 05576e5b4f8d50e4d98358b20a3f8755, type: 2}
   m_IsPrefabParent: 0
@@ -9393,19 +9402,19 @@ MonoBehaviour:
   m_DontDestroyOnLoad: 1
   m_RunInBackground: 1
   m_ScriptCRCCheck: 1
-  m_MaxDelay: 0.01
+  m_MaxDelay: 0.05
   m_LogLevel: 1
   m_PlayerPrefab: {fileID: 1692480771552320, guid: 5647b08476264db4788883791609c8ad,
     type: 2}
   m_AutoCreatePlayer: 0
   m_PlayerSpawnMethod: 0
-  m_OfflineScene: 
-  m_OnlineScene: Online_Lobby
+  m_OfflineScene: Title
+  m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 1383037164253312, guid: e1233598747b4e1458f001328d9e98ba, type: 2}
   - {fileID: 1618374010297264, guid: 7ab4d1e6b7e8c5542b530a950adfa081, type: 2}
   - {fileID: 1748261167873404, guid: 05576e5b4f8d50e4d98358b20a3f8755, type: 2}
-  m_CustomConfig: 0
+  m_CustomConfig: 1
   m_MaxConnections: 4
   m_ConnectionConfig:
     m_PacketSize: 1440
@@ -9447,7 +9456,7 @@ MonoBehaviour:
     m_MaxTimerTimeout: 12000
     m_MinNetSimulatorTimeout: 1
     m_MaxNetSimulatorTimeout: 12000
-  m_Channels: 
+  m_Channels: 0500000000000000
   m_UseWebSockets: 0
   m_UseSimulator: 0
   m_SimulatedLatency: 1
@@ -9460,7 +9469,8 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
-  lobbyScene: Online_Lobby
+  lobbySceneOnline: Online_Lobby
+  lobbySceneOffline: Offline_Lobby
 --- !u!4 &1961532812
 Transform:
   m_ObjectHideFlags: 0
