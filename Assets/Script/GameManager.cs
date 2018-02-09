@@ -45,19 +45,25 @@ public class GameManager : NetworkBehaviour
     public int firstTeamLayer;
     public GameObject teamPrefab;
     public GameObject[] teams;
-    
+    [SyncVar]
+    public int team1Score;
+    [SyncVar]
+    public int team2Score;
     public Vector3[] spawnPoints;
     public int numberOfPlayers;
+    public DeathMatchRules deathMatch;
+    public KingOfTheHillRules hillRules;
     public int maxRounds;
     public int currentRound;
-    
-    
+    public bool gameActive;
+    [SyncVar]
+    public bool matchStarted = false;
     public bool useTitleScreen;
-
-    public Scorekeeper score;
-    public GameObject scorePrefab;
-    public Rules rules;
-    
+    [SyncVar]
+    public bool countdownOver = false;
+    [SyncVar]
+    public float countdownTimer;
+    public float timeBeforeMatch;
 
     public string level;
 
@@ -85,11 +91,47 @@ public class GameManager : NetworkBehaviour
         outputPath = Application.dataPath + "/gamelog.txt";
         if (!File.Exists(outputPath)) File.Create(outputPath).Close();
         Debug.Log("Logging match results to: " + outputPath);
+
+        //initialize variables
+        deathMatch = GetComponent<DeathMatchRules>();
+        //hillRules = GetComponent<KingOfTheHillRules>();
         activePlayers = 0;
 
         //handle title screen skip in editor (currently unsupported until i get around to fixing it)
         //if (!useTitleScreen)
             //StartGame(SceneManager.GetActiveScene().name, maxRounds);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if(countdownTimer > 0)
+            countdownTimer -= Time.deltaTime;
+        if (gameActive)
+        {
+            if (matchStarted)
+            {
+                if (countdownTimer < 0)
+                    countdownOver = true;
+                if (NetworkServer.active && deathMatch)
+                {
+                    if (deathMatch.TimeLimit())
+                    {
+                        KillTeam(null); //draw
+                        WriteToLog("Time ran out, it's a draw");
+                    }
+                }
+            }
+            else if (countdownTimer < 1)
+            {
+                matchStarted = true;
+
+                if (deathMatch)
+                {
+                    deathMatch.Reset();
+                }
+            }
+        }
     }
 
     public override void OnStartClient()
@@ -113,18 +155,26 @@ public class GameManager : NetworkBehaviour
             if (t != team && team != null)
             {
                 t.AddPoints();
-                rules.AddScore(t.name);
+                if (deathMatch)
+                    deathMatch.AddScore(t.name);
                 NetManager.GetInstance().SendScoreUpdate();
+                WriteToLog(t.name + " won the round with " + deathMatch.time + " seconds remaining");
             }
         }
         currentRound++;
+        // added 3 new variables here:
+        countdownTimer = timeBeforeMatch;
+        matchStarted = false;
+        // old boolean variables - Paul
         if (currentRound >= maxRounds)
         {
-            string winner = rules.GameWinner();
+            string winner = deathMatch.GameWinner();
             if (winner == "")
                 WriteToLog("Match over. It's a tie");
             else
                 WriteToLog("Match over. Winner: " + winner);
+
+            gameActive = false;
             NetManager.GetInstance().StopHost();
             activePlayers = 0;
         }
@@ -174,12 +224,25 @@ public class GameManager : NetworkBehaviour
     {
         NetworkServer.Spawn(gameObject);
         currentRound = 0;
+        gameActive = true;
+        // New boolean variable position
+        matchStarted = false;
+        countdownTimer = timeBeforeMatch;
+        countdownOver = false;
         NetManager.GetInstance().ServerChangeScene(level);
-        rules.StartGame();
+        NetworkServer.SendToAll(NetManager.ExtMsgType.StartGame, new NetManager.PingMessage());
         WriteToLog("Starting new game, level: " + level + " out of " + maxRounds + " rounds");
     }
 
-    
+    [Client]
+    public void OnStartGame(NetworkMessage netMsg)
+    {
+        gameActive = true;
+        // New boolean variable position
+        matchStarted = false;
+        countdownTimer = timeBeforeMatch;
+        countdownOver = false;
+    }
 
     [Server]
     public GameObject SpawnPlayer(Player ply)

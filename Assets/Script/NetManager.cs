@@ -173,6 +173,7 @@ public class NetManager : NetworkManager
         Log("Connecting to the server!");
         client.RegisterHandler(ExtMsgType.Ping, OnPing);
         client.RegisterHandler(ExtMsgType.PlayerInfo, OnReceivePlayerInfoClient);
+        client.RegisterHandler(ExtMsgType.StartGame, OnStartGame);
         client.RegisterHandler(ExtMsgType.Score, OnReceiveScore);
         base.OnClientConnect(conn);
     }
@@ -180,8 +181,8 @@ public class NetManager : NetworkManager
     public void OnReceiveScore(NetworkMessage netMsg)
     {
         ScoreMessage msg = netMsg.ReadMessage<ScoreMessage>();
-        GameManager.singleton.score.team1Score = msg.team1Score;
-        GameManager.singleton.score.team2Score = msg.team2Score;
+        GameManager.singleton.team1Score = msg.team1Score;
+        GameManager.singleton.team2Score = msg.team2Score;
     }
 
     public void OnReceivePlayerInfoClient(NetworkMessage netMsg)
@@ -199,6 +200,11 @@ public class NetManager : NetworkManager
             p.connectionId = msg.connectionId;
         Log("Received ping");
         client.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(localPlayers));    
+    }
+
+    public void OnStartGame(NetworkMessage netMsg)
+    {
+        GameManager.singleton.OnStartGame(netMsg);
     }
 
     public static void Log(string msg)
@@ -278,6 +284,7 @@ public class NetManager : NetworkManager
     {
         public static short PlayerInfo = MsgType.Highest + 1;
         public static short Ping = MsgType.Highest + 2;
-        public static short Score = MsgType.Highest + 3;
+        public static short StartGame = MsgType.Highest + 3;
+        public static short Score = MsgType.Highest + 4;
     }
 }

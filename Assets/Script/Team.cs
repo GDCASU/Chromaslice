@@ -145,8 +145,6 @@ public class Team : NetworkBehaviour
 
         newPlayer.layer = gameObject.layer;
 
-        spawnTimer = GameManager.singleton.spawnTimer;
-
         GameObject invinciblePrefab = Instantiate(invincibilityParticlePrefab, newPlayer.transform.position, Quaternion.identity, newPlayer.transform);
         var main = invinciblePrefab.GetComponent<ParticleSystem>().main;
         //main.duration = spawnTimer;

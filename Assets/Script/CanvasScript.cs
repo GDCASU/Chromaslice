@@ -37,17 +37,16 @@ public class CanvasScript : MonoBehaviour
             //Debug.Log("Key was pressd");
             //debugMenu.SetActive(!debugMenu.activeSelf);
         }
-        Scorekeeper score = FindObjectOfType<Scorekeeper>();
-        scorep1.text = score.team1Score.ToString();
-        scorep2.text = score.team2Score.ToString();
-        if (score.matchStarted)
+        scorep1.text = GameManager.singleton.team1Score.ToString();
+        scorep2.text = GameManager.singleton.team2Score.ToString();
+        if (GameManager.singleton.matchStarted)
         {
-            if (score.countdownOver)
+            if (GameManager.singleton.countdownOver)
             {
-                float time = .time;
+                float time = GameManager.singleton.deathMatch.time;
                 timer.text = Mathf.FloorToInt(time / 60).ToString("00") + ":" + Mathf.FloorToInt(time % 60).ToString("00");
             }
-            if (score.countdownTimer <= 1 && GameManager.singleton.countdownTimer >= 0)
+            if (GameManager.singleton.countdownTimer <= 1 && GameManager.singleton.countdownTimer >= 0)
             {
                 timer.text = "FIGHT!!!";
             }
