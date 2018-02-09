@@ -136,15 +136,14 @@ public class Team : NetworkBehaviour
     [Server]
     public GameObject SpawnPlayer(Player ply)
     {
-        Debug.Log(ply.controllerId);
+        Debug.Log("Spawning player " + ply.controllerId + " on team " + ply.team);
+        CanvasLog.instance.Log("Spawning player " + ply.controllerId + " on team " + ply.team);
         int num = ply.playerId % 2 + 1;
         if ((num == 1 && player1) || (num == 2 && player2)) return null;
         Vector3 pos = (num == 1 ? spawn1 : spawn2);
         GameObject newPlayer = Instantiate(playerPrefab, pos, Quaternion.identity, transform);
 
         newPlayer.layer = gameObject.layer;
-
-        spawnTimer = GameManager.singleton.spawnTimer;
 
         GameObject invinciblePrefab = Instantiate(invincibilityParticlePrefab, newPlayer.transform.position, Quaternion.identity, newPlayer.transform);
         var main = invinciblePrefab.GetComponent<ParticleSystem>().main;
@@ -255,8 +254,8 @@ public class Team : NetworkBehaviour
 
     public void KillTeam()
     {
-        // Check if the team doesn't have invincibility
-        if (!(currentPowerUp != null && currentPowerUp.GetComponent<InvincibilityPowerUp>().isActive))
+        // Do not kill if invincible
+        if(IsInvincibleOver())
             GameManager.singleton.KillTeam(this);
     }
 }

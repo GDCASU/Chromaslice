@@ -11,28 +11,23 @@ using UnityEngine;
  * Author: Zachary Schmalz
  * Date: September 15, 2017
  * 
+ * Version 2.0.0
+ * Author: Zachary Schmalz
+ * Date: January 26, 2018
+ * Revisions: Added functionality to work with the PowerUp Spawners
 */
 
 public class RopePowerUp : PowerUp
 {
     private float maxRopeLength;
+    private float boostPercent;
 
-    // Use this for initialization
-    protected override void Start()
+    // Assign power-up data
+    public override void SetData(float delay = 0, float duration = 0, float percent = 0)
     {
-        base.Start();
-    }
-
-    // Update is called once per frame
-    protected override void Update()
-    {
-        base.Update();
-    }
-
-    // Probably not needed anymore. We'll see ;)
-    public override void OnPowerUpCollect(Team t, int modifier)
-    {
-        base.OnPowerUpCollect(t, modifier);
+        spawnDelay = delay;
+        activeLength = duration;
+        boostPercent = percent;
     }
 
     // When triggered, saves the original maxRopeLength field of the rope prefab/currentRope,
@@ -42,6 +37,7 @@ public class RopePowerUp : PowerUp
         base.Activate();
         maxRopeLength = Team.ropePrefab.GetComponent<Rope>().maxRopeLength;
         Team.ropePrefab.GetComponent<Rope>().maxRopeLength = CalculateNewValue(maxRopeLength, boostPercent);
+
         // Only update currentRope maxRopeLength if it is not null
         if (Team.currentRope)
         {

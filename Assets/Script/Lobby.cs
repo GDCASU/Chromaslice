@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ using UnityEngine.UI;
 
 public class Lobby : MonoBehaviour {
 
-    public NetManager nm;
+    public NetManager netManager;
 
     public InputField player1Name;
     public InputField player2Name;
@@ -29,7 +30,8 @@ public class Lobby : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        nm = NetManager.GetInstance();
+        netManager = NetManager.GetInstance();
+        UpdatePlayerDisplay();
 	}
 
     public void SetPlayers(bool two)
@@ -42,8 +44,11 @@ public class Lobby : MonoBehaviour {
         if (!started)
         {
             UpdateInfo();
-            nm.StartHost();
+            netManager.StartHost();
             started = true;
+            GameManager.singleton.level = level.selectedText.text + "_Level";
+            GameManager.singleton.maxRounds = rounds.currentSelection + 1;
+            netManager.ServerChangeScene("Online_Lobby");
         }
     }
 
@@ -52,17 +57,18 @@ public class Lobby : MonoBehaviour {
         if (!started)
         {
             UpdateInfo();
-            nm.networkAddress = ipField.text;
-            nm.StartClient();
+            netManager.networkAddress = ipField.text;
+            netManager.StartClient();
             started = true;
+            netManager.ServerChangeScene("Online_Lobby");
         }
     }
 
     public void UpdateInfo()
     {
-        nm.localPlayers.Add(new Player() { name = player1Name.text, controllerId = 0 });
+        netManager.localPlayers.Add(new Player() { name = player1Name.text, controllerId = 0 });
         if(twoPlayers)
-            nm.localPlayers.Add(new Player() { name = player2Name.text, controllerId = 1 });
+            netManager.localPlayers.Add(new Player() { name = player2Name.text, controllerId = 1 });
     }
 
     public void UpdatePlayerDisplay()
@@ -72,7 +78,7 @@ public class Lobby : MonoBehaviour {
             Debug.LogWarning("More than 4 players somehow!");
         for (int i = 0; i < list.Count; i++)
             playerNameTexts[i].text = list[i].name;
-        if (list.Count == 4)
+        if (list.Count == 4 && NetworkServer.active)
         {
             startButton.interactable = true;
             playerText.text = "Ready to Start!";
@@ -84,12 +90,14 @@ public class Lobby : MonoBehaviour {
     //only callable by host = server
     public void StartGame()
     {
-        GameManager.singleton.StartGame(level.selectedText.text + "_Level", rounds.currentSelection + 1);
+        GameManager.singleton.StartGame();
     }
 
     public void Exit()
     {
+        Debug.Log("Exit chosen.");
         NetManager.GetInstance().StopHost();
+        Destroy(NetManager.GetInstance().gameObject);
         SceneManager.LoadScene(0);
     }
 }
