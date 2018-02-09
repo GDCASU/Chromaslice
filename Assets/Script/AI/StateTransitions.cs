@@ -12,7 +12,11 @@ using UnityEngine;
  * Author:          Zachary Schmalz
  * Date:            11/9/2017
  */
-
+ /* @author:        Diego Wilde
+  * @date:          Feb 2, 2018
+  * @description:   Moved priority control to State.cs from here, and removed and cleaned up 
+  *                 the code that was in here
+  **/
 // Create the ScriptableObject
 [CreateAssetMenu (menuName = "AI/StateTransitions")]
 
@@ -20,18 +24,22 @@ public class StateTransitions : ScriptableObject
 {
     private List<Transition> AllTransitions;
     private State BaseState;
-    private int[] Priorities;
+
+    //DW: removed - unused
+    /**    private int[] Priorities;    **/
 
     // Set the data for creating and accessing the BaseState's transitions
     public void CreateStateTransitions(State baseState, List<State> allStates, List<Func<bool>> Conditions)
     {
         AllTransitions = new List<Transition>();
         BaseState = baseState;
-        Priorities = ReturnPriorities();
+        //DW: removed - unused
+        /** Priorities = ReturnPriorities();    **/
 
         // Create the list of Transition objects
+        // DW: edited to get priority array from State.cs
         for (int i = 0; i < allStates.Count; i++)
-            AllTransitions.Add(new Transition(allStates[i], Priorities[i], Conditions[i]));
+            AllTransitions.Add(new Transition(allStates[i], BaseState.priorities[i], Conditions[i]));
     }
 
     // Evaluate all the transitions for the state
@@ -69,14 +77,8 @@ public class StateTransitions : ScriptableObject
         }
     }
 
-    /// <summary>
-    /// This method is where the priorities of the transitions from the BaseClass to all other States are made
-    /// The lower the number = the higher the priority.
-    /// Use this format when setting the priorities for each state:
-    /// 
-    /// IdleState->AttackState->PowerUpState
-    /// 
-    /// </summary>
+//DW: old way of determining priorities; no longer needed
+/**
 
     // These are only sample priorities and should be adjusted later.
     // Currently the states should immediately switch to another state
@@ -102,4 +104,5 @@ public class StateTransitions : ScriptableObject
 
         return priorities;
     }
+    **/
 }

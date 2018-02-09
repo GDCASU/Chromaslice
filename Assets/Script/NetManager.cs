@@ -18,7 +18,11 @@ public class NetManager : NetworkManager
 {
     public List<Player> playerList;
 
+    // players that are on the same machine but can have different controllers
     public List<Player> localPlayers;
+
+    public string lobbySceneOnline;
+    public string lobbySceneOffline;
 
     public void Start()
     {
@@ -28,7 +32,8 @@ public class NetManager : NetworkManager
 
     public void StartLocalGame()
     {
-        maxConnections = 0;
+        Log("Starting local game");
+        maxConnections = 1;
         for (short i = 0; i < 4; i++)
             localPlayers.Add(new Player() { name = "Player " + i, controllerId = i });
         StartHost();
@@ -37,21 +42,27 @@ public class NetManager : NetworkManager
     void OnReceivePlayerInfo(NetworkMessage netMsg)
     {
         PlayerInfoMessage msg = netMsg.ReadMessage<PlayerInfoMessage>();
-        if (IsGameJoinable(msg.players.Count) || msg.players.Count == 4)
+        if (GetPlayer(msg.players[0].connectionId, msg.players[0].controllerId) == null) //ignore player info for players that already spawned
         {
-            playerList.AddRange(msg.players);
-            for (int i = 0; i < playerList.Count; i++)
-                playerList[i].playerId = i;
-            NetworkServer.SendToAll(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
-        } else
-        {
-            GetConnection(msg.players[0].connectionId).Disconnect();
+            if ((IsGameJoinable(msg.players.Count) || msg.players.Count == 4) && GetPlayer(msg.players[0].connectionId, msg.players[0].controllerId) == null)
+            {
+                playerList.AddRange(msg.players);
+                for (int i = 0; i < playerList.Count; i++)
+                    playerList[i].playerId = i;
+                NetworkServer.SendToAll(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
+            }
+            else
+            {
+                Log("Game not joinable, disconnecting player " + msg.players[0].connectionId);
+                GetConnection(msg.players[0].connectionId).Disconnect();
+            }
         }
     }
 
     public override void OnStartServer()
     {
         NetworkServer.RegisterHandler(ExtMsgType.PlayerInfo, OnReceivePlayerInfo);
+        base.OnStartServer();
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
@@ -61,19 +72,30 @@ public class NetManager : NetworkManager
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
     {
+        Log("Adding player from client");
         NetworkServer.AddPlayerForConnection(conn, GameManager.singleton.SpawnPlayer(GetPlayer(conn.connectionId, playerControllerId)), playerControllerId);
     }
 
     public void SendScoreUpdate()
     {
-        NetworkServer.SendToAll(ExtMsgType.Score, new ScoreMessage() {
+        NetworkServer.SendToAll(ExtMsgType.Score, new ScoreMessage()
+        {
             team1Score = GameManager.singleton.teams[0].GetComponent<Team>().points,
             team2Score = GameManager.singleton.teams[1].GetComponent<Team>().points
         });
     }
 
+    public override void OnServerDisconnect(NetworkConnection conn)
+    {
+        Log("Player " + conn.connectionId + " disconnected.");
+        playerList.RemoveAll(p => p.connectionId == conn.connectionId);
+        base.OnServerDisconnect(conn);
+    }
+
+    // Called on the server when a new client connects
     public override void OnServerConnect(NetworkConnection conn)
     {
+        Log("Player " + conn.connectionId + " has connected.");
         conn.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(playerList));
         base.OnServerConnect(conn);
     }
@@ -82,12 +104,16 @@ public class NetManager : NetworkManager
     {
         localPlayers = new List<Player>();
         playerList = new List<Player>();
+        Log("Stopping server...");
+        base.OnStopServer();
     }
 
     public override void OnStopClient()
     {
         localPlayers = new List<Player>();
         playerList = new List<Player>();
+        Log("Stopping client...");
+        base.OnStopClient();
     }
 
     public static NetManager GetInstance()
@@ -118,15 +144,17 @@ public class NetManager : NetworkManager
 
     public bool IsGameJoinable(int playersJoining)
     {
-        return (networkSceneName == onlineScene && (playersJoining + playerList.Count <= 4));
+        return (networkSceneName == lobbySceneOnline && (playersJoining + playerList.Count <= 4));
     }
 
     public override void OnClientSceneChanged(NetworkConnection conn)
     {
-        if (!ClientScene.ready) ClientScene.Ready(conn);
+        Log("Client scene changed to " + networkSceneName + " local players " + localPlayers.Count);
+        if (networkSceneName == lobbySceneOnline || networkSceneName == lobbySceneOffline) return;
+        if (!ClientScene.ready) { ClientScene.Ready(conn); }
         for (short i = 0; i < localPlayers.Count; i++)
         {
-            if (ClientScene.localPlayers.Count >= i+1 && ClientScene.localPlayers[i].IsValid && ClientScene.localPlayers[i].gameObject)
+            if (ClientScene.localPlayers.Count >= i + 1 && ClientScene.localPlayers[i].IsValid && ClientScene.localPlayers[i].gameObject)
                 Destroy(ClientScene.localPlayers[i].gameObject);
             ClientScene.AddPlayer(conn, i);
         }
@@ -134,15 +162,18 @@ public class NetManager : NetworkManager
 
     public override void OnServerReady(NetworkConnection conn)
     {
+        Log("Received 'Ready' from player " + conn.connectionId);
         NetworkServer.SendToClient(conn.connectionId, ExtMsgType.Ping, new PingMessage() { connectionId = conn.connectionId });
         base.OnServerReady(conn);
     }
 
+    // Called on the client when connected to a server
     public override void OnClientConnect(NetworkConnection conn)
     {
+        Log("Connecting to the server!");
         client.RegisterHandler(ExtMsgType.Ping, OnPing);
         client.RegisterHandler(ExtMsgType.PlayerInfo, OnReceivePlayerInfoClient);
-        client.RegisterHandler(ExtMsgType.StartGame, GameManager.singleton.OnStartGame);
+        client.RegisterHandler(ExtMsgType.StartGame, OnStartGame);
         client.RegisterHandler(ExtMsgType.Score, OnReceiveScore);
         base.OnClientConnect(conn);
     }
@@ -167,7 +198,19 @@ public class NetManager : NetworkManager
         PingMessage msg = netMsg.ReadMessage<PingMessage>();
         foreach (Player p in localPlayers)
             p.connectionId = msg.connectionId;
-        client.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(localPlayers));
+        Log("Received ping");
+        client.Send(ExtMsgType.PlayerInfo, new PlayerInfoMessage(localPlayers));    
+    }
+
+    public void OnStartGame(NetworkMessage netMsg)
+    {
+        GameManager.singleton.OnStartGame(netMsg);
+    }
+
+    public static void Log(string msg)
+    {
+        Debug.Log(msg);
+        if(CanvasLog.instance) CanvasLog.instance.Log(msg);
     }
 
     class PlayerInfoMessage : MessageBase
@@ -236,6 +279,7 @@ public class NetManager : NetworkManager
         }
     }
 
+    // creates extra message types used for derived message objects
     public class ExtMsgType
     {
         public static short PlayerInfo = MsgType.Highest + 1;
