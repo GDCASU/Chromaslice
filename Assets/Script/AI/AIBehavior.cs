@@ -40,8 +40,7 @@ public class AIBehavior : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
+    {   
         //TEMPORARY PLAYER CONTROLS
         if(Input.GetKeyDown(KeyCode.Space))
         {

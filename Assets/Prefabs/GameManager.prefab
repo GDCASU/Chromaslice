@@ -122,6 +122,8 @@ MonoBehaviour:
   firstTeamLayer: 10
   teamPrefab: {fileID: 1383037164253312, guid: e1233598747b4e1458f001328d9e98ba, type: 2}
   teams: []
+  team1Score: 0
+  team2Score: 0
   spawnPoints: []
   numberOfPlayers: 0
   deathMatch: {fileID: 0}
@@ -134,4 +136,4 @@ MonoBehaviour:
   countdownOver: 0
   countdownTimer: 0
   timeBeforeMatch: 4
-  spawnTimer: 3
+  level: 

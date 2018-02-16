@@ -55,22 +55,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
+    i0: 225
+    i1: 35
+    i2: 53
+    i3: 152
+    i4: 116
+    i5: 123
+    i6: 78
+    i7: 20
+    i8: 88
+    i9: 240
+    i10: 1
+    i11: 50
+    i12: 141
+    i13: 158
+    i14: 152
+    i15: 186
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114498158417853706
@@ -90,8 +90,10 @@ MonoBehaviour:
   invincibilityParticlePrefab: {fileID: 1260787253499360, guid: 6c58453193176ba4cbd4331e276601de,
     type: 2}
   ropeFormTime: 1
-  player1: {fileID: 0}
-  player2: {fileID: 0}
   currentRope: {fileID: 0}
   points: 0
-  spawnTimer: 0
+  spawnTimer: 3
+  player1: {fileID: 0}
+  player2: {fileID: 0}
+  controller1: 0
+  controller2: 0

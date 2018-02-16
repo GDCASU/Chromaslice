@@ -6,6 +6,10 @@ using UnityEngine;
 // Date:        1/26/2017
 // Description: Template class for hazards
 
+// Developer:   Nick Arnieri
+// Date:        2/22/2017
+// Description: Add collision events
+
 public class HazardTemplate : Hazard
 {
     /// <summary>
@@ -57,6 +61,36 @@ public class HazardTemplate : Hazard
     /// Behavior for when another object collides with this object
     /// </summary>
     /// <param name="other">Game object colliding with</param>
+    public override void OnCollisionEnter(Collision other)
+    {
+        base.OnCollisionEnter(other);
+        // ADD YOUR CODE HERE
+    }
+
+    /// <summary>
+    /// Behavior for when another object stops colliding with this object
+    /// </summary>
+    /// <param name="other">Game object colliding with</param>
+    public override void OnCollisionExit(Collision other)
+    {
+        base.OnCollisionExit(other);
+        // ADD YOUR CODE HERE
+    }
+
+    /// <summary>
+    /// Behavior for when another object is touching this object
+    /// </summary>
+    /// <param name="other">Game object colliding with</param>
+    public override void OnCollisionStay(Collision other)
+    {
+        base.OnCollisionStay(other);
+        // ADD YOUR CODE HERE
+    }
+
+    /// <summary>
+    /// Behavior for when another objects trigger touches this object
+    /// </summary>
+    /// <param name="other">Game object colliding with</param>
     public override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
@@ -64,7 +98,7 @@ public class HazardTemplate : Hazard
     }
 
     /// <summary>
-    /// Behavior for when another object stops colliding with this object
+    /// Behavior for when another objects trigger stops touching this object
     /// </summary>
     /// <param name="other">Game object colliding with</param>
     public override void OnTriggerExit(Collider other)
@@ -74,7 +108,7 @@ public class HazardTemplate : Hazard
     }
 
     /// <summary>
-    /// Behavior for when another object is touching this object
+    /// Behavior for when another objects trigger is touching this object
     /// </summary>
     /// <param name="other">Game object colliding with</param>
     public override void OnTriggerStay(Collider other)
