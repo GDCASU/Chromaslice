@@ -8,13 +8,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d05ab9e91debfeb46a3f5144b6064290, type: 3}
-  m_Name: Attack
+  m_Script: {fileID: 11500000, guid: 43fbc06c389252142b59dd0e12048f83, type: 3}
+  m_Name: Evasion
   m_EditorClassIdentifier: 
   StateTransitions: {fileID: 11400000, guid: 4a19d1f3434173046964196ab6b46d6e, type: 2}
   priorities: 
-  AI1DistanceToRopeWeight: 0
-  AI2DistanceToRopeWeight: 0
-  ropeLengthWeight: 1
-  angleWeight: 1
-  closestPlayerDistanceToMidpointWeight: 10
+  AI1DistanceToRopeWeight: 1
+  AI2DistanceToRopeWeight: 1
+  ropeLengthWeight: 0
+  angleWeight: 0
+  closestPlayerDistanceToMidpointWeight: 0
