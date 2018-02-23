@@ -52,4 +52,9 @@ public class TitleMenu : MonoBehaviour {
     {
         NetManager.GetInstance().ServerChangeScene(NetManager.GetInstance().lobbySceneOffline);
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }
