@@ -222,7 +222,7 @@ public class GameManager : NetworkBehaviour
     [Server]
     public void StartGame()
     {
-        NetworkServer.Spawn(gameObject);
+        //NetworkServer.Spawn(gameObject);
         currentRound = 0;
         gameActive = true;
         // New boolean variable position

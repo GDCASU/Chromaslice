@@ -30,7 +30,13 @@ public abstract class State : ScriptableObject
 
     public int[] priorities;
 
+    public float AI1DistanceToRopeWeight;
+    public float AI2DistanceToRopeWeight;
+    public float ropeLengthWeight;
+    public float angleWeight;
+    public float closestPlayerDistanceToMidpointWeight;
 
+    protected AIBehavior AIBehaviorScript;
 
     // A list containing the Method Conditions used for evaluating transitions
     protected List<Func<bool>> Conditions;

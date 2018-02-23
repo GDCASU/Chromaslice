@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[System.Serializable]
 public class Player {
 
     public string name;
@@ -11,5 +12,4 @@ public class Player {
     public short controllerId;
     public int playerId;
     public int team;
-
 }
