@@ -18,6 +18,12 @@ using UnityEngine;
 //              a default setting in GenerateDefaultControls, and add/remove the
 //              relevant Getter method (such as GetJump)
 
+// Developer:   Trevor Angle
+// Date:        2/23/2018
+// Description: Changed default keyboard powerup button to 'E', LoadFromConfig() can
+//              can optionally set controls to "debug" controls rather than reading 
+//              from the ini
+
 [Serializable]
 public class Controls
 {
@@ -132,8 +138,48 @@ public class Controls
     /// </summary>
     /// <param name="controller">Slot from which to load</param>
     /// <returns>Controls object for given slot</returns>
-    public static Controls LoadFromConfig(int controller)
+    public static Controls LoadFromConfig(int controller, bool debug = false)
     {
+        //Allows all players to be controlled from keyboard, skips reading config file
+        if (debug) {
+            Controls c = new Controls(controller);
+            c.horizAxis = new ControlInput("Horizontal" + controller);
+            c.vertAxis = new ControlInput("Vertical" + controller);
+            c.jumpButton = new ControlInput((KeyCode)Enum.Parse(typeof(KeyCode), "Joystick" + controller + "Button4"));
+            c.dashButton = new ControlInput((KeyCode)Enum.Parse(typeof(KeyCode), "Joystick" + controller + "Button8"));
+            c.powerUpButton = new ControlInput((KeyCode)Enum.Parse(typeof(KeyCode), "Joystick" + controller + "Button2"));
+            switch (controller) {
+                case 1:
+                    c.horizAxisAlt = new ControlInput(KeyCode.D, KeyCode.A);
+                    c.vertAxisAlt = new ControlInput(KeyCode.W, KeyCode.S);
+                    c.jumpButtonAlt = new ControlInput(KeyCode.Space);
+                    c.dashButtonAlt = new ControlInput(KeyCode.Q);
+                    c.powerUpButtonAlt = new ControlInput(KeyCode.E);
+                    break;
+                case 2:
+                    c.horizAxisAlt = new ControlInput(KeyCode.H, KeyCode.F);
+                    c.vertAxisAlt = new ControlInput(KeyCode.T, KeyCode.G);
+                    c.jumpButtonAlt = new ControlInput(KeyCode.V);
+                    c.dashButtonAlt = new ControlInput(KeyCode.R);
+                    c.powerUpButtonAlt = new ControlInput(KeyCode.Y);
+                    break;
+                case 3:
+                    c.horizAxisAlt = new ControlInput(KeyCode.L, KeyCode.J);
+                    c.vertAxisAlt = new ControlInput(KeyCode.I, KeyCode.K);
+                    c.jumpButtonAlt = new ControlInput(KeyCode.N);
+                    c.dashButtonAlt = new ControlInput(KeyCode.U);
+                    c.powerUpButtonAlt = new ControlInput(KeyCode.O);
+                    break;
+                case 4:
+                    c.horizAxisAlt = new ControlInput(KeyCode.RightArrow, KeyCode.LeftArrow);
+                    c.vertAxisAlt = new ControlInput(KeyCode.UpArrow, KeyCode.DownArrow);
+                    c.jumpButtonAlt = new ControlInput(KeyCode.RightAlt);
+                    c.dashButtonAlt = new ControlInput(KeyCode.RightShift);
+                    c.powerUpButtonAlt = new ControlInput(KeyCode.RightControl);
+                    break;
+            }
+            return c;
+        }
         if (!File.Exists(cfgPath))
         {
             Debug.LogWarning("controls.ini not found, generating new one!");
@@ -188,7 +234,7 @@ public class Controls
             c.vertAxisAlt = new ControlInput(KeyCode.W, KeyCode.S);
             c.jumpButtonAlt = new ControlInput(KeyCode.Space);
             c.dashButtonAlt = new ControlInput(KeyCode.Q);
-            c.powerUpButtonAlt = new ControlInput(KeyCode.Z);
+            c.powerUpButtonAlt = new ControlInput(KeyCode.E);
         }
 
         return c;
