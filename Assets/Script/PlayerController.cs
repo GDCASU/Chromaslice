@@ -53,6 +53,10 @@ using UnityEngine.Networking;
 //              Added "Beyblade Effect" - tops bounce off each other
 //              violently when colliding
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Networking update
+
 public class PlayerController : NetworkBehaviour
 {
 
@@ -60,7 +64,6 @@ public class PlayerController : NetworkBehaviour
     public float numPlayers = 1; //is this even needed anymore?
 
     //Player attributes
-    public float health = 100;
     public float maxSpeed;
     public float bounceFactor;
     public float sprintPower = 5;
@@ -69,7 +72,6 @@ public class PlayerController : NetworkBehaviour
     public float dashPower = 5;
     public float dashTime = 1;
     public float dashCooldown = 3;
-    public float jumpCooldown = 3;
     public int team;
 
     private float tempMovementPower;
@@ -77,9 +79,9 @@ public class PlayerController : NetworkBehaviour
 
     private bool sprinting = false;
     private bool dashing = false;
+    private Vector3 targetLock;
     private float timeSinceSprint = 0;
     private float timeSinceDash = 0;
-    private float timeSinceJump = 0;
 
     // Property for affecting the maxSpeed of the players
     public float MaxSpeed
@@ -92,11 +94,7 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
-    //Jump stuff
-    public float jumpPower = 25.0f;
-    public int maxJumps = 1; //if we want double jump
     float distanceToGround; //to prevent jumping in the air
-
     public Controls controls;
 
     void Start()
@@ -104,7 +102,9 @@ public class PlayerController : NetworkBehaviour
         distanceToGround = GetComponent<SphereCollider>().radius;
         tempMaxSpeed = maxSpeed;
         tempMovementPower = 1;
+        targetLock = Vector3.zero;
     }
+
 
     void LateUpdate()
     {
@@ -116,11 +116,10 @@ public class PlayerController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (GameManager.singleton.matchStarted && isLocalPlayer)
+        if (isLocalPlayer && GameManager.singleton.matchStarted)
         {
             Rigidbody rb = GetComponent<Rigidbody>();
 
-            if (controls.GetJump() && isGrounded() && timeSinceJump >= jumpCooldown) { Jump(); timeSinceJump = 0; }
             if (controls.GetDash() && !dashing && timeSinceDash >= dashCooldown) { Dash(); timeSinceDash = 0; }
 
             // Active powerUp if Team has one
@@ -143,7 +142,6 @@ public class PlayerController : NetworkBehaviour
             }
 
             timeSinceDash += Time.deltaTime;
-            timeSinceJump += Time.deltaTime;
 
             if (timeSinceDash >= dashTime)
             {
@@ -154,7 +152,7 @@ public class PlayerController : NetworkBehaviour
             Vector3 target = new Vector3(controls.GetHorizontal(), 0, controls.GetVertical()).normalized * maxSpeed;
             Vector3 accel;
             if (dashing)
-                accel = target * dashPower - rb.velocity;
+                accel = targetLock - rb.velocity;
             else
                 accel = new Vector3((target.x - rb.velocity.x) * decelerationRate, 0, (target.z - rb.velocity.z) * decelerationRate);
             accel.y = 0;
@@ -172,6 +170,7 @@ public class PlayerController : NetworkBehaviour
 
     public void SetControls(int controller)
     {
+        Debug.Log("Setting controls to " + controller);
         controls = Controls.LoadFromConfig(controller);
     }
 
@@ -180,24 +179,10 @@ public class PlayerController : NetworkBehaviour
         team = num;
     }
 
-    public void SetJumpPower(float n)
-    {
-        jumpPower = n;
-    }
 
     public void SetDashPower(float n)
     {
         sprintPower = n;
-    }
-
-    bool isGrounded()
-    {
-        return Physics.Raycast(transform.position, -Vector3.up, distanceToGround + 0.1f);
-    }
-
-    void Jump()
-    {
-        GetComponent<Rigidbody>().velocity = Vector3.up * jumpPower;
     }
 
     void Dash()
@@ -210,6 +195,7 @@ public class PlayerController : NetworkBehaviour
 
         dashing = true;
         timeSinceDash = 0;
+        targetLock = new Vector3(controls.GetHorizontal(), 0, controls.GetVertical()).normalized * maxSpeed * dashPower;
     }
 
     void UnDash()

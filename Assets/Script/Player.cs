@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+[System.Serializable]
 public class Player {
 
     public string name;
     public NetworkInstanceId obj;
     public int connectionId;
-    public int controllerId;
+    public short controllerId;
+    public int playerId;
     public int team;
-
 }

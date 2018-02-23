@@ -12,16 +12,18 @@ using UnityEngine;
 
 public class Projectile : Interactable
 {
+    private Rigidbody rigidBody;
+
 	// Use this for initialization
 	protected override void Start ()
     {
-        base.Start();
+        rigidBody = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
 	protected override void Update ()
     {
-        base.Update();
+        
 	}
     
     // Function to calculate direction and velocity to launch projectile
@@ -34,7 +36,7 @@ public class Projectile : Interactable
 
         averageDirection /= ropePoints.Count - 1;
 
-        Vector3 speedModifier = (player1.GetComponent<Rigidbody>().velocity + player2.GetComponent<Rigidbody>().velocity) / 2;
+        Vector3 speedModifier = (Player1.GetComponent<Rigidbody>().velocity + Player2.GetComponent<Rigidbody>().velocity) / 2;
         Vector3 direction = gameObject.transform.position - averageDirection;
 
         // These values may need adjusting

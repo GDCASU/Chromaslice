@@ -20,6 +20,10 @@ using UnityEngine.Networking;
 // Date:        9/24/17
 // Description: Team now has a invincibility delay in the spawnTimer
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Changed variables to syncvars and reworked spawning/respawning
+//              to work with networking
 
 public class Team : NetworkBehaviour
 {
@@ -33,30 +37,45 @@ public class Team : NetworkBehaviour
     public GameObject ropePrefab;
     public GameObject invincibilityParticlePrefab;  // a prefab that has a particle system component
     public float ropeFormTime;
-    public GameObject player1;
-    public GameObject player2;
     public GameObject currentRope;
     public int points;
     public float spawnTimer;
+    public GameObject player1;
+    public GameObject player2;
 
+    [SyncVar]
     private Vector3 spawn1;
+    [SyncVar]
     private Vector3 spawn2;
-    private int controller1;
-    private int controller2;
-    private Color color1;
-    private Color color2;
     private float rejoinTimer;
     private bool hasRope = false;
     private GameObject currentPowerUp;
 
+    [SyncVar]
+    public NetworkInstanceId player1Id;
+    [SyncVar]
+    public NetworkInstanceId player2Id;
+
+    [SyncVar]
+    public int controller1;
+    [SyncVar]
+    public int controller2;
+    [SyncVar]
+    private Color color1;
+    [SyncVar]
+    private Color color2;
 
     // Use this for initialization
     void Start()
     {
         rejoinTimer = ropeFormTime;
         currentPowerUp = null;
-        if(player1) RpcConfigurePlayer(player1.GetComponent<NetworkIdentity>().netId, controller1, 1, color1);
-        if(player2) RpcConfigurePlayer(player2.GetComponent<NetworkIdentity>().netId, controller2, 2, color2);
+    }
+
+    public override void OnStartClient()
+    {
+        if (!player1Id.IsEmpty()) SetupPlayer(player1Id, controller1, 1);
+        if (!player2Id.IsEmpty()) SetupPlayer(player2Id, controller2, 2);
     }
 
     // Update is called once per frame
@@ -87,6 +106,7 @@ public class Team : NetworkBehaviour
                 {
                     currentRope = Instantiate(ropePrefab, transform);
                     currentRope.GetComponent<Rope>().SetEndpoints(player1.transform, player2.transform);
+                    currentRope.GetComponent<Rope>().parentId = GetComponent<NetworkIdentity>().netId;
                     NetworkServer.Spawn(currentRope);
                     hasRope = true;
                 }
@@ -102,27 +122,28 @@ public class Team : NetworkBehaviour
     /// <returns></returns>
     public bool IsInvincibleOver()
     {
-        if (spawnTimer <= 0)
-            return true;
-
-        return false;
+        return spawnTimer <= 0;
     }
 
+    //clients don't need to know about this
+    [Server]
     public void SetSpawnPoints(Vector3 first, Vector3 second)
     {
         spawn1 = first;
         spawn2 = second;
     }
 
-    public GameObject SpawnPlayer(int num)
+    [Server]
+    public GameObject SpawnPlayer(Player ply)
     {
+        Debug.Log("Spawning player " + ply.controllerId + " on team " + ply.team);
+        CanvasLog.instance.Log("Spawning player " + ply.controllerId + " on team " + ply.team);
+        int num = ply.playerId % 2 + 1;
         if ((num == 1 && player1) || (num == 2 && player2)) return null;
         Vector3 pos = (num == 1 ? spawn1 : spawn2);
         GameObject newPlayer = Instantiate(playerPrefab, pos, Quaternion.identity, transform);
 
         newPlayer.layer = gameObject.layer;
-
-        spawnTimer = GameManager.singleton.spawnTimer;
 
         GameObject invinciblePrefab = Instantiate(invincibilityParticlePrefab, newPlayer.transform.position, Quaternion.identity, newPlayer.transform);
         var main = invinciblePrefab.GetComponent<ParticleSystem>().main;
@@ -133,16 +154,47 @@ public class Team : NetworkBehaviour
         NetworkServer.Spawn(newPlayer);
         if (num == 1)
         {
-            player1 = newPlayer;
-            RpcConfigurePlayer(newPlayer.GetComponent<NetworkIdentity>().netId, controller1, num, color1);
+            player1Id = newPlayer.GetComponent<NetworkIdentity>().netId;
+            controller1 = ply.controllerId;
+            RpcSetupPlayer(newPlayer.GetComponent<NetworkIdentity>().netId, controller1, num);
         }
         else
         {
-            player2 = newPlayer;
-            RpcConfigurePlayer(newPlayer.GetComponent<NetworkIdentity>().netId, controller2, num, color2);
+            player2Id = newPlayer.GetComponent<NetworkIdentity>().netId;
+            controller2 = ply.controllerId;
+            RpcSetupPlayer(newPlayer.GetComponent<NetworkIdentity>().netId, controller2, num);
         }
 
         return newPlayer;
+    }
+
+
+    [ClientRpc]
+    public void RpcSetupPlayer(NetworkInstanceId ply, int control, int num)
+    {
+        SetupPlayer(ply, control, num);
+    }
+
+    public void SetupPlayer(NetworkInstanceId ply, int control, int num)
+    {
+        if (num == 1)
+        {
+            player1Id = ply;
+            controller1 = control;
+            player1 = ClientScene.FindLocalObject(ply);
+            ApplyColor(player1, color1);
+            player1.GetComponent<PlayerController>().SetControls(controller1 + 1);
+            player1.transform.SetParent(transform);
+        }
+        else
+        {
+            player2Id = ply;
+            controller2 = control;
+            player2 = ClientScene.FindLocalObject(ply);
+            ApplyColor(player2, color2);
+            player2.GetComponent<PlayerController>().SetControls(controller2 + 1);
+            player2.transform.SetParent(transform);
+        }
     }
 
     public void SetControls(int p1controller, int p2controller)
@@ -155,19 +207,6 @@ public class Team : NetworkBehaviour
     {
         color1 = c1;
         color2 = c2;
-    }
-
-    [ClientRpc]
-    public void RpcConfigurePlayer(NetworkInstanceId id, int controller, int team, Color color)
-    {
-        GameObject player = ClientScene.FindLocalObject(id);
-        if (team == 1)
-            player1 = player;
-        else
-            player2 = player;
-        player.GetComponent<PlayerController>().SetControls(controller);
-        player.GetComponent<PlayerController>().SetTeam(team);
-        ApplyColor(player, color);
     }
 
     public void ApplyColor(GameObject player, Color color)
@@ -187,12 +226,24 @@ public class Team : NetworkBehaviour
     public void ResetTeam()
     {
         if (currentRope) Destroy(currentRope);
-        if (player1) Destroy(player1);
-        if (player2) Destroy(player2);
-        player1 = null;
-        player2 = null;
-        SpawnPlayer(1);
-        SpawnPlayer(2);
+        if (player1)
+        {
+            player1.transform.position = spawn1;
+            player1.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            player1.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+        if (player2)
+        {
+            player2.transform.position = spawn2;
+            player2.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            player2.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
+    }
+
+    [ClientRpc]
+    public void RpcResetTeam()
+    {
+        ResetTeam();
     }
 
     public void AddPoints()
@@ -203,8 +254,8 @@ public class Team : NetworkBehaviour
 
     public void KillTeam()
     {
-        // Check if the team doesn't have invincibility
-        if (!(currentPowerUp != null && currentPowerUp.GetComponent<InvincibilityPowerUp>().isActive))
+        // Do not kill if invincible
+        if(IsInvincibleOver())
             GameManager.singleton.KillTeam(this);
     }
 }

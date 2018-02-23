@@ -3,84 +3,165 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Description:     This class is the AttackState of the AI
+ * Version:         1.1.0
+ * Author:          Zachary Schmalz
+ * Date:            11/9/2017
+ */
+
+// Create the Scriptable Object
+[CreateAssetMenu(menuName = "AI/States/Attack")]
+
 public class AttackState : State
 {
-    private GameObject test;
-
     // Positions of all players
     Vector3 AI1Pos;
     Vector3 AI2Pos;
     Vector3 enemy1Pos;
     Vector3 enemy2Pos;
 
+    // Potentially useful distance values
     private float distAi1ToEnemyRope;
     private float distAi2ToEnemyRope;
     private float distAiRopeToEnemy;
 
-    public AttackState(GameObject t)
+    public override void Enter(StateMachine sm)
     {
-        test = t;
-    }
+        Debug.Log("Entering State: Attack");
 
-    public override void Start(StateMachine sm)
-    {
+        AIBehaviorScript = sm.gameObject.GetComponent<AIBehavior>();
+        AIBehaviorScript.AI1DistanceToRopeWeight = AI1DistanceToRopeWeight;
+        AIBehaviorScript.AI2DistanceToRopeWeight = AI2DistanceToRopeWeight;
+        AIBehaviorScript.ropeLengthWeight = ropeLengthWeight;
+        AIBehaviorScript.angleWeight = angleWeight;
+        AIBehaviorScript.closestPlayerDistanceToMidpointWeight = closestPlayerDistanceToMidpointWeight;
+
+        Conditions = new List<Func<bool>>() { Condition1, Condition2, Condition3 };
+        StateTransitions.CreateStateTransitions(this, sm.AllStates, Conditions);
+
         team = sm.GetTeam();
         enemyTeam = sm.GetEnemyTeam();
     }
 
-    public override void Update(StateMachine sm)
+    public override void Execute(StateMachine sm)
     {
         // Set positions of players
         AI1Pos = team.player1.transform.position;
         AI2Pos = team.player2.transform.position;
         enemy1Pos = enemyTeam.player1.transform.position;
         enemy2Pos = enemyTeam.player2.transform.position;
-
-        EvaluateDistances();
     }
 
     public override void Exit(StateMachine sm)
     {
-
+        Debug.Log("Exiting State: Attack");
     }
 
-    public override State EvaluateTransitions(StateMachine sm)
+    // Condition for transitioning to IDLE STATE
+    protected override bool Condition1()
     {
-        return null;
+        Debug.Log("Evaluating Condition 1");
+        return true;
+    }
+
+    // Condition for transitioning to ATTACK STATE
+    protected override bool Condition2()
+    {
+        Debug.Log("Evaluating Condition 2");
+        return true;
+    }
+
+    // Condition for transitioning to POWERUP STATE
+    protected override bool Condition3()
+    {
+        Debug.Log("Evaluating Condition 3");
+        return true;
     }
 
     private void EvaluateDistances()
     {
-        // Get the closer player to the AI (Don't know if this is needed or not)
+        // Honestly this is all probably just spaghetti code. 
 
-        //GameObject closerPlayer;
-        //float avgDist1 = Vector3.Distance(AI1Pos, enemy1Pos) + Vector3.Distance(AI2Pos, enemy1Pos);
-        //float avgDist2 = Vector3.Distance(AI1Pos, enemy2Pos) + Vector3.Distance(AI2Pos, enemy2Pos);
-        //if (avgDist1 <= avgDist2)
-        //    closerPlayer = enemyTeam.player1;
+        //// Get the minimum length of points on AI rope line to both enemies
+        //Vector3 point1, point2, closer, point;
+        //float dist1 = Vector3.Distance(enemy1Pos, point1 = ClosestPointOnTeamRope(enemy1Pos));
+        //float dist2 = Vector3.Distance(enemy2Pos, point2 = ClosestPointOnTeamRope(enemy2Pos));
+        //if(dist1 <= dist2)
+        //{
+        //    distAiRopeToEnemy = dist1;
+        //    closer = enemy1Pos;
+
+        //    if (dist1 <= 0)
+        //        point = enemy1Pos;
+        //    else
+        //        point = point1;
+        //    Debug.Log("Point 1");
+        //}
         //else
-        //    closerPlayer = enemyTeam.player2;
+        //{
+        //    distAiRopeToEnemy = dist2;
+        //    closer = enemy2Pos;
 
-        // Get the minimum length of points on AI rope line to both enemies
-        Vector3 point1, point2;
-        float dist1 = Vector3.Distance(enemyTeam.player1.transform.position, point1 = ClosestPointOnTeamRope(enemyTeam.player1.transform.position));
-        float dist2 = Vector3.Distance(enemyTeam.player2.transform.position, point2 = ClosestPointOnTeamRope(enemyTeam.player2.transform.position));
-        distAiRopeToEnemy = Mathf.Min(dist1,dist2);
-        Debug.Log("Distance: " + distAiRopeToEnemy);
+        //    if (dist1 <= 0)
+        //        point = enemy2Pos;
+        //    else
+        //        point = point2;
+        //    Debug.Log("Point 2");
+        //}
 
-        // Set test object position (Not needed in final version)
-        if (Vector3.Distance(point1, enemyTeam.player1.transform.position) <= Vector3.Distance(point2, enemyTeam.player2.transform.position))
-            test.transform.position = point1;
-        else
-            test.transform.position = point2;
+        //distAi1ToEnemyRope = Vector3.Distance(AI1Pos, ClosestPointOnEnemyRope(AI1Pos));
+        //distAi2ToEnemyRope = Vector3.Distance(AI2Pos, ClosestPointOnEnemyRope(AI2Pos));
 
-        dist1 = Vector3.Distance(AI1Pos, point1 = ClosestPointOnEnemyRope(AI1Pos));
-        dist2 = Vector3.Distance(AI2Pos, point2 
-            = ClosestPointOnEnemyRope(AI2Pos));
-        float distEnemyRopeToAi = Mathf.Min(dist1, dist2);
+        //// Move the AI
+        //Vector3 closerAi, other;
 
-       // GameObject.Instantiate(test, )
+        //if (distAi1ToEnemyRope <= distAi2ToEnemyRope)
+        //{
+        //    closerAi = AI1Pos;
+        //    other = AI2Pos;
+        //}
+        //else
+        //{
+        //    closerAi = AI2Pos;
+        //    other = AI1Pos;
+        //}
+        //float aiAndCloserAngle = Mathf.Atan2(closer.z - closerAi.z, closer.x - closerAi.x) * 180 / Mathf.PI;
 
+        //Debug.Log(aiAndCloserAngle);
+
+        //Vector3 dir1 = closer - point;
+
+        //Rigidbody rb = team.player1.GetComponent<Rigidbody>();
+        //Rigidbody rb2 = team.player2.GetComponent<Rigidbody>();
+
+        //Vector3 target1 = new Vector3(Math.Sign(dir1.x), 0, Math.Sign(dir1.z)).normalized * 10;
+        //Vector3 accel1 = new Vector3((target1.x - rb.velocity.x) * .25f, 0, (target1.z - rb.velocity.z) * .25f);
+        //accel1.y = 0;
+
+        //Vector3 target2 = new Vector3(Math.Sign(dir1.x), 0, Math.Sign(dir1.z)).normalized * 10;
+        //Vector3 accel2 = new Vector3((target2.x - rb2.velocity.x) * .25f, 0, (target2.z - rb2.velocity.z) * .25f);
+        //accel2.y = 0;
+
+        
+
+        //if (Math.Abs(aiAndCloserAngle) < 90 + 20 && Math.Abs(aiAndCloserAngle) > 90 - 20)
+        //{
+        //    Debug.Log("True");
+        //    closer -= Vector3.forward * 5;
+
+
+        //    Vector3 newTarget = new Vector3((closer.x - closerAi.x), 0, closer.z - closerAi.z).normalized * 10;
+        //    Vector3 newAccel = new Vector3((newTarget.x - rb.velocity.x) * .25f, 0, (newTarget.z - rb.velocity.z) * .25f);
+        //    newAccel.y = 0;
+        //    rb.AddForce(newAccel, ForceMode.VelocityChange);
+        //    rb2.AddForce(accel2, ForceMode.VelocityChange);
+        //}
+        //else
+        //{
+        //    rb.AddForce(accel1, ForceMode.VelocityChange);
+        //    rb2.AddForce(accel2, ForceMode.VelocityChange);
+        //}
     }
 
     // Returns the point on the rope between the AI to the closer player
@@ -117,5 +198,38 @@ public class AttackState : State
 
         Vector3 v3 = v2 * t;
         return enemy1Pos + v3;
+    }
+
+    private void EvaluatePowerup()
+    {
+        float dist1 = Vector3.Distance(AI1Pos, ClosestPointOnTeamRope(AI1Pos));
+        float dist2 = Vector3.Distance(AI2Pos, ClosestPointOnTeamRope(AI2Pos));
+
+
+        if (team.GetComponent<Team>().CurrentPowerUp != null)
+        {
+            PowerUp p = team.GetComponent<Team>().CurrentPowerUp.GetComponent<PowerUp>();
+
+            if (p is SpeedPowerUp)
+            {
+                if(dist1 > 5 || dist2 > 5)
+				    p.Activate();
+            }
+            else if (p is InvincibilityPowerUp)
+            {
+                if (dist1 <= 2 || dist2 <= 2)
+                    p.Activate();
+            }
+            else if (p is RopePowerUp)
+            {
+                if (dist1 > 5 || dist2 > 5)
+                    p.Activate();
+            }
+            else if (p is KnockbackPowerUp)
+            {
+                if (dist1 <= 2 || dist2 <= 2)
+                    p.Activate();
+            }
+        }
     }
 }
