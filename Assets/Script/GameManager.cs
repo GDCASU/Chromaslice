@@ -209,6 +209,7 @@ public class GameManager : NetworkBehaviour
         teams[num].GetComponent<Team>().SetSpawnPoints(spawnPoints[num * 2], spawnPoints[num * 2 + 1]);
         teams[num].GetComponent<Team>().SetColors(colorPairs[num, 0], colorPairs[num, 1]);
         NetworkServer.Spawn(teams[num]);
+        NetManager.GetInstance().SpawnReadyPlayers(num);
     }
 
     [Server]

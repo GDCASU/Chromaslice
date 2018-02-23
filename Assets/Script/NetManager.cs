@@ -73,7 +73,18 @@ public class NetManager : NetworkManager
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId, NetworkReader extraMessageReader)
     {
         Log("Adding player from client");
-        NetworkServer.AddPlayerForConnection(conn, GameManager.singleton.SpawnPlayer(GetPlayer(conn.connectionId, playerControllerId)), playerControllerId);
+        Player ply = GetPlayer(conn.connectionId, playerControllerId);
+        GameObject plyObj = GameManager.singleton.SpawnPlayer(ply);
+        NetworkServer.AddPlayerForConnection(conn, plyObj, playerControllerId);
+    }
+
+    public void SpawnReadyPlayers(int num)
+    {
+        foreach (NetworkConnection conn in NetworkServer.connections)
+            if (conn.isReady)
+                foreach (Player ply in playerList.FindAll(p => p.connectionId == conn.connectionId))
+                    if (ply.playerId / 2 == num)
+                        NetworkServer.AddPlayerForConnection(conn, GameManager.singleton.SpawnPlayer(GetPlayer(conn.connectionId, ply.controllerId)), ply.controllerId);
     }
 
     public void SendScoreUpdate()
@@ -155,7 +166,7 @@ public class NetManager : NetworkManager
         for (short i = 0; i < localPlayers.Count; i++)
         {
             if (ClientScene.localPlayers.Count >= i + 1 && ClientScene.localPlayers[i].IsValid && ClientScene.localPlayers[i].gameObject)
-                Destroy(ClientScene.localPlayers[i].gameObject);
+                return;
             ClientScene.AddPlayer(conn, i);
         }
     }
