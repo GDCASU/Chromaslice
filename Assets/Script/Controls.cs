@@ -134,7 +134,7 @@ public class Controls
     /// <returns>Controls object for given slot</returns>
     public static Controls LoadFromConfig(int controller)
     {
-        if (!File.Exists(cfgPath))
+        //if (!File.Exists(cfgPath))
         {
             Debug.LogWarning("controls.ini not found, generating new one!");
             GenerateDefaultConfig();
@@ -188,7 +188,7 @@ public class Controls
             c.vertAxisAlt = new ControlInput(KeyCode.W, KeyCode.S);
             c.jumpButtonAlt = new ControlInput(KeyCode.Space);
             c.dashButtonAlt = new ControlInput(KeyCode.Q);
-            c.powerUpButtonAlt = new ControlInput(KeyCode.Z);
+            c.powerUpButtonAlt = new ControlInput(KeyCode.E);
         }
 
         return c;
