@@ -30,6 +30,13 @@ public class AttackState : State
     {
         Debug.Log("Entering State: Attack");
 
+        AIBehaviorScript = sm.gameObject.GetComponent<AIBehavior>();
+        AIBehaviorScript.AI1DistanceToRopeWeight = AI1DistanceToRopeWeight;
+        AIBehaviorScript.AI2DistanceToRopeWeight = AI2DistanceToRopeWeight;
+        AIBehaviorScript.ropeLengthWeight = ropeLengthWeight;
+        AIBehaviorScript.angleWeight = angleWeight;
+        AIBehaviorScript.closestPlayerDistanceToMidpointWeight = closestPlayerDistanceToMidpointWeight;
+
         Conditions = new List<Func<bool>>() { Condition1, Condition2, Condition3 };
         StateTransitions.CreateStateTransitions(this, sm.AllStates, Conditions);
 
