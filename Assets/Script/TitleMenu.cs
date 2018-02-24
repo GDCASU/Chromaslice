@@ -11,12 +11,12 @@ using UnityEngine.UI;
 
 public class TitleMenu : MonoBehaviour {
 
-    //public Dropdown levelSelect;
-    //public Dropdown roundSelect;
-    public GameManager gameManager;
     public Toggle[] roundSelect;
     public GameObject[] levelSelect;
-    public string lobbySceneName;
+    public GameObject EliminationPanel;
+    public GameObject DeathmatchPanel;
+    public GameObject SoccerPanel;
+
     private string selectedLevel;
     private int rounds;
 
@@ -51,6 +51,13 @@ public class TitleMenu : MonoBehaviour {
     public void StartOnline()
     {
         NetManager.GetInstance().ServerChangeScene(NetManager.GetInstance().lobbySceneOffline);
+    }
+
+    public void SelectGamemode(int option)
+    {
+        EliminationPanel.SetActive(option == 0);
+        DeathmatchPanel.SetActive(option == 1);
+        SoccerPanel.SetActive(option == 2);
     }
 
     public void ExitGame()
