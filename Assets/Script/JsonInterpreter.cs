@@ -8,10 +8,13 @@ using UnityEngine;
 //Date:         2/14/18
 //Description:  File meant to read and write data for players
 //              within an json file. 
+//
+//Developer:    Nicholas Nguyen
+//Date:         2/23/18
+//Description:  Made changes so that each player data is stored in
+//              their own json file rather than a single file
 
 public class JsonInterpreter : MonoBehaviour {
-
-    public List<Player> playerList;
 
     private string data;
     private string fileName;
@@ -21,109 +24,87 @@ public class JsonInterpreter : MonoBehaviour {
      */
     public void Awake()
     {
-        playerList = new List<Player>();
-        TestWrite();
+        //TestWrite();
         TestRead();
     }
 
     /*
-     * Method that reads the json file containing the player data
-     * makes a COMPLETELY NEW PLAYER LIST
+     * Method that reads the json file for the specified
+     * player and returns it
      */
-    private void CreatePlayerList()
+    public Player ReadFromJson(string playerName)
     {
-        fileName = Application.dataPath + "/Resources/PlayerData.json";
+        fileName = Application.dataPath + "/Resources/Profiles/" + playerName + "Data.json";
 
-        CheckFile();
-
-        data = File.ReadAllText(fileName);
-        playerList = new List<Player>();
-
-        //array of strings is used to seperate each player data
-        string[] playerString = data.Split('|');
-
-        foreach(string player in playerString)
+        //Used try and catch to make sure file is found
+        try
         {
-            Player playerObject = JsonUtility.FromJson<Player>(player);
-            playerList.Add(playerObject);
+            data = File.ReadAllText(fileName);
+
+            return JsonUtility.FromJson<Player>(data);
         }
+        catch(Exception e)
+        {
+            Debug.Log(e);
+        }
+
+        //Return null if no file is found
+        return null;
     }
 
     /*
-     * Method that writes the playerList data into
-     * the json file
+     * Method that writes the inputted player data into a json file
      * 
-     * In order to store all the players within
-     * a single Json, the string being written into the jfile
-     * each individual player is split up between a '|'
+     * Creates new file if this is a new player
      */
-    private void Write()
+    public void WriteToJson(Player player)
     {
-        fileName = Application.dataPath + "/Resources/PlayerData.json";
+        fileName = Application.dataPath + "/Resources/Profiles/" + player.name + "Data.json";
 
         CheckFile();
 
-        data = "";
-
-        foreach(Player player in playerList)
-        {
-            data += JsonUtility.ToJson(player) + "|";
-        }
-
-        //This is used to remove the last '|' that occurs
-        data = data.Substring(0, data.Length - 1);
+        data = JsonUtility.ToJson(player);
 
         File.WriteAllText(fileName, data);
     }
 
     /*
-     * Method that makes sure the file can be found
+     * Method that creates a new file if the file does not exist
      */
     private void CheckFile()
     {
-        try
+        if (!File.Exists(fileName))
         {
-            if (!File.Exists(fileName))
-            {
-                FileStream fs = File.Create(fileName);
-                fs.Close();
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.Log("Exeption: " + e);
+            FileStream fs = File.Create(fileName);
+            fs.Close();
         }
     }
 
     /**
-     * Method to test the writing method within the class
+     * Method to test the WriteToJson method within the class
      */
     private void TestWrite()
     {
         Player player1 = new Player();
-        player1.name = "Krabs";
+        player1.name = "TestPlayerOne";
         player1.team = 1;
 
         Player player2 = new Player();
-        player2.name = "Boofboi";
+        player2.name = "TestPlayerTwo";
         player2.team = 2;
 
-        playerList.Add(player1);
-        playerList.Add(player2);
-        Debug.Log(playerList);
-        Write();
+        WriteToJson(player1);
+        WriteToJson(player2);
     }
 
     /*
-     * Method to tet the reading method within the class
+     * Method to tet the ReadFromJson method within the class
      */
     private void TestRead()
     {
-        CreatePlayerList();
+        Player readPlayer = ReadFromJson("TestPlayerOn");
 
-        foreach(Player player in playerList)
-        {
-            Debug.Log(player.name);
-        }
+        Debug.Log("Player name: " + readPlayer.name);
+        Debug.Log("Player team: " + readPlayer.team);
     }
 }
