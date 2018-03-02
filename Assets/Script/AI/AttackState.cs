@@ -30,6 +30,13 @@ public class AttackState : State
     {
         Debug.Log("Entering State: Attack");
 
+        AIBehaviorScript = sm.gameObject.GetComponent<AIBehavior>();
+        AIBehaviorScript.AI1DistanceToRopeWeight = AI1DistanceToRopeWeight;
+        AIBehaviorScript.AI2DistanceToRopeWeight = AI2DistanceToRopeWeight;
+        AIBehaviorScript.ropeLengthWeight = ropeLengthWeight;
+        AIBehaviorScript.angleWeight = angleWeight;
+        AIBehaviorScript.closestPlayerDistanceToMidpointWeight = closestPlayerDistanceToMidpointWeight;
+
         Conditions = new List<Func<bool>>() { Condition1, Condition2, Condition3 };
         StateTransitions.CreateStateTransitions(this, sm.AllStates, Conditions);
 
@@ -191,5 +198,38 @@ public class AttackState : State
 
         Vector3 v3 = v2 * t;
         return enemy1Pos + v3;
+    }
+
+    private void EvaluatePowerup()
+    {
+        float dist1 = Vector3.Distance(AI1Pos, ClosestPointOnTeamRope(AI1Pos));
+        float dist2 = Vector3.Distance(AI2Pos, ClosestPointOnTeamRope(AI2Pos));
+
+
+        if (team.GetComponent<Team>().CurrentPowerUp != null)
+        {
+            PowerUp p = team.GetComponent<Team>().CurrentPowerUp.GetComponent<PowerUp>();
+
+            if (p is SpeedPowerUp)
+            {
+                if(dist1 > 5 || dist2 > 5)
+				    p.Activate();
+            }
+            else if (p is InvincibilityPowerUp)
+            {
+                if (dist1 <= 2 || dist2 <= 2)
+                    p.Activate();
+            }
+            else if (p is RopePowerUp)
+            {
+                if (dist1 > 5 || dist2 > 5)
+                    p.Activate();
+            }
+            else if (p is KnockbackPowerUp)
+            {
+                if (dist1 <= 2 || dist2 <= 2)
+                    p.Activate();
+            }
+        }
     }
 }

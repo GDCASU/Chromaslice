@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Name: Attack
   m_EditorClassIdentifier: 
   StateTransitions: {fileID: 11400000, guid: 4a19d1f3434173046964196ab6b46d6e, type: 2}
+  priorities: 
+  AI1DistanceToRopeWeight: 0
+  AI2DistanceToRopeWeight: 0
+  ropeLengthWeight: 1
+  angleWeight: 1
+  closestPlayerDistanceToMidpointWeight: 10

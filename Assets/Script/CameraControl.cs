@@ -10,7 +10,8 @@ using UnityEngine;
 
 // Kyle Aycock 11/17/17 - fixed an error having to do with unhandled zero-player case
 
-public class CameraControl : MonoBehaviour {
+public class CameraControl : MonoBehaviour
+{
 
     private Camera cam;
     private Transform camPos;
@@ -31,8 +32,7 @@ public class CameraControl : MonoBehaviour {
     //DW: Each frame changes the camera focus and position
     void Update () {
         camPosVector = new Vector3(camPos.position.x, camPos.position.y, camPos.position.z);
-        //Set the camera to the optimal focal point
-        camPos.LookAt(getAveragePlayerPos(), Vector3.up);
+        
         // Pan the camera
         Vector3 moveTo = Vector3.zero;
         if (camPos.position.x < getAveragePlayerPos().x - deltaX)
@@ -50,6 +50,9 @@ public class CameraControl : MonoBehaviour {
         float newZ = getNearestPlayerZPos() - deltaZ;
         this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, newZ);
 
+        //Set the camera to the optimal focal point
+        camPos.LookAt(getAveragePlayerPos(), Vector3.up);
+
     }
 
     //DW: This method gives us the midpoint between all players
@@ -65,9 +68,9 @@ public class CameraControl : MonoBehaviour {
             aveY += player.transform.position.y;
             aveZ += player.transform.position.z;
         }
-        aveX = (float) aveX / players.Length;
-        aveY = (float) aveY / players.Length;
-        aveZ = (float) aveZ / players.Length;
+        aveX = aveX / ((float)players.Length);
+        aveY = aveY / ((float)players.Length);
+        aveZ = aveZ /((float)players.Length);
         midPlayerPoint = new Vector3(aveX, aveY, aveZ);
         return midPlayerPoint;
     }

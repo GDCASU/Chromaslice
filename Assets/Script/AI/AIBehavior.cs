@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class AIBehavior : MonoBehaviour
 {
+    public float AI1DistanceToRopeWeight;
+    public float AI2DistanceToRopeWeight;
+    public float ropeLengthWeight;
+    public float angleWeight;
+    public float closestPlayerDistanceToMidpointWeight;
+    private bool temp = false;
 
     private GameObject AI1;
     private GameObject AI2;
@@ -29,17 +35,39 @@ public class AIBehavior : MonoBehaviour
         player1 = Players[0];
         player2 = Players[1];
         playerRadius = AI1.GetComponent<SphereCollider>().radius;
-        maxRopeLength = 5; //get max rope length
+        maxRopeLength = 30; //get max rope length
     }
 
     // Update is called once per frame
     void Update()
-    {
-        Debug.Log(1.0f / Time.deltaTime);
+    {   
+        //TEMPORARY PLAYER CONTROLS
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            if(temp)
+            {
+                AI1DistanceToRopeWeight = 0;
+                AI2DistanceToRopeWeight = 0;
+                ropeLengthWeight = 1;
+                angleWeight = 1;
+                closestPlayerDistanceToMidpointWeight = 10;
+                temp = !temp;
+            }
+            else
+            {
+                AI1DistanceToRopeWeight = 1;
+                AI2DistanceToRopeWeight = 1;
+                ropeLengthWeight = 0;
+                angleWeight = 0;
+                closestPlayerDistanceToMidpointWeight = 0;
+                temp = !temp;
+            }
+        }
+
         currentEvaluation = Mathf.NegativeInfinity;
         currentAI1Direction = Vector3.zero;
         currentAI2Direction = Vector3.zero;
-        maxSpeed = player1.GetComponent<PlayerController>().maxSpeed;
+        maxSpeed = 20;//player1.GetComponent<PlayerController>().maxSpeed;
 
         //Calculate next step for enemy players
         futurePlayer1Position = player1.transform.position + player1.GetComponent<Rigidbody>().velocity * Time.deltaTime;
@@ -161,10 +189,8 @@ public class AIBehavior : MonoBehaviour
                 }
             }
         }
-        //AI1.GetComponent<Rigidbody>().AddForce(currentAI1Direction.normalized * maxSpeed, ForceMode.Impulse);
         AI1.GetComponent<Rigidbody>().velocity = currentAI1Direction.normalized * maxSpeed;
         AI2.GetComponent<Rigidbody>().velocity = currentAI2Direction.normalized * maxSpeed;
-        /**/
     }
 
     float Evaluate(Vector3 AI1Position, Vector3 AI2Position, Vector3 closestPlayerPosition, Vector3 farthestPlayerPosition)
@@ -173,10 +199,14 @@ public class AIBehavior : MonoBehaviour
         float AI2DistanceToRope = DistanceFromPointToLine(AI2Position, closestPlayerPosition, Vector3.Normalize(closestPlayerPosition - farthestPlayerPosition)); //Good
         float closestPlayerDistanceToRope = DistanceFromPointToLine(closestPlayerPosition, AI1Position, Vector3.Normalize(AI1Position - AI2Position)); //Bad?
         float AI1DistanceToMidpoint = Vector3.Distance((closestPlayerPosition + farthestPlayerPosition) / 2, AI1Position);
-        float AI2DistanceToMidpoint = Vector3.Distance((closestPlayerPosition + farthestPlayerPosition) / 2, AI1Position);
+        float AI2DistanceToMidpoint = Vector3.Distance((closestPlayerPosition + farthestPlayerPosition) / 2, AI2Position);
         float closestPlayerDistanceToMidpoint = Vector3.Distance((AI1Position + AI2Position) / 2, closestPlayerPosition);
+        float AIRopeLength = Vector3.Distance(AI1Position, AI2Position);
         float angle = Mathf.Abs(90 - Mathf.Abs(Vector3.Angle((AI1Position + AI2Position) / 2 - closestPlayerPosition, AI1Position - AI2Position)));
-        return 50 / closestPlayerDistanceToRope + 100 / closestPlayerDistanceToMidpoint + ((Vector3.Magnitude(AI1Position - AI2Position) < maxRopeLength) ? 0.1f * (AI1DistanceToRope + AI2DistanceToRope + AI1DistanceToMidpoint + AI2DistanceToMidpoint) : -20 * Vector3.Magnitude(AI1Position - AI2Position)) - angle;
+
+        //AI Evaluation Function
+        //Change this function to alter the behavior of the AI
+        return ropeLengthWeight * ((AIRopeLength > maxRopeLength) ? -999999 * AIRopeLength : (AIRopeLength >= 8 && AIRopeLength <= 22) ? 1 : 0) - angleWeight * angle/90 + closestPlayerDistanceToMidpointWeight * 1/closestPlayerDistanceToMidpoint + AI1DistanceToRopeWeight * AI1DistanceToRope + AI2DistanceToRopeWeight * AI2DistanceToRope;
     }
 
     float DistanceFromPointToLine(Vector3 point, Vector3 pointOnLine, Vector3 line)

@@ -34,6 +34,10 @@ using UnityEngine.SceneManagement;
 // Description: Changed spawning system & controls to work with networking, added documentation and
 //              rearranged update method. Need to fix titlescreen-skip functionality
 
+// Developer:   Kyle Aycock
+// Date:        11/17/17
+// Description: Turns out this wasn't networked properly, dunno why I thought it was
+
 public class GameManager : NetworkBehaviour
 {
     public static GameManager singleton;
@@ -41,7 +45,9 @@ public class GameManager : NetworkBehaviour
     public int firstTeamLayer;
     public GameObject teamPrefab;
     public GameObject[] teams;
+    [SyncVar]
     public int team1Score;
+    [SyncVar]
     public int team2Score;
     public Vector3[] spawnPoints;
     public int numberOfPlayers;
@@ -50,12 +56,16 @@ public class GameManager : NetworkBehaviour
     public int maxRounds;
     public int currentRound;
     public bool gameActive;
+    [SyncVar]
     public bool matchStarted = false;
     public bool useTitleScreen;
+    [SyncVar]
     public bool countdownOver = false;
+    [SyncVar]
     public float countdownTimer;
     public float timeBeforeMatch;
-    public float spawnTimer;
+
+    public string level;
 
     public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
 
@@ -67,6 +77,7 @@ public class GameManager : NetworkBehaviour
     // Use this for initialization
     void Awake()
     {
+        Debug.Log("GameManager is Awake. NetID: " + GetComponent<NetworkIdentity>().netId);
         //make singleton
         if (singleton)
         {
@@ -121,6 +132,11 @@ public class GameManager : NetworkBehaviour
                 }
             }
         }
+    }
+
+    public override void OnStartClient()
+    {
+        Debug.Log("Spawned on client. NetID: " + GetComponent<NetworkIdentity>().netId);
     }
 
     /// <summary>
@@ -193,6 +209,7 @@ public class GameManager : NetworkBehaviour
         teams[num].GetComponent<Team>().SetSpawnPoints(spawnPoints[num * 2], spawnPoints[num * 2 + 1]);
         teams[num].GetComponent<Team>().SetColors(colorPairs[num, 0], colorPairs[num, 1]);
         NetworkServer.Spawn(teams[num]);
+        NetManager.GetInstance().SpawnReadyPlayers(num);
     }
 
     [Server]
@@ -204,19 +221,18 @@ public class GameManager : NetworkBehaviour
     }
 
     [Server]
-    public void StartGame(string levelName, int rounds)
+    public void StartGame()
     {
-        NetworkServer.Spawn(gameObject);
-        maxRounds = rounds;
+        //NetworkServer.Spawn(gameObject);
         currentRound = 0;
         gameActive = true;
         // New boolean variable position
         matchStarted = false;
         countdownTimer = timeBeforeMatch;
         countdownOver = false;
+        NetManager.GetInstance().ServerChangeScene(level);
         NetworkServer.SendToAll(NetManager.ExtMsgType.StartGame, new NetManager.PingMessage());
-        NetManager.GetInstance().ServerChangeScene(levelName);
-        WriteToLog("Starting new game, level: " + levelName + " out of " + rounds + " rounds");
+        WriteToLog("Starting new game, level: " + level + " out of " + maxRounds + " rounds");
     }
 
     [Client]

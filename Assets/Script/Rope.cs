@@ -177,10 +177,6 @@ public class Rope : NetworkBehaviour
     {
         Debug.Log("Rope was destroyed.");
 
-        // If the rope was in a state of collecting a PowerUp when it breaks, activate the code in the PowerUp object
-        if (collectedPowerUp)
-            powerUp.GetComponent<PowerUp>().OnPowerUpCollect(team, rotations);
-
         // If the rope was in a state of launching a projectile when it breaks, call the projectile code. Pass the vector containing all rope points
         // Also set the Team that launches the projectile
         if (hitProjectile && projectile != null)
@@ -211,8 +207,7 @@ public class Rope : NetworkBehaviour
             for (int i = 0; i < visiblePoints.Length - 1; i++)
                 if (RaycastSegment(visiblePoints[i], visiblePoints[i + 1], out hit, gameObject.layer))
                     if (hit.collider.GetComponent<PlayerController>())
-                        if (team.IsInvincibleOver())
-                            hit.collider.transform.parent.GetComponent<Team>().KillTeam();
+                        hit.collider.transform.parent.GetComponent<Team>().KillTeam();
         }
 
 

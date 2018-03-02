@@ -37,8 +37,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1627938274008060}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.23, y: 1, z: 5}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -93,11 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cdab4231970d2047a0e8f5bc2017b6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boostPercent: 0
-  boostDuration: 0
   isActive: 0
-  knockbackRadius: 25
-  knockbackIntensity: 10000
 --- !u!135 &135776310638176470
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -105,7 +101,7 @@ SphereCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1627938274008060}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5

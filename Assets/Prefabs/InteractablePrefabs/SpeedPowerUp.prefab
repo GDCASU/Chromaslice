@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33507710433081558}
   - component: {fileID: 135852046099956206}
   - component: {fileID: 23222407697603318}
-  - component: {fileID: 114707686109305690}
+  - component: {fileID: 114232350582044458}
   m_Layer: 0
   m_Name: SpeedPowerUp
   m_TagString: Untagged
@@ -37,8 +37,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1115685166643496}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.23, y: 1, z: 5}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 4, y: 4, z: 4}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -82,7 +82,7 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1115685166643496}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114707686109305690
+--- !u!114 &114232350582044458
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -93,8 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46efd7069265e2d429e97031e42dc297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boostPercent: 50
-  boostDuration: 10
+  isActive: 0
 --- !u!135 &135852046099956206
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -102,7 +101,7 @@ SphereCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1115685166643496}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
