@@ -39,3 +39,5 @@ sysinfo.txt
 # In-game files
 /Assets/gamelog.txt
 /Assets/gamelog.txt.meta
+*.meta
+*.meta
