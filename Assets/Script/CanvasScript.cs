@@ -9,11 +9,8 @@ using UnityEngine.UI;
 
 public class CanvasScript : MonoBehaviour
 {
-
-    public Text scorep1;
-    public int p1ScoreNum;
-    public Text scorep2;
-    public int p2ScoreNum;
+    public Text teamScoreText1;
+    public Text tesmScoreText2;
     public Text timer;
     public Text speedp1;
     public Text speedp2;
@@ -23,10 +20,7 @@ public class CanvasScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        p1ScoreNum = 0;
-        p2ScoreNum = 0;
-        scorep1.text = "" + p1ScoreNum;
-        scorep2.text = "" + p2ScoreNum;
+
     }
 
     // Update is called once per frame
@@ -38,10 +32,13 @@ public class CanvasScript : MonoBehaviour
             //debugMenu.SetActive(!debugMenu.activeSelf);
         }
 
-        if (GameManager.singleton.currentGame && GameManager.singleton.currentGame.IsGameActive)
+        if (GameManager.singleton.currentGame != null && GameManager.singleton.currentGame.IsGameActive)
         {
-                float time = GameManager.singleton.currentGame.TimeReamining;
-                timer.text = Mathf.FloorToInt(time / 60).ToString("00") + ":" + Mathf.FloorToInt(time % 60).ToString("00");
+            float time = GameManager.singleton.currentGame.TimeReamining;
+            timer.text = Mathf.FloorToInt(time / 60).ToString("00") + ":" + Mathf.FloorToInt(time % 60).ToString("00");
+
+            teamScoreText1.text = GameManager.singleton.currentGame.Team1Score.ToString();
+            tesmScoreText2.text = GameManager.singleton.currentGame.Team2Score.ToString();
         }
 
         else

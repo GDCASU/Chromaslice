@@ -12342,16 +12342,6 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 224533112134790148, guid: 3e61585c529642247b5109bdd54e251f,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -35
-      objectReference: {fileID: 0}
-    - target: {fileID: 224726174219518622, guid: 3e61585c529642247b5109bdd54e251f,
-        type: 2}
-      propertyPath: m_AnchoredPosition.y
-      value: -35
-      objectReference: {fileID: 0}
     - target: {fileID: 1968237302608450, guid: 3e61585c529642247b5109bdd54e251f, type: 2}
       propertyPath: m_IsActive
       value: 0
@@ -37121,7 +37111,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 293, y: -176}
-  m_SizeDelta: {x: 220.71315, y: 95.75514}
+  m_SizeDelta: {x: 222.14172, y: 96.76705}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1882258961
 GameObject:

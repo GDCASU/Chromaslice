@@ -91,8 +91,8 @@ public class NetManager : NetworkManager
     {
         NetworkServer.SendToAll(ExtMsgType.Score, new ScoreMessage()
         {
-            team1Score = GameManager.singleton.teams[0].GetComponent<Team>().points,
-            team2Score = GameManager.singleton.teams[1].GetComponent<Team>().points
+            team1Score = GameManager.singleton.currentGame.Team1Score,
+            team2Score = GameManager.singleton.currentGame.Team2Score
         });
     }
 
@@ -192,8 +192,8 @@ public class NetManager : NetworkManager
     public void OnReceiveScore(NetworkMessage netMsg)
     {
         ScoreMessage msg = netMsg.ReadMessage<ScoreMessage>();
-        GameManager.singleton.team1Score = msg.team1Score;
-        GameManager.singleton.team2Score = msg.team2Score;
+        //GameManager.singleton.team1Score = msg.team1Score;
+        //GameManager.singleton.team2Score = msg.team2Score;
     }
 
     public void OnReceivePlayerInfoClient(NetworkMessage netMsg)
@@ -274,8 +274,8 @@ public class NetManager : NetworkManager
 
     public class ScoreMessage : MessageBase
     {
-        public int team1Score;
-        public int team2Score;
+        public float team1Score;
+        public float team2Score;
 
         public override void Serialize(NetworkWriter writer)
         {
@@ -285,8 +285,8 @@ public class NetManager : NetworkManager
 
         public override void Deserialize(NetworkReader reader)
         {
-            team1Score = reader.ReadInt32();
-            team2Score = reader.ReadInt32();
+            team1Score = reader.ReadSingle();
+            team2Score = reader.ReadSingle();
         }
     }
 

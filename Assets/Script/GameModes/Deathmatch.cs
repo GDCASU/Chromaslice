@@ -16,7 +16,6 @@ public class Deathmatch : GameMode
         base.Update();
 	}
 
-    [Server]
     public override void KillTeam(Team team)
     {
         for (int i = 0; i < GameManager.singleton.teams.Length; i++)
@@ -26,20 +25,22 @@ public class Deathmatch : GameMode
             t.RpcResetTeam();
             if (t != team && team != null)
             {
-                t.AddPoints();
                 AddScore(t.name);
                 NetManager.GetInstance().SendScoreUpdate();
                 GameManager.singleton.WriteToLog(t.name + " won the round with " + timeRemaining + " seconds remaining");
             }
-            currentRound++;
-            timeBeforeRound = GameConstants.TimeBeforeRound;
-            if(currentRound >= gameRoundLimit)
-            {
-                gameActive = false;
-                NetManager.GetInstance().StopHost();
-                GameManager.singleton.activePlayers = 0;
-            }
+        }
 
+        currentRound++;
+        if (currentRound >= gameRoundLimit)
+        {
+            gameActive = false;
+            NetManager.GetInstance().StopHost();
+            GameManager.singleton.activePlayers = 0;
+        }
+        else
+        {
+            BeginRound();
         }
     }
 

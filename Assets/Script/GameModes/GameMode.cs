@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class GameMode : NetworkBehaviour
+public class GameMode : MonoBehaviour
 {
-    [SyncVar] protected float team1Score;
-    [SyncVar] protected float team2Score;
+    protected float team1Score;
+    protected float team2Score;
 
     protected int gameRoundLimit;
     protected int currentRound;
@@ -16,13 +16,13 @@ public class GameMode : NetworkBehaviour
     protected float timeBeforeRound;
 
     public bool IsGameActive { get { return gameActive; } }
+    public bool IsRoundActive { get { return gameActive && timeBeforeRound <= 0 && timeRemaining > 0; } }
     public bool IsRoundOver { get { return timeRemaining <= 0;} }
     public float TimeReamining { get { return timeRemaining; } protected set { timeRemaining = value; } }
     public int CurrentRound { get { return currentRound; } protected set { currentRound = value; } }
     public int GameRoundLimit { get { return gameRoundLimit; } set { gameRoundLimit = value; } }
     public float Team1Score { get { return team1Score; } }
     public float Team2Score { get { return team2Score; } }
-
 
     protected virtual void Start()
     {
@@ -53,7 +53,6 @@ public class GameMode : NetworkBehaviour
 	}
 
     // Base behavior: Reset team to spawn
-    [Server]
     public virtual void KillTeam(Team team)
     {
         for (int i = 0; i < GameManager.singleton.teams.Length; i++)

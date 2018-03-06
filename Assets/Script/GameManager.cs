@@ -56,10 +56,10 @@ public class GameManager : NetworkBehaviour
 
 
 
-    [SyncVar]
-    public int team1Score;
-    [SyncVar]
-    public int team2Score;
+    //[SyncVar]
+    //public int team1Score;
+    //[SyncVar]
+    //public int team2Score;
 
 
     [SyncVar]
@@ -73,12 +73,16 @@ public class GameManager : NetworkBehaviour
     public float countdownTimer;
 
 
-
     private int numberOfPlayers;
     private Vector3[] spawnPoints;
     private int firstTeamLayer;
     private string outputPath;
     public int activePlayers;
+
+
+
+
+
 
     // Use this for initialization
     void Awake()
@@ -98,9 +102,6 @@ public class GameManager : NetworkBehaviour
         if (!File.Exists(outputPath)) File.Create(outputPath).Close();
         Debug.Log("Logging match results to: " + outputPath);
 
-        //initialize variables
-        //deathMatch = GetComponent<DeathMatchRules>();
-        //hillRules = GetComponent<KingOfTheHillRules>();
         activePlayers = 0;
 
         //handle title screen skip in editor (currently unsupported until i get around to fixing it)
@@ -111,42 +112,18 @@ public class GameManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (countdownTimer > 0)
-        //{
-        //    countdownTimer -= Time.deltaTime;
-        //    Debug.Log(countdownTimer);
-        //}
-
-        //if (gameActive)
-        //{
-        //    if (matchStarted)
-        //    {
-        //        if (countdownTimer < 0)
-        //            countdownOver = true;
-        //        if (NetworkServer.active && deathMatch)
-        //        {
-        //            if (deathMatch.TimeLimitReached)
-        //            {
-        //                KillTeam(null); //draw
-        //                WriteToLog("Time ran out, it's a draw");
-        //            }
-        //        }
-        //    }
-        //    else if (countdownTimer < 1)
-        //    {
-        //        matchStarted = true;
-
-        //        if (deathMatch)
-        //        {
-        //            deathMatch.Reset();
-        //        }
-        //    }
-        //}
+        
     }
 
     public override void OnStartClient()
     {
         Debug.Log("Spawned on client. NetID: " + GetComponent<NetworkIdentity>().netId);
+    }
+
+    [Server]
+    public void KillTeam(Team team)
+    {
+        currentGame.KillTeam(team);
     }
 
     /// <summary>

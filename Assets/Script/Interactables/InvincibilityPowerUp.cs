@@ -28,19 +28,9 @@ public class InvincibilityPowerUp : PowerUp
 
     public override void Activate()
     {
-        // Add more time to the spawn timer which prevents death
-        Team.spawnTimer = activeLength;
-
         // Add particle effects to the players
-        GameObject invincibilityEffect1 = Instantiate(Team.invincibilityParticlePrefab, Player1.transform.position, Quaternion.identity, Player1.transform);
-        GameObject invincibilityEffect2 = Instantiate(Team.invincibilityParticlePrefab, Player2.transform.position, Quaternion.identity, Player2.transform);
-        var main1 = invincibilityEffect1.GetComponent<ParticleSystem>().main;
-        var main2 = invincibilityEffect1.GetComponent<ParticleSystem>().main;
-        main1.startLifetime = activeLength;
-        main2.startLifetime = activeLength;
-        Destroy(invincibilityEffect1, activeLength);
-        Destroy(invincibilityEffect2, activeLength);
-
+        Team.AddInvincibilityEffect(Player1, activeLength);
+        Team.AddInvincibilityEffect(Player2, activeLength);
         base.Activate();
     }
 }
