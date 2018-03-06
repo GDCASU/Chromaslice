@@ -22,7 +22,6 @@ public class TitleMenu : MonoBehaviour {
 
     public void StartLocal()
     {
-        
         foreach (Toggle t in roundSelect)
         {
             if (t.isOn)
@@ -44,7 +43,7 @@ public class TitleMenu : MonoBehaviour {
 
         NetManager.GetInstance().StartLocalGame();
         GameManager.singleton.level = selectedLevel + "_Level";
-        GameManager.singleton.maxRounds = rounds;
+        GameManager.singleton.currentGame.GameRoundLimit = rounds;
         GameManager.singleton.StartGame();
     }
 
@@ -58,6 +57,14 @@ public class TitleMenu : MonoBehaviour {
         EliminationPanel.SetActive(option == 0);
         DeathmatchPanel.SetActive(option == 1);
         SoccerPanel.SetActive(option == 2);
+
+        switch (option)
+        {
+            case 1:
+                GameManager.singleton.SetGameMode(typeof(Deathmatch));
+                break;
+        }
+
     }
 
     public void ExitGame()

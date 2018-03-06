@@ -256,6 +256,6 @@ public class Team : NetworkBehaviour
     {
         // Do not kill if invincible
         if(IsInvincibleOver())
-            GameManager.singleton.KillTeam(this);
+            GameManager.singleton.currentGame.KillTeam(this);
     }
 }

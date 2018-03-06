@@ -42,37 +42,43 @@ public class GameManager : NetworkBehaviour
 {
     public static GameManager singleton;
 
-    public int firstTeamLayer;
-    public GameObject teamPrefab;
+    public GameObject teamPlayerPrefab;
+    public GameObject teamAiPrefab;
     public GameObject[] teams;
+    public GameMode currentGame;
+
+    public int maxRounds;
+    //public int currentRound;
+    public bool gameActive;
+
+    public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
+    public string level;
+
+
+
     [SyncVar]
     public int team1Score;
     [SyncVar]
     public int team2Score;
-    public Vector3[] spawnPoints;
-    public int numberOfPlayers;
-    public DeathMatchRules deathMatch;
-    public KingOfTheHillRules hillRules;
-    public int maxRounds;
-    public int currentRound;
-    public bool gameActive;
+
+
     [SyncVar]
     public bool matchStarted = false;
-    public bool useTitleScreen;
+    //public bool useTitleScreen;
+
     [SyncVar]
     public bool countdownOver = false;
+
     [SyncVar]
     public float countdownTimer;
-    public float timeBeforeMatch;
 
-    public string level;
 
-    public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
 
-    //game log path
+    private int numberOfPlayers;
+    private Vector3[] spawnPoints;
+    private int firstTeamLayer;
     private string outputPath;
-    //used for knowing which player to spawn
-    private int activePlayers;
+    public int activePlayers;
 
     // Use this for initialization
     void Awake()
@@ -93,7 +99,7 @@ public class GameManager : NetworkBehaviour
         Debug.Log("Logging match results to: " + outputPath);
 
         //initialize variables
-        deathMatch = GetComponent<DeathMatchRules>();
+        //deathMatch = GetComponent<DeathMatchRules>();
         //hillRules = GetComponent<KingOfTheHillRules>();
         activePlayers = 0;
 
@@ -105,79 +111,42 @@ public class GameManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(countdownTimer > 0)
-            countdownTimer -= Time.deltaTime;
-        if (gameActive)
-        {
-            if (matchStarted)
-            {
-                if (countdownTimer < 0)
-                    countdownOver = true;
-                if (NetworkServer.active && deathMatch)
-                {
-                    if (deathMatch.TimeLimit())
-                    {
-                        KillTeam(null); //draw
-                        WriteToLog("Time ran out, it's a draw");
-                    }
-                }
-            }
-            else if (countdownTimer < 1)
-            {
-                matchStarted = true;
+        //if (countdownTimer > 0)
+        //{
+        //    countdownTimer -= Time.deltaTime;
+        //    Debug.Log(countdownTimer);
+        //}
 
-                if (deathMatch)
-                {
-                    deathMatch.Reset();
-                }
-            }
-        }
+        //if (gameActive)
+        //{
+        //    if (matchStarted)
+        //    {
+        //        if (countdownTimer < 0)
+        //            countdownOver = true;
+        //        if (NetworkServer.active && deathMatch)
+        //        {
+        //            if (deathMatch.TimeLimitReached)
+        //            {
+        //                KillTeam(null); //draw
+        //                WriteToLog("Time ran out, it's a draw");
+        //            }
+        //        }
+        //    }
+        //    else if (countdownTimer < 1)
+        //    {
+        //        matchStarted = true;
+
+        //        if (deathMatch)
+        //        {
+        //            deathMatch.Reset();
+        //        }
+        //    }
+        //}
     }
 
     public override void OnStartClient()
     {
         Debug.Log("Spawned on client. NetID: " + GetComponent<NetworkIdentity>().netId);
-    }
-
-    /// <summary>
-    /// Performs necessary actions when one team is defeated
-    /// Adds points, advances current round, returns to title if rounds are over
-    /// </summary>
-    /// <param name="team">Team that got killed</param>
-    [Server]
-    public void KillTeam(Team team)
-    {
-        for (int i = 0; i < teams.Length; i++)
-        {
-            Team t = teams[i].GetComponent<Team>();
-            t.ResetTeam();
-            t.RpcResetTeam();
-            if (t != team && team != null)
-            {
-                t.AddPoints();
-                if (deathMatch)
-                    deathMatch.AddScore(t.name);
-                NetManager.GetInstance().SendScoreUpdate();
-                WriteToLog(t.name + " won the round with " + deathMatch.time + " seconds remaining");
-            }
-        }
-        currentRound++;
-        // added 3 new variables here:
-        countdownTimer = timeBeforeMatch;
-        matchStarted = false;
-        // old boolean variables - Paul
-        if (currentRound >= maxRounds)
-        {
-            string winner = deathMatch.GameWinner();
-            if (winner == "")
-                WriteToLog("Match over. It's a tie");
-            else
-                WriteToLog("Match over. Winner: " + winner);
-
-            gameActive = false;
-            NetManager.GetInstance().StopHost();
-            activePlayers = 0;
-        }
     }
 
     /// <summary>
@@ -203,7 +172,7 @@ public class GameManager : NetworkBehaviour
     public void SpawnTeam(int num)
     {
         Debug.Log("Spawning team " + num);
-        teams[num] = Instantiate(teamPrefab);
+        teams[num] = Instantiate(teamPlayerPrefab);
         teams[num].name = "Team " + num;
         teams[num].layer = firstTeamLayer + num;
         teams[num].GetComponent<Team>().SetSpawnPoints(spawnPoints[num * 2], spawnPoints[num * 2 + 1]);
@@ -224,12 +193,7 @@ public class GameManager : NetworkBehaviour
     public void StartGame()
     {
         //NetworkServer.Spawn(gameObject);
-        currentRound = 0;
-        gameActive = true;
-        // New boolean variable position
-        matchStarted = false;
-        countdownTimer = timeBeforeMatch;
-        countdownOver = false;
+        currentGame.BeginRound();
         NetManager.GetInstance().ServerChangeScene(level);
         NetworkServer.SendToAll(NetManager.ExtMsgType.StartGame, new NetManager.PingMessage());
         WriteToLog("Starting new game, level: " + level + " out of " + maxRounds + " rounds");
@@ -238,11 +202,7 @@ public class GameManager : NetworkBehaviour
     [Client]
     public void OnStartGame(NetworkMessage netMsg)
     {
-        gameActive = true;
-        // New boolean variable position
-        matchStarted = false;
-        countdownTimer = timeBeforeMatch;
-        countdownOver = false;
+        currentGame.BeginRound();
     }
 
     [Server]
@@ -257,5 +217,12 @@ public class GameManager : NetworkBehaviour
         StreamWriter sw = new StreamWriter(File.Open(outputPath, FileMode.Append));
         sw.WriteLine(msg);
         sw.Close();
+    }
+
+    public void SetGameMode(System.Type mode)
+    {
+        Destroy(gameObject.GetComponent<GameMode>());
+        gameObject.AddComponent(mode);
+        currentGame = GetComponent<GameMode>();
     }
 }

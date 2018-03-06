@@ -16,7 +16,7 @@ public class ControlPoint : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (GameManager.singleton.hillRules)
+        if (GameManager.singleton.currentGame.GetType() == typeof(KingOfTheHill))
         {
             GameObject newObject = Instantiate(pointPrefab, position, Quaternion.identity, transform);
             point = newObject;
@@ -28,19 +28,19 @@ public class ControlPoint : MonoBehaviour
 
 public class PointCollision : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider collision)
-    {
-        if (GameManager.singleton.hillRules)
-        {
-            GameManager.singleton.hillRules.ChangeOnPoint(collision.gameObject.transform.parent.gameObject.name);
-        }
-    }
+    //private void OnTriggerEnter(Collider collision)
+    //{
+    //    if (GameManager.singleton.hillRules)
+    //    {
+    //        GameManager.singleton.hillRules.ChangeOnPoint(collision.gameObject.transform.parent.gameObject.name);
+    //    }
+    //}
 
-    private void OnTriggerExit(Collider collision)
-    {
-        if (GameManager.singleton.hillRules)
-        {
-            GameManager.singleton.hillRules.ChangeOffPoint(collision.gameObject.transform.parent.gameObject.name);
-        }
-    }
+    //private void OnTriggerExit(Collider collision)
+    //{
+    //    if (GameManager.singleton.hillRules)
+    //    {
+    //        GameManager.singleton.hillRules.ChangeOffPoint(collision.gameObject.transform.parent.gameObject.name);
+    //    }
+    //}
 }

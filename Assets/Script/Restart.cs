@@ -14,7 +14,7 @@ public class Restart : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name,LoadSceneMode.Single); // loads current scene
         GameManager.singleton.matchStarted = false;
-        GameManager.singleton.countdownTimer = GameManager.singleton.timeBeforeMatch;
+        GameManager.singleton.countdownTimer = GameConstants.TimeBeforeRound;
         GameManager.singleton.countdownOver = false;
     }
 
