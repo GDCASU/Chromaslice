@@ -104,6 +104,8 @@ public class GameManager : NetworkBehaviour
 
         activePlayers = 0;
 
+        //SetGameMode(typeof(Deathmatch));
+
         //handle title screen skip in editor (currently unsupported until i get around to fixing it)
         //if (!useTitleScreen)
             //StartGame(SceneManager.GetActiveScene().name, maxRounds);
@@ -198,8 +200,12 @@ public class GameManager : NetworkBehaviour
 
     public void SetGameMode(System.Type mode)
     {
-        Destroy(gameObject.GetComponent<GameMode>());
-        gameObject.AddComponent(mode);
-        currentGame = GetComponent<GameMode>();
+        Destroy(GetComponent<GameMode>());
+
+        if (mode == typeof(Deathmatch))
+            currentGame = gameObject.AddComponent<Deathmatch>();
+
+        else if (mode == typeof(Soccer))
+            currentGame = gameObject.AddComponent<Soccer>();
     }
 }

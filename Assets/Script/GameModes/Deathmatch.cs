@@ -13,35 +13,48 @@ public class Deathmatch : GameMode
 	
 	protected override void Update ()
     {
-        base.Update();
-	}
-
-    public override void KillTeam(Team team)
-    {
-        for (int i = 0; i < GameManager.singleton.teams.Length; i++)
+        if (nextRoundTrigger)
         {
-            Team t = GameManager.singleton.teams[i].GetComponent<Team>();
-            t.ResetTeam();
-            t.RpcResetTeam();
-            if (t != team && team != null)
+            if (timeBeforeNextRound > 0)
+                timeBeforeNextRound -= Time.deltaTime;
+            else
             {
-                AddScore(t.name);
-                NetManager.GetInstance().SendScoreUpdate();
-                GameManager.singleton.WriteToLog(t.name + " won the round with " + timeRemaining + " seconds remaining");
+                base.KillTeam(null);
+                BeginRound();
             }
         }
 
-        currentRound++;
-        if (currentRound >= gameRoundLimit)
+        base.Update();
+    }
+
+    public override void KillTeam(Team team)
+    {
+        if (!nextRoundTrigger)
         {
-            gameActive = false;
-            NetManager.GetInstance().StopHost();
-            GameManager.singleton.activePlayers = 0;
+            for (int i = 0; i < GameManager.singleton.teams.Length; i++)
+            {
+                Team t = GameManager.singleton.teams[i].GetComponent<Team>();
+                if (t != team && team != null)
+                {
+                    AddScore(t.name);
+                    NetManager.GetInstance().SendScoreUpdate();
+                    GameManager.singleton.WriteToLog(t.name + " won the round with " + timeRemaining + " seconds remaining");
+                }
+            }
+
+            currentRound++;
+            if (currentRound >= gameRoundLimit)
+            {
+                gameActive = false;
+                NetManager.GetInstance().StopHost();
+                GameManager.singleton.activePlayers = 0;
+            }
+
+            gameActive = true;
+            timeRemaining = GameConstants.TimeBeforeNextRound;
         }
-        else
-        {
-            BeginRound();
-        }
+
+        nextRoundTrigger = true;
     }
 
     public override void AddScore(string name)

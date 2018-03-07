@@ -14,6 +14,11 @@ public class GameMode : MonoBehaviour
     protected bool gameActive;
     protected float timeRemaining;
     protected float timeBeforeRound;
+    protected float timeBeforeNextRound;
+    protected bool nextRoundTrigger;
+
+    private GameObject camera;
+    private float animationTimer;
 
     public bool IsGameActive { get { return gameActive; } }
     public bool IsRoundActive { get { return gameActive && timeBeforeRound <= 0 && timeRemaining > 0; } }
@@ -30,13 +35,26 @@ public class GameMode : MonoBehaviour
         team2Score = 0;
         currentRound = 0;
         gameActive = false;
+        nextRoundTrigger = false;
         timeRemaining = GameConstants.DeathmatchTimeLimit;
         timeBeforeRound = GameConstants.TimeBeforeRound;
+        animationTimer = 0;
+        camera = null;
     }
 
     protected virtual void Update ()
     {
-        if(gameActive)
+        if (camera == null)
+        {
+            camera = GameObject.FindGameObjectWithTag("MainCamera");
+            if (camera.GetComponent<Animator>())
+                animationTimer = camera.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
+        }
+
+        if (animationTimer > 0)
+                animationTimer -= Time.deltaTime;
+
+        else if (gameActive)
         {
             if (timeBeforeRound > 0)
                 timeBeforeRound -= Time.deltaTime;
@@ -44,13 +62,13 @@ public class GameMode : MonoBehaviour
             else if (!IsRoundOver)
                 timeRemaining -= Time.deltaTime;
 
-            else if(IsRoundOver)
+            else if(IsRoundOver && !nextRoundTrigger)
             {
                 KillTeam(null);
                 GameManager.singleton.WriteToLog("Time Limit Reached! Draw!");
             }
         }
-	}
+    }
 
     // Base behavior: Reset team to spawn
     public virtual void KillTeam(Team team)
@@ -67,6 +85,8 @@ public class GameMode : MonoBehaviour
     {
         timeBeforeRound = GameConstants.TimeBeforeRound;
         timeRemaining = GameConstants.DeathmatchTimeLimit;
+        timeBeforeNextRound = GameConstants.TimeBeforeNextRound;
+        nextRoundTrigger = false;
         gameActive = true;
     }
 

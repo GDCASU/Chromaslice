@@ -51,7 +51,7 @@ public class ShockDeathPlane : Hazard
     {
         if (isActive)
         {
-            other.transform.parent.GetComponent<Team>().KillTeam();
+            other.transform.parent.GetComponent<Team>().KillTeam(other.gameObject);
         }
     }
 
@@ -63,7 +63,7 @@ public class ShockDeathPlane : Hazard
     {
         if (isActive)
         {
-            other.transform.parent.GetComponent<Team>().KillTeam();
+            other.transform.parent.GetComponent<Team>().KillTeam(other.gameObject);
         }
     }
 }

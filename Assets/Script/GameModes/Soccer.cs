@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Soccer : MonoBehaviour {
+public class Soccer : GameMode {
 
 	// Use this for initialization
 	void Start () {

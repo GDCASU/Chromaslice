@@ -19,6 +19,7 @@ public class CameraControl : MonoBehaviour
     //Degree of leniency before the camera pans
     public float deltaX = 3.0f;
     public float deltaZ = 0.0f;
+    public float yPosition = 0.0f;
     public bool gamePaused;
     //restricts camera movement to one dimension
     public bool lockAxis = true;
@@ -30,7 +31,8 @@ public class CameraControl : MonoBehaviour
 
 
     //DW: Each frame changes the camera focus and position
-    void Update () {
+    public void Update ()
+    {
         camPosVector = new Vector3(camPos.position.x, camPos.position.y, camPos.position.z);
         
         // Pan the camera
@@ -48,7 +50,7 @@ public class CameraControl : MonoBehaviour
         // this kind of panning is a little choppy; I think its something to do with transform.Translate
 
         float newZ = getNearestPlayerZPos() - deltaZ;
-        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, newZ);
+        this.transform.position = new Vector3(this.transform.position.x, yPosition, newZ);
 
         //Set the camera to the optimal focal point
         camPos.LookAt(getAveragePlayerPos(), Vector3.up);
@@ -85,6 +87,4 @@ public class CameraControl : MonoBehaviour
                 farPoint = player.transform.position.z;
         return farPoint;
     }
-
-
 }
