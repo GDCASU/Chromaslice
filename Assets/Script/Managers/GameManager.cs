@@ -79,11 +79,6 @@ public class GameManager : NetworkBehaviour
     private string outputPath;
     public int activePlayers;
 
-
-
-
-
-
     // Use this for initialization
     void Awake()
     {
@@ -207,5 +202,11 @@ public class GameManager : NetworkBehaviour
 
         else if (mode == typeof(Soccer))
             currentGame = gameObject.AddComponent<Soccer>();
+    }
+
+    [ClientRpc]
+    public void RpcResetClients()
+    {
+        NetManager.GetInstance().StopClient();
     }
 }

@@ -46,8 +46,18 @@ public class Deathmatch : GameMode
             if (currentRound >= gameRoundLimit)
             {
                 gameActive = false;
-                NetManager.GetInstance().StopHost();
                 GameManager.singleton.activePlayers = 0;
+
+                // Set the offline scene to "Title" then stop the server and switch to it
+                NetManager.GetInstance().offlineScene = "Title"; // change to server you want to change to
+                if (GameManager.singleton.isLocalPlayer)
+                {
+                    NetManager.GetInstance().StopClient();
+                }
+                else
+                {
+                    NetManager.GetInstance().StopServer();
+                }
             }
 
             gameActive = true;

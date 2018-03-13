@@ -115,7 +115,12 @@ public class NetManager : NetworkManager
     {
         localPlayers = new List<Player>();
         playerList = new List<Player>();
+
+        // reset the client connections when the server stops
+        GameManager.singleton.RpcResetClients();
+
         Log("Stopping server...");
+        // reset the stuff that we need to reset here
         base.OnStopServer();
     }
 
