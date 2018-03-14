@@ -11,4 +11,6 @@ public static class GameConstants
     // Deathmatch Constants
     public const float DeathmatchTimeLimit = 60.0f;
 
+    // Soccer Constants
+    public const float SoccerTimeLimit = 60.0f;
 }

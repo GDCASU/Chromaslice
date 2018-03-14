@@ -36,7 +36,6 @@ public class GameMode : MonoBehaviour
         currentRound = 0;
         gameActive = false;
         nextRoundTrigger = false;
-        timeRemaining = GameConstants.DeathmatchTimeLimit;
         timeBeforeRound = GameConstants.TimeBeforeRound;
         animationTimer = 0;
         camera = null;
@@ -81,10 +80,9 @@ public class GameMode : MonoBehaviour
         }
     }
 
-    public void BeginRound()
+    public virtual void BeginRound()
     {
         timeBeforeRound = GameConstants.TimeBeforeRound;
-        timeRemaining = GameConstants.DeathmatchTimeLimit;
         timeBeforeNextRound = GameConstants.TimeBeforeNextRound;
         nextRoundTrigger = false;
         gameActive = true;
@@ -103,5 +101,22 @@ public class GameMode : MonoBehaviour
             GameManager.singleton.WriteToLog("Round End: Team 2 wins!");
         else
             GameManager.singleton.WriteToLog("Round End: Both teams tied!");
+    }
+
+    public virtual void StopGame()
+    {
+        gameActive = false;
+        GameManager.singleton.activePlayers = 0;
+
+        // Set the offline scene to "Title" then stop the server and switch to it
+        NetManager.GetInstance().offlineScene = "Title"; // change to server you want to change to
+        if (GameManager.singleton.isLocalPlayer)
+        {
+            NetManager.GetInstance().StopClient();
+        }
+        else
+        {
+            NetManager.GetInstance().StopServer();
+        }
     }
 }

@@ -8,6 +8,7 @@ public class Deathmatch : GameMode
 
 	protected override void Start ()
     {
+        timeRemaining = GameConstants.DeathmatchTimeLimit;
         base.Start();
 	}
 	
@@ -27,6 +28,12 @@ public class Deathmatch : GameMode
         base.Update();
     }
 
+    public override void BeginRound()
+    {
+        timeRemaining = GameConstants.DeathmatchTimeLimit;
+        base.BeginRound();
+    }
+
     public override void KillTeam(Team team)
     {
         if (!nextRoundTrigger)
@@ -44,24 +51,13 @@ public class Deathmatch : GameMode
 
             currentRound++;
             if (currentRound >= gameRoundLimit)
+                StopGame();
+
+            else
             {
-                gameActive = false;
-                GameManager.singleton.activePlayers = 0;
-
-                // Set the offline scene to "Title" then stop the server and switch to it
-                NetManager.GetInstance().offlineScene = "Title"; // change to server you want to change to
-                if (GameManager.singleton.isLocalPlayer)
-                {
-                    NetManager.GetInstance().StopClient();
-                }
-                else
-                {
-                    NetManager.GetInstance().StopServer();
-                }
+                gameActive = true;
+                timeRemaining = GameConstants.TimeBeforeNextRound;
             }
-
-            gameActive = true;
-            timeRemaining = GameConstants.TimeBeforeNextRound;
         }
 
         nextRoundTrigger = true;
