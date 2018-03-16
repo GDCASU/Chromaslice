@@ -122,15 +122,14 @@ public class PowerUp : Interactable
     }
 
     // Deletes the game object from the scence
-    protected virtual void RemovePowerUp()
+    public virtual void RemovePowerUp()
     {
-        Team.CurrentPowerUp = null;
-
         // If the spawner is not continuous, delete the spawner
         if (GetComponentInParent<PowerUpSpawner>())
             if (GetComponentInParent<PowerUpSpawner>().continuousSpawn == false)
                 Destroy(transform.parent.gameObject);
 
         Destroy(gameObject);
+        Team.CurrentPowerUp = null;
     }
 }

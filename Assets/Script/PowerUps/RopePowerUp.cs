@@ -47,7 +47,7 @@ public class RopePowerUp : PowerUp
 
     // Restores the original maxRopeLength field of the rope prefab/currentRope
     // and destroy the gameObject containing this script
-    protected override void RemovePowerUp()
+    public override void RemovePowerUp()
     {
         Team.ropePrefab.GetComponent<Rope>().maxRopeLength = maxRopeLength;
         // Only update currentRope maxRopeLength if it is not null

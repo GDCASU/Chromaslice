@@ -78,6 +78,7 @@ public class TitleMenu : MonoBehaviour
         NetManager.GetInstance().ServerChangeScene(NetManager.GetInstance().lobbySceneOffline);
     }
 
+    // Updates the gamemode selected via the UI
     public void SelectGamemode(int option)
     {
         DeathmatchPanel.SetActive(option == 0);
@@ -90,7 +91,7 @@ public class TitleMenu : MonoBehaviour
                 break;
 
             case 1:
-                GameManager.singleton.SetGameMode(typeof(Deathmatch));
+                GameManager.singleton.SetGameMode(typeof(Soccer));
                 break;
 
             default :

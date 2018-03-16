@@ -107,24 +107,6 @@ public class Team : NetworkBehaviour
                 }
             }
         }
-
-        // Check that the round is active
-        if (GameManager.singleton.currentGame.IsRoundActive)
-        {
-            // Do not remove invincibility particle effect
-            if (currentPowerUp != null && currentPowerUp.GetComponent<PowerUp>().GetType() == typeof(InvincibilityPowerUp) && currentPowerUp.GetComponent<PowerUp>().isActive);
-            else
-            {
-                if (player1)
-                    if (player1.GetComponentInChildren<ParticleSystem>())
-                        Destroy(player1.GetComponentInChildren<ParticleSystem>().gameObject);
-
-                if (player2)
-                    if (player2.GetComponentInChildren<ParticleSystem>())
-                        Destroy(player2.GetComponentInChildren<ParticleSystem>().gameObject);
-            }
-        }
-
     }
 
     //clients don't need to know about this
@@ -144,9 +126,7 @@ public class Team : NetworkBehaviour
         if ((num == 1 && player1) || (num == 2 && player2)) return null;
         Vector3 pos = (num == 1 ? spawn1 : spawn2);
         GameObject newPlayer = Instantiate(playerPrefab, pos, Quaternion.identity, transform);
-
         AddInvincibilityEffect(newPlayer, 30);
-
         newPlayer.layer = gameObject.layer;
 
         NetworkServer.Spawn(newPlayer);
@@ -221,28 +201,39 @@ public class Team : NetworkBehaviour
         player.GetComponentInChildren<Light>().color = Color.Lerp(player.GetComponentInChildren<Light>().color, color, 0.005f);
     }
 
+    // Removes current power up (if any), resets each player and adds invincibility particles for beginning of each round
     public void ResetTeam()
     {
+        if (currentPowerUp != null)
+            currentPowerUp.GetComponent<PowerUp>().RemovePowerUp();
+
         if (currentRope)
             Destroy(currentRope);
 
         if (player1)
         {
-            player1.transform.position = spawn1;
-            player1.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            player1.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            ResetPlayer(player1);
             AddInvincibilityEffect(player1, GameConstants.TimeBeforeRound);
-            player1.SetActive(true);
         }
+
         if (player2)
         {
-            player2.transform.position = spawn2;
-            player2.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            player2.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            ResetPlayer(player2);
             AddInvincibilityEffect(player2, GameConstants.TimeBeforeRound);
-            player2.SetActive(true);
         }
-        Destroy(currentPowerUp);
+    }
+
+    // Resets and reactivates the player. Can be called by itself or another function (ResetTeam)
+    public void ResetPlayer(GameObject player)
+    {
+        if (player == player1)
+            player.transform.position = spawn1;
+        else
+            player.transform.position = spawn2;
+
+        player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        player.SetActive(true);
     }
 
     [ClientRpc]
@@ -251,26 +242,31 @@ public class Team : NetworkBehaviour
         ResetTeam();
     }
 
-    // Adds the invincibility particle effect to the player game object
+    // Adds the invincibility particle effect to the player game object and is destroyed when finished
     public void AddInvincibilityEffect(GameObject player, float duration)
     {
         var main = invincibilityParticlePrefab.GetComponent<ParticleSystem>().main;
         main.duration = duration;
-        GameObject invinciblePrefab = Instantiate(invincibilityParticlePrefab, player.transform.position, Quaternion.identity, player.transform);
-        Destroy(invinciblePrefab, duration);
+        GameObject instance = Instantiate(invincibilityParticlePrefab, player.transform.position, Quaternion.identity, player.transform);
+        Destroy(instance, duration);
     }
 
+    // This function should probably be renamed to KillPlayer instead, we'll see
+    // This function is called by the rope script when colliding with a player, and passes the player to kill as an argument
     public void KillTeam(GameObject player)
     {
-        // Do not kill if invincible
-        if (currentPowerUp != null && currentPowerUp.GetComponent<PowerUp>().GetType() == typeof(InvincibilityPowerUp) && currentPowerUp.GetComponent<PowerUp>().isActive)
+        // Do not kill while carrying instance of invincibility prefab
+        if (player.GetComponentInChildren<ParticleSystem>() && player.GetComponentInChildren<ParticleSystem>().gameObject.name == invincibilityParticlePrefab.name + "(Clone)")
             return;
 
+        // Instantiate red particle effect prefab
         if (player.transform.root.name == "Team 0")
         {
             GameObject explosion = Instantiate(deathParticlePrefabRed, player.transform. position, Quaternion.identity);
             Destroy(explosion, 5.0f);
         }
+
+        // Instantiate blue particle effect prefab
         else if (player.transform.root.name == "Team 1")
         {
             GameObject explosion = Instantiate(deathParticlePrefabBlue, player.transform.position, Quaternion.identity);
@@ -280,8 +276,9 @@ public class Team : NetworkBehaviour
         if (currentRope)
             Destroy(currentRope);
 
+        // Players are simply deactivated and reactivated since deleting/respawning would complicate networking code
         player.SetActive(false);
 
-        GameManager.singleton.KillTeam(this);
+        GameManager.singleton.KillTeam(player);
     }
 }

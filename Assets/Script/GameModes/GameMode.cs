@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+// Description: This class controls all functions of an active game and serves as the base class for all gamemodes
+// Author(s): Zachary Schmalz, (others to be credited)
+// Version 2.0.0
+// Date: March 16, 2018
+
 public class GameMode : MonoBehaviour
 {
+    // Protected fields to be used im base/sub classes
     protected float team1Score;
     protected float team2Score;
-
     protected int gameRoundLimit;
     protected int currentRound;
     protected float timeLimit;
@@ -17,9 +22,11 @@ public class GameMode : MonoBehaviour
     protected float timeBeforeNextRound;
     protected bool nextRoundTrigger;
 
+    // Private variables
     private GameObject camera;
     private float animationTimer;
 
+    // Public properties
     public bool IsGameActive { get { return gameActive; } }
     public bool IsRoundActive { get { return gameActive && timeBeforeRound <= 0 && timeRemaining > 0; } }
     public bool IsRoundOver { get { return timeRemaining <= 0;} }
@@ -28,7 +35,9 @@ public class GameMode : MonoBehaviour
     public int GameRoundLimit { get { return gameRoundLimit; } set { gameRoundLimit = value; } }
     public float Team1Score { get { return team1Score; } }
     public float Team2Score { get { return team2Score; } }
+    public bool IsGameOver { get { return currentRound >= gameRoundLimit; } }
 
+    // Initiailize variables
     protected virtual void Start()
     {
         team1Score = 0;
@@ -43,6 +52,7 @@ public class GameMode : MonoBehaviour
 
     protected virtual void Update ()
     {
+        // If the level has a camera flyby animation
         if (camera == null)
         {
             camera = GameObject.FindGameObjectWithTag("MainCamera");
@@ -50,19 +60,41 @@ public class GameMode : MonoBehaviour
                 animationTimer = camera.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
         }
 
+        // The camera is animating
         if (animationTimer > 0)
-                animationTimer -= Time.deltaTime;
+            animationTimer -= Time.deltaTime;
 
+        // The scene is actively open and executing
         else if (gameActive)
         {
+            // Wait for time before the round starts
             if (timeBeforeRound > 0)
+            {
                 timeBeforeRound -= Time.deltaTime;
 
+                // Only on the first round of the match, remove the invincibility effect when the round starts.
+                // This is a really gross way to do it, but its the best solution available :-(
+                if(timeBeforeRound <= 0 && currentRound == 0)
+                {
+                    foreach(GameObject t in GameManager.singleton.teams)
+                    {
+                        Team team = t.GetComponent<Team>();
+                        if(team.player1.GetComponentInChildren<ParticleSystem>() && team.player1.GetComponentInChildren<ParticleSystem>().gameObject.name == team.invincibilityParticlePrefab.name + "(Clone)")
+                            Destroy(team.player1.GetComponentInChildren<ParticleSystem>().gameObject);
+                        if (team.player2.GetComponentInChildren<ParticleSystem>() && team.player2.GetComponentInChildren<ParticleSystem>().gameObject.name == team.invincibilityParticlePrefab.name + "(Clone)")
+                            Destroy(team.player2.GetComponentInChildren<ParticleSystem>().gameObject);
+                    }
+                }
+            }
+
+            // Subtract time from the remaining time in the round
             else if (!IsRoundOver)
                 timeRemaining -= Time.deltaTime;
 
-            else if(IsRoundOver && !nextRoundTrigger)
+            // The time expired, reset the round
+            else if (IsRoundOver && !nextRoundTrigger)
             {
+                nextRoundTrigger = true;
                 KillTeam(null);
                 GameManager.singleton.WriteToLog("Time Limit Reached! Draw!");
             }
@@ -70,7 +102,7 @@ public class GameMode : MonoBehaviour
     }
 
     // Base behavior: Reset team to spawn
-    public virtual void KillTeam(Team team)
+    public virtual void KillTeam(GameObject player)
     {
         for (int i = 0; i < GameManager.singleton.teams.Length; i++)
         {
@@ -80,6 +112,7 @@ public class GameMode : MonoBehaviour
         }
     }
 
+    // Resets all variables used/changed during a round
     public virtual void BeginRound()
     {
         timeBeforeRound = GameConstants.TimeBeforeRound;
@@ -88,11 +121,21 @@ public class GameMode : MonoBehaviour
         gameActive = true;
     }
 
+    // Sub classes handle updating team scores, the base behavior handles transitioning to the next round (or game end)
     public virtual void AddScore(string name)
     {
-
+        nextRoundTrigger = true;
+        currentRound++;
+        if (IsGameOver)
+        {
+            timeBeforeNextRound = GameConstants.TimeBeforeGameEnd;
+            timeRemaining = timeBeforeNextRound;
+        }
+        else
+            timeRemaining = GameConstants.TimeBeforeNextRound;
     }
 
+    // Display the results of the match
     public void GameWinner()
     {
         if (team1Score > team2Score)
@@ -103,8 +146,11 @@ public class GameMode : MonoBehaviour
             GameManager.singleton.WriteToLog("Round End: Both teams tied!");
     }
 
+    // Handles the stopping of the game and transitioning to title screen
     public virtual void StopGame()
     {
+        GameWinner();
+
         gameActive = false;
         GameManager.singleton.activePlayers = 0;
 

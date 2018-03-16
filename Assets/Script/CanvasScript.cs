@@ -32,6 +32,7 @@ public class CanvasScript : MonoBehaviour
             //debugMenu.SetActive(!debugMenu.activeSelf);
         }
 
+        // Update the timer and team scores if the game is active
         if (GameManager.singleton.currentGame != null && GameManager.singleton.currentGame.IsGameActive)
         {
             float time = GameManager.singleton.currentGame.TimeReamining;

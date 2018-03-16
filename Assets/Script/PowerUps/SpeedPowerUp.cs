@@ -50,7 +50,7 @@ public class SpeedPowerUp : PowerUp
 
     // Restores the original speed when the boost expires
     // and destroy the gameObject containing this script
-    protected override void RemovePowerUp()
+    public override void RemovePowerUp()
     {
         Player1.GetComponent<PlayerController>().MaxSpeed = player1Speed;
         Player2.GetComponent<PlayerController>().MaxSpeed = player2Speed;

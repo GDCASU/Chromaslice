@@ -118,9 +118,9 @@ public class GameManager : NetworkBehaviour
     }
 
     [Server]
-    public void KillTeam(Team team)
+    public void KillTeam(GameObject player)
     {
-        currentGame.KillTeam(team);
+        currentGame.KillTeam(player);
     }
 
     /// <summary>
@@ -193,6 +193,7 @@ public class GameManager : NetworkBehaviour
         sw.Close();
     }
 
+    // Set the current game mode to be played (Deathmatch is default)
     public void SetGameMode(System.Type mode)
     {
         Destroy(GetComponent<GameMode>());

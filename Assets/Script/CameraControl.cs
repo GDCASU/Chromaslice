@@ -16,6 +16,9 @@ public class CameraControl : MonoBehaviour
     private Camera cam;
     private Transform camPos;
     private Vector3 camPosVector;
+    private Vector3 lastPosition;
+    private float lastNearestZPos;
+    private GameObject[] players;
     //Degree of leniency before the camera pans
     public float deltaX = 3.0f;
     public float deltaZ = 0.0f;
@@ -27,12 +30,18 @@ public class CameraControl : MonoBehaviour
     private void Awake () {
         cam = GetComponent<Camera>();
         camPos = this.transform;
+        players = null;
     }
-
 
     //DW: Each frame changes the camera focus and position
     public void Update ()
     {
+        if (players == null || players.Length != 2 * (GameManager.singleton.teams.Length))
+        {
+            GetPlayers();
+            return;
+        }
+
         camPosVector = new Vector3(camPos.position.x, camPos.position.y, camPos.position.z);
         
         // Pan the camera
@@ -41,7 +50,7 @@ public class CameraControl : MonoBehaviour
                 moveTo = new Vector3((getAveragePlayerPos().x - deltaX) - camPos.position.x, 0.0f, 0.0f);
         if (camPos.position.x > getAveragePlayerPos().x + deltaX)
                 moveTo = new Vector3((getAveragePlayerPos().x + deltaX) - camPos.position.x, 0.0f, 0.0f);
-         //This code should work the same for forward / back panning, but it's pretty wack right now
+        //This code should work the same for forward / back panning, but it's pretty wack right now
 
         if (lockAxis) // pins the camera to movement only in the x direction
             camPos.Translate(moveTo, Space.World);
@@ -55,6 +64,8 @@ public class CameraControl : MonoBehaviour
         //Set the camera to the optimal focal point
         camPos.LookAt(getAveragePlayerPos(), Vector3.up);
 
+        lastPosition = getAveragePlayerPos();
+        lastNearestZPos = getNearestPlayerZPos();
     }
 
     //DW: This method gives us the midpoint between all players
@@ -64,27 +75,55 @@ public class CameraControl : MonoBehaviour
         aveX = 0.0f;
         aveY = 0.0f;
         aveZ = 0.0f;
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach(GameObject player in players){
-            aveX += player.transform.position.x;
-            aveY += player.transform.position.y;
-            aveZ += player.transform.position.z;
+        int activePlayers = 0;
+        foreach(GameObject player in players)
+        {
+            if (player != null && player.activeSelf)
+            {
+                activePlayers++;
+                aveX += player.transform.position.x;
+                aveY += player.transform.position.y;
+                aveZ += player.transform.position.z;
+            }
         }
-        aveX = aveX / ((float)players.Length);
-        aveY = aveY / ((float)players.Length);
-        aveZ = aveZ /((float)players.Length);
-        midPlayerPoint = new Vector3(aveX, aveY, aveZ);
-        return midPlayerPoint;
+
+        if (activePlayers <= 0)
+            return lastPosition;
+        else
+        {
+            aveX = aveX / activePlayers;
+            aveY = aveY / activePlayers;
+            aveZ = aveZ / activePlayers;
+            midPlayerPoint = new Vector3(aveX, aveY, aveZ);
+            return midPlayerPoint;
+        }
     }
 
     // get the Z of the player closest to z = negative infinite
-    private float getNearestPlayerZPos(){
+    private float getNearestPlayerZPos()
+    {
         float farPoint = Mathf.Infinity;
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        if (players.Length == 0) return 0;
+        if (players.Length == 0)
+            return 0;
+
+        int activePlayers = 0;
         foreach (GameObject player in players)
-            if (player.transform.position.z < farPoint)
+        {
+            if (player != null && player.activeSelf && player.transform.position.z < farPoint)
+            {
+                activePlayers++;
                 farPoint = player.transform.position.z;
-        return farPoint;
+            }
+        }
+
+        if (activePlayers <= 0)
+            return lastNearestZPos;
+        else
+            return farPoint;
+    }
+
+    private void GetPlayers()
+    {
+        players = GameObject.FindGameObjectsWithTag("Player");
     }
 }
