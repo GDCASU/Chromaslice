@@ -35,7 +35,7 @@ public class DeathPlane : Hazard
     public override void OnTriggerEnter(Collider other)
     {
         if(other.transform.GetComponentInParent<Team>())
-            other.transform.parent.GetComponentInParent<Team>().KillTeam();
+            other.transform.parent.GetComponentInParent<Team>().KillTeam(other.gameObject);
 
         else if(other.GetComponent<Rigidbody>())
             Destroy(other);

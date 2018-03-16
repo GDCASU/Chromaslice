@@ -1,89 +1,88 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-// Developer:       Nick Arnieri
-// Date:            9/15/2017
-// Description:     Rules to determine if game is over for Death Match gamemode
-
-// Developer:       Nick Arnieri
-// Date:            10/4/2017
-// Description:     Change to make game rules responsible for keeping track of score
-
-// Developer:       Nick Arnieri
-// Date:            10/20/2017
-// Description:     Seperate function calls to allow easier usage by GameManager
+// Description: This class controls the deathmath game mode
+// Author(s): Connor Pillsbury, Zachary Schmalz, (others to be credited)
+// Version: 2.0.0
+// Date: March 16, 2018
 
 public class Deathmatch : GameMode
 {
-    public int scoreLimit;
-
-    private bool gameActive;
-
-    // Use this for initialization
-    void Start()
+	protected override void Start ()
     {
-        scoreTeam1 = 0;
-        scoreTeam2 = 0;
-        scoreLimit = 5;
-        timeLimit = 60f;
-        time = timeLimit;
+        timeRemaining = GameConstants.DeathmatchTimeLimit;
+        base.Start();
+	}
+	
+	protected override void Update ()
+    {
+        // Timer to the next round (or game end) has been triggered
+        if (nextRoundTrigger)
+        {
+            if (timeBeforeNextRound > 0)
+                timeBeforeNextRound -= Time.deltaTime;
+            else
+            {
+                // Reset players
+                base.KillTeam(null);
+
+                if (IsGameOver)
+                    StopGame();
+                else
+                    BeginRound();
+            }
+        }
+
+        base.Update();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void BeginRound()
     {
-        if (gameActive)
-            time -= Time.deltaTime;
+        timeRemaining = GameConstants.DeathmatchTimeLimit;
+        base.BeginRound();
     }
 
-    /// <summary>
-    /// Adds a point to the necessary team
-    /// </summary>
-    /// <param name="name">Name of team that needs a point</param>
-    public void AddScore(string name)
+    // When a player dies, update the score for the appropriate team
+    public override void KillTeam(GameObject player)
+    {
+        if (!nextRoundTrigger)
+        {
+            Team team = player.GetComponentInParent<Team>();
+            for (int i = 0; i < GameManager.singleton.teams.Length; i++)
+            {
+                Team t = GameManager.singleton.teams[i].GetComponent<Team>();
+                if (t != team && team != null)
+                {
+                    AddScore(t.name);
+                    NetManager.GetInstance().SendScoreUpdate();
+                    GameManager.singleton.WriteToLog(t.name + " won the round with " + timeRemaining + " seconds remaining");
+                }
+            }
+        }
+
+        // Time expired without a death, destroy players and reset round
+        else if(nextRoundTrigger && player == null)
+        {
+            foreach(GameObject t in GameManager.singleton.teams)
+            {
+                Team team = t.GetComponent<Team>();
+                team.KillTeam(team.player1);
+                team.KillTeam(team.player2);
+            }
+            timeRemaining = GameConstants.TimeBeforeNextRound;
+        } 
+    }
+
+    // Add score and reset round
+    public override void AddScore(string name)
     {
         if (name == "Team 0")
-            scoreTeam1++;
-        else
-            scoreTeam2++;
+            team1Score++;
+        else if(name == "Team 1")
+            team2Score++;
 
-        gameActive = false;
-    }
-
-    /// <summary>
-    /// Resets values for next match
-    /// </summary>
-    public void Reset()
-    {
-        time = timeLimit;
-        gameActive = true;
-    }
-
-    /// <summary>
-    /// Checks to see if game has ended based on game rules
-    /// </summary>
-    public string GameWinner()
-    {
-        string gameOver = "";
-
-        // Check both teams score against score limit
-        if (scoreTeam1 >= scoreLimit)
-            gameOver = "Team 0";
-        else if (scoreTeam2 >= scoreLimit)
-            gameOver = "Team 1";
-
-        return gameOver;
-    }
-
-    /// <summary>
-    /// Checks to see whether the match time has run out
-    /// </summary>
-    public bool TimeLimit()
-    {
-        if (time >= 0)
-            return true;
-
-        return false;
+        base.AddScore(name);
     }
 }
