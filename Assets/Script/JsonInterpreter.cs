@@ -25,7 +25,7 @@ public class JsonInterpreter : MonoBehaviour {
     public void Awake()
     {
         //TestWrite();
-        TestRead();
+        //TestRead();
     }
 
     /*
