@@ -15,6 +15,7 @@ public class PowerUpSpawnerEditor : Editor
     // Properties that need to be saved in the inspector window
     public SerializedProperty
         methodProp,
+        areaProp,
 
         speedProp,
         ropeProp,
@@ -29,12 +30,15 @@ public class PowerUpSpawnerEditor : Editor
 
         selectionProp,
         intervalProp,
-        continuousSpawnProp;
+        continuousSpawnProp,
+        spawnBoxProp,
+        spawnRadiusProp;
 
     // Serialize the properties
     void OnEnable()
     {
         methodProp = serializedObject.FindProperty("method");
+        areaProp = serializedObject.FindProperty("area");
         speedProp = serializedObject.FindProperty("speedSelect");
         ropeProp = serializedObject.FindProperty("ropeSelect");
         knockbackProp = serializedObject.FindProperty("knockbackSelect");
@@ -49,6 +53,8 @@ public class PowerUpSpawnerEditor : Editor
         selectionProp = serializedObject.FindProperty("selection");
         intervalProp = serializedObject.FindProperty("spawnInterval");
         continuousSpawnProp = serializedObject.FindProperty("continuousSpawn");
+        spawnBoxProp = serializedObject.FindProperty("spawnBox");
+        spawnRadiusProp = serializedObject.FindProperty("spawnRadius");
     }
 
     // Update the inspector window with these properties
@@ -67,6 +73,31 @@ public class PowerUpSpawnerEditor : Editor
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(intervalProp, new GUIContent("Spawning Interval"));
             EditorGUI.indentLevel--;
+        }
+        EditorGUILayout.Space();
+
+        //Spawn Radius
+        EditorGUILayout.PropertyField(areaProp);
+        PowerUpSpawner.SpawningArea area = (PowerUpSpawner.SpawningArea)areaProp.enumValueIndex;
+
+        switch (area)
+        {
+            // Random Spawning Method
+            case PowerUpSpawner.SpawningArea.Circle:
+                EditorGUI.indentLevel++;
+                EditorGUIUtility.labelWidth = 150;
+
+                EditorGUILayout.PropertyField(spawnRadiusProp, new GUIContent("Spawn Raduis"), true);
+
+                EditorGUI.indentLevel--;
+                break;
+            case PowerUpSpawner.SpawningArea.Rectangle:
+                EditorGUI.indentLevel++;
+
+                EditorGUILayout.PropertyField(spawnBoxProp, new GUIContent("Spawn Box"), true);
+
+                EditorGUI.indentLevel++;
+                break;
         }
         EditorGUILayout.Space();
 
