@@ -38,6 +38,11 @@ using UnityEngine.SceneManagement;
 // Date:        11/17/17
 // Description: Turns out this wasn't networked properly, dunno why I thought it was
 
+//Developer:    Nicholas Nguyen
+//Date:         3/16/18
+//Description:  Added the profile list and had it initialized within the Awake
+//              by using new method called createProfiles
+
 public class GameManager : NetworkBehaviour
 {
     public static GameManager singleton;
@@ -46,6 +51,7 @@ public class GameManager : NetworkBehaviour
     public GameObject teamAiPrefab;
     public GameObject[] teams;
     public GameMode currentGame;
+    public List<Profile> profileList;
 
     public int maxRounds;
     //public int currentRound;
@@ -78,6 +84,7 @@ public class GameManager : NetworkBehaviour
     private int firstTeamLayer;
     private string outputPath;
     public int activePlayers;
+    private string filename;
 
     // Use this for initialization
     void Awake()
@@ -98,6 +105,11 @@ public class GameManager : NetworkBehaviour
         Debug.Log("Logging match results to: " + outputPath);
 
         activePlayers = 0;
+
+        //Initializes the profile list and then fills it
+        profileList = new List<Profile>();
+        createProfiles();
+        //testCreateProfiles();
 
         //SetGameMode(typeof(Deathmatch));
 
@@ -209,5 +221,49 @@ public class GameManager : NetworkBehaviour
     public void RpcResetClients()
     {
         NetManager.GetInstance().StopClient();
+    }
+
+    /**
+     * Fills the profile list with the json files found
+     * within the profile folder found within the resources folder
+     */
+    private void createProfiles()
+    {
+        //Directory where the profiles are stored
+        filename = Application.dataPath + "/Resources/Profiles/";
+        DirectoryInfo d = new DirectoryInfo(filename);
+
+        //Array of the files within the directory
+        FileInfo[] files = d.GetFiles();
+        //For each of the files it creates a new profile and stores it within the player list
+        foreach(FileInfo file in files)
+        {
+            //File directory of the profile
+            string playerFileName = file.ToString();
+
+            //If the file is a json file
+            if (playerFileName.EndsWith(".json"))
+            {
+                //These find the profile name from the directory
+                int nameStartIndex = playerFileName.LastIndexOf("\\") + 1;
+                string playerName = playerFileName.Substring(nameStartIndex);
+                playerName = playerName.Substring(0, playerName.Length - 9);
+
+                //Creates a new profile and adds it to the list
+                Profile newProfile = new Profile(playerName);
+                profileList.Add(newProfile);
+            }
+        }
+    }
+
+    /**
+     * Small method to test createProfiles method
+     */
+    private void testCreateProfiles()
+    {
+        foreach(Profile profile in profileList)
+        {
+            Debug.Log(profile.name);
+        }
     }
 }
