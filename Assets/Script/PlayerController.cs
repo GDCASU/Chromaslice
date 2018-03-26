@@ -123,7 +123,7 @@ public class PlayerController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (isLocalPlayer && GameManager.singleton.matchStarted)
+        if (isLocalPlayer && GameManager.singleton.currentGame.IsRoundActive)
         {
             Rigidbody rb = GetComponent<Rigidbody>();
 

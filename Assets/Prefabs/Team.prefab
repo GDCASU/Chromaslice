@@ -91,9 +91,11 @@ MonoBehaviour:
     type: 2}
   ropeFormTime: 1
   currentRope: {fileID: 0}
-  points: 0
-  spawnTimer: 3
   player1: {fileID: 0}
   player2: {fileID: 0}
+  deathParticlePrefabRed: {fileID: 1173952396250680, guid: 101b9c4c5562dc541b4653acc995f4c7,
+    type: 2}
+  deathParticlePrefabBlue: {fileID: 1578063337113730, guid: edeb246baada7074587ce86f5e3644df,
+    type: 2}
   controller1: 0
   controller2: 0
