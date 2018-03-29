@@ -207,7 +207,7 @@ public class Rope : NetworkBehaviour
             for (int i = 0; i < visiblePoints.Length - 1; i++)
                 if (RaycastSegment(visiblePoints[i], visiblePoints[i + 1], out hit, gameObject.layer))
                     if (hit.collider.GetComponent<PlayerController>())
-                        hit.collider.transform.parent.GetComponent<Team>().KillTeam();
+                        hit.collider.transform.parent.GetComponent<Team>().KillTeam(hit.collider.gameObject);
         }
 
 

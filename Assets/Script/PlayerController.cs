@@ -57,6 +57,11 @@ using UnityEngine.Networking;
 // Date:        11/17/17
 // Description: Networking update
 
+// Developer:   Trevor Angle
+// Date:        2/23/2018
+// Description: Added field for controller number, as well as the ability to
+//              toggle debug keyboard controls by hitting Left Ctrl in-game.
+
 public class PlayerController : NetworkBehaviour
 {
 
@@ -73,6 +78,8 @@ public class PlayerController : NetworkBehaviour
     public float dashTime = 1;
     public float dashCooldown = 3;
     public int team;
+    public int controller;
+    public bool controlDebug = false;
 
     private float tempMovementPower;
     private float tempMaxSpeed;
@@ -116,7 +123,7 @@ public class PlayerController : NetworkBehaviour
 
     void FixedUpdate()
     {
-        if (isLocalPlayer && GameManager.singleton.matchStarted)
+        if (isLocalPlayer && GameManager.singleton.currentGame.IsRoundActive)
         {
             Rigidbody rb = GetComponent<Rigidbody>();
 
@@ -161,6 +168,14 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    void Update() {
+        //Left ctrl toggles debug controls
+        if (Input.GetKeyDown(KeyCode.LeftControl)) {
+            controlDebug = !controlDebug;
+            SetControls(controller, controlDebug);
+        }
+    }
+
     public void OnCollisionEnter(Collision collision)
     {
         //Beyblade effect - sends both tops flying in the direction of the normal they collided with based on bounceFactor
@@ -168,10 +183,11 @@ public class PlayerController : NetworkBehaviour
             GetComponent<Rigidbody>().AddForce((collision.relativeVelocity * bounceFactor).magnitude * collision.contacts[0].normal, ForceMode.VelocityChange);
     }
 
-    public void SetControls(int controller)
+    public void SetControls(int controller, bool debug = false)
     {
         Debug.Log("Setting controls to " + controller);
-        controls = Controls.LoadFromConfig(controller);
+        controls = Controls.LoadFromConfig(controller, debug);
+        this.controller = controller;
     }
 
     public void SetTeam(int num)

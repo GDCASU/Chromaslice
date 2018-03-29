@@ -77,10 +77,10 @@ MonoBehaviour:
     flag: 1
     param1: 3
     param2: 25
-    param3: 10000
+    param3: 35000
   invincibilityStruct:
     flag: 1
     param1: 3
     param2: 10
     param3: 23
-  selection: 0
+  selection: 2

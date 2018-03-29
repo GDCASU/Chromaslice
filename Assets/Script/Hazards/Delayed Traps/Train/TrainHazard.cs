@@ -10,77 +10,88 @@ using UnityEngine;
 //                      A basic movement function has also been added, but is open to be removed when a movement script
 //                      is added to the train.  
 
-public class TrainHazard : MonoBehaviour // not complete
+// Developer:   Tyler Cole
+// Date:        2/19/2018
+// Description: Turned into a child class of hazard and updated to fit that. *IMPORTANT* A collision script needs to be
+//              written for the train gameObject.
+
+public class TrainHazard : Hazard 
 {
 
-    float spawnedTime;
-    float activeTime;
-    public float durationInactive;  // the float used to determine the time (in seconds) of how long the train is inactive
-    public float durationActive;    // the float used to determine the time (in seconds) of how long the train is active
     Vector3 startLocation;
     public GameObject train;        // put the train object here
-    bool isTrainActive = true;
     public float trainSpeed;        // the float used to determine train's speed (delete if a movement script is created)
 
-    // Use this for initialization
-    void Start()
+    // Initalize timer
+    public override void Start()
     {
-        spawnedTime = Time.time;
-
-        // start location is determined by placement
+        base.Start();
         startLocation = train.transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    // Handles timer and toggling hazard status
+    public override void Update()
     {
-        if (isTrainActive)
+        base.Update();
+        train.SetActive(isActive);
+        if (isActive)
         {
-            // very basic movement (delete if a movement script is created)
             train.transform.Translate(Vector3.forward * Time.deltaTime * trainSpeed);
-
-            // despawns train after durationActive time
-            if (Time.time - durationActive >= spawnedTime)
-            {
-                activeTime = Time.time;
-                DespawnTrain();
-                isTrainActive = false;
-            }
-        }
-        else
-        {
-            // respawns train after durationInactive
-            if (Time.time - durationInactive >= activeTime)
-            {
-                spawnedTime = Time.time;
-                RespawnTrain();
-                isTrainActive = true;
-            }
         }
     }
 
-    // if it hits the player it should knockback and debuff (still in development, currently just kills)
-    void OnTriggerEnter(Collider c)
+    // Resets the timer of the trap
+    public override void ResetTimer()
     {
-        // Knockback
-        if (isTrainActive)
-        {
-            // knockback ?
-            // c.GetComponent<Rigidbody>().AddForce(c.relativeVelocity(.normal, ForceMode.VelocityChange);
-            // debuff
-        }
+        base.ResetTimer();
     }
 
-    // sets the train back to active and then resets it to starting location
-    void RespawnTrain()
+    // Activates the trap
+    public override void ActivateTrap()
     {
-        train.SetActive(true);
+        base.ActivateTrap();
         train.transform.position = startLocation;
     }
-    
-    // sets the train to deactive
-    void DespawnTrain()
+
+    // Deactivates the trap
+    public override void DeactivateTrap()
     {
-        train.SetActive(false);
+        base.DeactivateTrap();
+    }
+
+    // Behavior for when another object collides with this object
+    public override void OnCollisionEnter(Collision other)
+    {
+        base.OnCollisionEnter(other);
+    }
+
+    // Behavior for when another object stops colliding with this object
+    public override void OnCollisionExit(Collision other)
+    {
+        base.OnCollisionExit(other);
+    }
+
+    // Behavior for when another object is touching this object
+    public override void OnCollisionStay(Collision other)
+    {
+        base.OnCollisionStay(other);
+    }
+
+    // Behavior for when another objects trigger touches this object
+    public override void OnTriggerEnter(Collider other)
+    {
+        base.OnTriggerEnter(other);
+    }
+
+    // Behavior for when another objects trigger stops touching this object
+    public override void OnTriggerExit(Collider other)
+    {
+        base.OnTriggerExit(other);
+    }
+
+    // Behavior for when another objects trigger is touching this object
+    public override void OnTriggerStay(Collider other)
+    {
+        base.OnTriggerStay(other);
     }
 }

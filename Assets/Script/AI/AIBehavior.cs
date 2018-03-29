@@ -67,7 +67,7 @@ public class AIBehavior : MonoBehaviour
         currentEvaluation = Mathf.NegativeInfinity;
         currentAI1Direction = Vector3.zero;
         currentAI2Direction = Vector3.zero;
-        maxSpeed = 10;//player1.GetComponent<PlayerController>().maxSpeed;
+        maxSpeed = 20;//player1.GetComponent<PlayerController>().maxSpeed;
 
         //Calculate next step for enemy players
         futurePlayer1Position = player1.transform.position + player1.GetComponent<Rigidbody>().velocity * Time.deltaTime;

@@ -9,47 +9,100 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-public class TitleMenu : MonoBehaviour {
+public class TitleMenu : MonoBehaviour
+{
 
-    //public Dropdown levelSelect;
-    //public Dropdown roundSelect;
-    public GameManager gameManager;
     public Toggle[] roundSelect;
-    public GameObject[] levelSelect;
-    public string lobbySceneName;
+    public GameObject[] deathmatchLevelSelect;
+    public GameObject[] soccerLevelSelect;
+    public GameObject DeathmatchPanel;
+    public GameObject SoccerPanel;
+
     private string selectedLevel;
     private int rounds;
 
+    public void Start()
+    {
+        // Deathmatch as default level
+        SelectGamemode(0);
+    }
+
     public void StartLocal()
     {
-        
+        // Select number of rounds
         foreach (Toggle t in roundSelect)
         {
             if (t.isOn)
             {
-                Debug.Log(t.transform.parent.name);
                 rounds = int.Parse(t.transform.parent.name);
                 break;
             }
         }
-        foreach (GameObject t in levelSelect)
+
+        // Select levels from deathmatch panel
+        if (DeathmatchPanel.activeSelf)
         {
-            if (t.GetComponentInChildren<Toggle>().isOn)
+            foreach (GameObject t in deathmatchLevelSelect)
             {
-                selectedLevel = t.GetComponentInChildren<Text>().text;
-                Debug.Log(t.GetComponentInChildren<Text>().text);
-                break;
+                if (t.GetComponentInChildren<Toggle>().isOn)
+                {
+                    selectedLevel = t.GetComponentInChildren<Text>().text;
+                    Debug.Log(t.GetComponentInChildren<Text>().text);
+                    break;
+                }
+            }
+        }
+
+        // Select levels from soccer level
+        else if(SoccerPanel.activeSelf)
+        {
+            foreach (GameObject t in soccerLevelSelect)
+            {
+                if (t.GetComponentInChildren<Toggle>().isOn)
+                {
+                    selectedLevel = t.GetComponentInChildren<Text>().text;
+                    Debug.Log(t.GetComponentInChildren<Text>().text);
+                    break;
+                }
             }
         }
 
         NetManager.GetInstance().StartLocalGame();
         GameManager.singleton.level = selectedLevel + "_Level";
-        GameManager.singleton.maxRounds = rounds;
+        GameManager.singleton.currentGame.GameRoundLimit = rounds;
         GameManager.singleton.StartGame();
     }
 
     public void StartOnline()
     {
         NetManager.GetInstance().ServerChangeScene(NetManager.GetInstance().lobbySceneOffline);
+    }
+
+    // Updates the gamemode selected via the UI
+    public void SelectGamemode(int option)
+    {
+        DeathmatchPanel.SetActive(option == 0);
+        SoccerPanel.SetActive(option == 1);
+
+        switch (option)
+        {
+            case 0:
+                GameManager.singleton.SetGameMode(typeof(Deathmatch));
+                break;
+
+            case 1:
+                GameManager.singleton.SetGameMode(typeof(Soccer));
+                break;
+
+            default :
+                GameManager.singleton.SetGameMode(typeof(Deathmatch));
+                break;
+        }
+
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
     }
 }
