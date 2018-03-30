@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 // Description: This class controls all functions of an active game and serves as the base class for all gamemodes
 // Author(s): Zachary Schmalz, (others to be credited)
@@ -28,6 +28,7 @@ public class GameMode : MonoBehaviour
 
     // Public properties
     public bool IsGameActive { get { return gameActive; } }
+    public bool IsCountdownActive { get { return timeBeforeRound < GameConstants.TimeBeforeRound && timeBeforeRound > 0; } }
     public bool IsRoundActive { get { return gameActive && timeBeforeRound <= 0 && timeRemaining > 0; } }
     public bool IsRoundOver { get { return timeRemaining <= 0;} }
     public float TimeReamining { get { return timeRemaining; } protected set { timeRemaining = value; } }
@@ -52,6 +53,10 @@ public class GameMode : MonoBehaviour
 
     protected virtual void Update ()
     {
+        // Only begin updates when scene has changhed to the level
+        if (SceneManager.GetActiveScene().name != GameManager.singleton.level)
+            return;
+
         // If the level has a camera flyby animation
         if (camera == null)
         {
@@ -62,29 +67,27 @@ public class GameMode : MonoBehaviour
 
         // The camera is animating
         if (animationTimer > 0)
+        {
             animationTimer -= Time.deltaTime;
+            if (animationTimer < 0)
+                animationTimer = 0;
+        }
 
         // The scene is actively open and executing
         else if (gameActive)
         {
+            // Execute only once at the beginning of the countdown timer
+            if (timeBeforeRound == GameConstants.TimeBeforeRound)
+            {
+                // Reset/Trigger players + animations
+                for (int i = 0; i < GameManager.singleton.teams.Length; i++)
+                    GameManager.singleton.teams[i].GetComponent<Team>().RpcResetTeam();
+            }
+
             // Wait for time before the round starts
             if (timeBeforeRound > 0)
             {
                 timeBeforeRound -= Time.deltaTime;
-
-                // Only on the first round of the match, remove the invincibility effect when the round starts.
-                // This is a really gross way to do it, but its the best solution available :-(
-                if(timeBeforeRound <= 0 && currentRound == 0)
-                {
-                    foreach(GameObject t in GameManager.singleton.teams)
-                    {
-                        Team team = t.GetComponent<Team>();
-                        if(team.player1.GetComponentInChildren<ParticleSystem>() && team.player1.GetComponentInChildren<ParticleSystem>().gameObject.name == team.invincibilityParticlePrefab.name + "(Clone)")
-                            Destroy(team.player1.GetComponentInChildren<ParticleSystem>().gameObject);
-                        if (team.player2.GetComponentInChildren<ParticleSystem>() && team.player2.GetComponentInChildren<ParticleSystem>().gameObject.name == team.invincibilityParticlePrefab.name + "(Clone)")
-                            Destroy(team.player2.GetComponentInChildren<ParticleSystem>().gameObject);
-                    }
-                }
             }
 
             // Subtract time from the remaining time in the round
@@ -107,7 +110,6 @@ public class GameMode : MonoBehaviour
         for (int i = 0; i < GameManager.singleton.teams.Length; i++)
         {
             Team t = GameManager.singleton.teams[i].GetComponent<Team>();
-            t.ResetTeam();
             t.RpcResetTeam();
         }
     }
