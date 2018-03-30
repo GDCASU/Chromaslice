@@ -60,6 +60,8 @@ public class GameManager : NetworkBehaviour
     public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
     public string level;
 
+
+
     //[SyncVar]
     //public int team1Score;
     //[SyncVar]
@@ -228,11 +230,8 @@ public class GameManager : NetworkBehaviour
     private void createProfiles()
     {
         //Directory where the profiles are stored
-        filename = Application.persistentDataPath + "/Resources/Profiles/";
+        filename = Application.dataPath + "/Resources/Profiles/";
         DirectoryInfo d = new DirectoryInfo(filename);
-
-        if (!d.Exists)
-            d.Create();
 
         //Array of the files within the directory
         FileInfo[] files = d.GetFiles();

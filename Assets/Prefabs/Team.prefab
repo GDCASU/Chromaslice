@@ -93,11 +93,7 @@ MonoBehaviour:
   currentRope: {fileID: 0}
   player1: {fileID: 0}
   player2: {fileID: 0}
-  spawnParticlePrefabRed: {fileID: 1017909548760416, guid: e39cab112d48d244e8273e869560f212,
-    type: 2}
   deathParticlePrefabRed: {fileID: 1173952396250680, guid: 101b9c4c5562dc541b4653acc995f4c7,
-    type: 2}
-  spawnParticlePrefabBlue: {fileID: 1309083337918216, guid: f3243ace41adee54d9781fa13f8874c7,
     type: 2}
   deathParticlePrefabBlue: {fileID: 1578063337113730, guid: edeb246baada7074587ce86f5e3644df,
     type: 2}
