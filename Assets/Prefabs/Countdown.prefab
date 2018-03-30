@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114556809024166946}
   - component: {fileID: 114970453619888612}
   - component: {fileID: 222562401022715860}
+  - component: {fileID: 95660004417128916}
   m_Layer: 5
   m_Name: Countdown
   m_TagString: Untagged
@@ -29,6 +30,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &95660004417128916
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1111056084649590}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6bcdeac0cef2b0a47981fdff133e84bf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114556809024166946
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -40,8 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3190b2937918f8143a3e197bdbbe4441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialDelay: 1
-  displayDuration: 1
+  displayDuration: 0.75
   one: {fileID: 21300000, guid: 54563d0af4e55f7449bd1b6dd651d70c, type: 3}
   two: {fileID: 21300000, guid: b3a0f6ee095e662439915099ddc31216, type: 3}
   three: {fileID: 21300000, guid: 65b7f5ce9815cb14faef8de7b083ff64, type: 3}
