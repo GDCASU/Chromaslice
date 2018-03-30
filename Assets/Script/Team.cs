@@ -41,9 +41,7 @@ public class Team : NetworkBehaviour
     public GameObject player1;
     public GameObject player2;
 
-    public GameObject spawnParticlePrefabRed;
     public GameObject deathParticlePrefabRed;
-    public GameObject spawnParticlePrefabBlue;
     public GameObject deathParticlePrefabBlue;
 
     [SyncVar]
@@ -71,6 +69,7 @@ public class Team : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
+        rejoinTimer = ropeFormTime;
         currentPowerUp = null;
     }
 
@@ -98,7 +97,7 @@ public class Team : NetworkBehaviour
                     hasRope = false;
                     rejoinTimer = ropeFormTime;
                 }
-                else if (GameManager.singleton.currentGame.IsRoundActive && player1.activeSelf && player2.activeSelf && Vector3.Distance(player1.transform.position, player2.transform.position) <= ropePrefab.GetComponent<Rope>().maxRopeLength && !Rope.RaycastSegment(player1.transform.position, player2.transform.position, gameObject.layer))
+                else if (player1.activeSelf && player2.activeSelf && Vector3.Distance(player1.transform.position, player2.transform.position) <= ropePrefab.GetComponent<Rope>().maxRopeLength && !Rope.RaycastSegment(player1.transform.position, player2.transform.position, gameObject.layer))
                 {
                     currentRope = Instantiate(ropePrefab, transform);
                     currentRope.GetComponent<Rope>().SetEndpoints(player1.transform, player2.transform);
@@ -127,10 +126,8 @@ public class Team : NetworkBehaviour
         if ((num == 1 && player1) || (num == 2 && player2)) return null;
         Vector3 pos = (num == 1 ? spawn1 : spawn2);
         GameObject newPlayer = Instantiate(playerPrefab, pos, Quaternion.identity, transform);
+        AddInvincibilityEffect(newPlayer, 30);
         newPlayer.layer = gameObject.layer;
-
-
-        newPlayer.transform.localScale = Vector3.zero;
 
         NetworkServer.Spawn(newPlayer);
         if (num == 1)
@@ -236,8 +233,6 @@ public class Team : NetworkBehaviour
 
         player.GetComponent<Rigidbody>().velocity = Vector3.zero;
         player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        AddSpawnEffect(player, 1.5f);
-        player.GetComponent<PlayerController>().TriggerSpawn();
         player.SetActive(true);
     }
 
@@ -256,14 +251,6 @@ public class Team : NetworkBehaviour
         Destroy(instance, duration);
     }
 
-    public void AddSpawnEffect(GameObject player, float duration)
-    {
-        var main = invincibilityParticlePrefab.GetComponent<ParticleSystem>().main;
-        main.duration = duration;
-        GameObject instance = Instantiate(player.transform.root.name == "Team 0" ? spawnParticlePrefabRed : spawnParticlePrefabBlue, player.transform.position, Quaternion.identity, player.transform);
-        Destroy(instance, duration);
-    }
-
     // This function should probably be renamed to KillPlayer instead, we'll see
     // This function is called by the rope script when colliding with a player, and passes the player to kill as an argument
     public void KillTeam(GameObject player)
@@ -272,9 +259,19 @@ public class Team : NetworkBehaviour
         if (player.GetComponentInChildren<ParticleSystem>() && player.GetComponentInChildren<ParticleSystem>().gameObject.name == invincibilityParticlePrefab.name + "(Clone)")
             return;
 
-        // Instantiate particle effects
-        GameObject explosion = Instantiate(player.transform.root.name == "Team 0" ? deathParticlePrefabRed : deathParticlePrefabBlue, player.transform.position, Quaternion.identity);
-        Destroy(explosion, 5.0f);
+        // Instantiate red particle effect prefab
+        if (player.transform.root.name == "Team 0")
+        {
+            GameObject explosion = Instantiate(deathParticlePrefabRed, player.transform. position, Quaternion.identity);
+            Destroy(explosion, 5.0f);
+        }
+
+        // Instantiate blue particle effect prefab
+        else if (player.transform.root.name == "Team 1")
+        {
+            GameObject explosion = Instantiate(deathParticlePrefabBlue, player.transform.position, Quaternion.identity);
+            Destroy(explosion, 5.0f);
+        }
 
         if (currentRope)
             Destroy(currentRope);
