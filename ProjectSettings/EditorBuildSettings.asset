@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Donut_Level.unity
     guid: f07316b38d844fa4e9a70acfb164b125
   - enabled: 1
+    path: Assets/Scenes/Rooftop_Level.unity
+    guid: b04c57d416b1ee54ab31a4df035f8144
+  - enabled: 1
     path: Assets/Scenes/Sport Arena_Level.unity
     guid: c04c826cec0c82449bf9449eedf8c8fb
   - enabled: 1
@@ -33,7 +36,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Skatepark_Level.unity
     guid: c094339101c4ceb4090dd42949d32f56
   - enabled: 1
-    path: Assets/Scenes/Train_level.unity
+    path: Assets/Scenes/Train_Level.unity
     guid: 4a899c2697b070544a09f1bb91df0fed
   - enabled: 1
     path: Assets/Scenes/Elevated_Level.unity
