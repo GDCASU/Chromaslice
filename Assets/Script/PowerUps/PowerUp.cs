@@ -35,6 +35,7 @@ using UnityEngine;
 
 public class PowerUp : Interactable
 {
+    [HideInInspector] public GameObject powerUpSpawner;
     [HideInInspector] public bool isActive;
     protected float spawnDelay;
     protected float activeLength;
@@ -89,12 +90,14 @@ public class PowerUp : Interactable
     }
 
     // When triggered
-    protected void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         Team = other.GetComponentInParent<Team>();
         Team.CurrentPowerUp = gameObject;
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+        powerUpSpawner.GetComponent<PowerUpSpawner>().CollectedPowerUp();
     }
 
     // Activate the powerUp
@@ -124,12 +127,11 @@ public class PowerUp : Interactable
     // Deletes the game object from the scence
     public virtual void RemovePowerUp()
     {
-        // If the spawner is not continuous, delete the spawner
-        if (GetComponentInParent<PowerUpSpawner>())
-            if (GetComponentInParent<PowerUpSpawner>().continuousSpawn == false)
-                Destroy(transform.parent.gameObject);
+        //// If the spawner is not continuous, delete the spawner
+        //if (GetComponentInParent<PowerUpSpawner>())
+        //    if (GetComponentInParent<PowerUpSpawner>().continuousSpawn == false)
+        //        Destroy(transform.parent.gameObject);
 
         Destroy(gameObject);
-        Team.CurrentPowerUp = null;
     }
 }

@@ -30,12 +30,16 @@ public class RopePowerUp : PowerUp
         boostPercent = percent;
     }
 
+    protected override void OnTriggerEnter(Collider other)
+    {
+        maxRopeLength = other.GetComponentInParent<Team>().ropePrefab.GetComponent<Rope>().maxRopeLength;
+        base.OnTriggerEnter(other);
+    }
+
     // When triggered, saves the original maxRopeLength field of the rope prefab/currentRope,
     // then calculates the length boost and updates the prefab/currentRope
     public override void Activate()
     {
-        base.Activate();
-        maxRopeLength = Team.ropePrefab.GetComponent<Rope>().maxRopeLength;
         Team.ropePrefab.GetComponent<Rope>().maxRopeLength = CalculateNewValue(maxRopeLength, boostPercent);
 
         // Only update currentRope maxRopeLength if it is not null
@@ -43,6 +47,7 @@ public class RopePowerUp : PowerUp
         {
             Team.currentRope.GetComponent<Rope>().maxRopeLength = CalculateNewValue(maxRopeLength, boostPercent);
         }
+        base.Activate();
     }
 
     // Restores the original maxRopeLength field of the rope prefab/currentRope
