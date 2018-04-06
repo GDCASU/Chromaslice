@@ -43,6 +43,11 @@ using UnityEngine.SceneManagement;
 //Description:  Added the profile list and had it initialized within the Awake
 //              by using new method called createProfiles
 
+//Developer:    Nicholas Nguyen
+//Date:         3/30/18
+//Description:  Small addition of profile array for the one's 
+//              that are currently selected. Methods for this were also added
+
 public class GameManager : NetworkBehaviour
 {
     public static GameManager singleton;
@@ -51,7 +56,6 @@ public class GameManager : NetworkBehaviour
     public GameObject teamAiPrefab;
     public GameObject[] teams;
     public GameMode currentGame;
-    public List<Profile> profileList;
 
     public int maxRounds;
     //public int currentRound;
@@ -59,6 +63,9 @@ public class GameManager : NetworkBehaviour
 
     public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
     public string level;
+
+    public List<Profile> profileList;
+    public Profile[] selectedProfiles;
 
     //[SyncVar]
     //public int team1Score;
@@ -108,6 +115,10 @@ public class GameManager : NetworkBehaviour
         profileList = new List<Profile>();
         createProfiles();
         //testCreateProfiles();
+
+        //Initializes the array of selected profiles
+        //Chose 4 for 4 players
+        selectedProfiles = new Profile[4];
 
         //SetGameMode(typeof(Deathmatch));
 
@@ -255,6 +266,26 @@ public class GameManager : NetworkBehaviour
                 profileList.Add(newProfile);
             }
         }
+    }
+
+    /**
+     * Method that adds a profile to array of selected profiles
+     */
+    public void addSelected(Profile profile, int index)
+    {
+        this.selectedProfiles[index] = profile;
+
+        //Debug.Log("Index: " + index + ", Name: " + selectedProfiles[index].name);
+    }
+    
+    /**
+     * Resets the Profile within the selectedProfiles array
+     * by making it null
+     */
+    public void resetSelected(int index)
+    {
+        this.selectedProfiles[index] = null;
+        Debug.Log(this.selectedProfiles[index]);
     }
 
     /**

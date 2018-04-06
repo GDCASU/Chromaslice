@@ -13,6 +13,10 @@ using UnityEngine;
 //Date:         2/23/18
 //Description:  Made changes so that each player data is stored in
 //              their own json file rather than a single file
+//
+//Developer:    Nicholas Nguyen
+//Date:         3/30/18
+//Description:  Changed fileName to use persistant data path in the write to json file
 
 public class JsonInterpreter : MonoBehaviour {
 
@@ -59,7 +63,7 @@ public class JsonInterpreter : MonoBehaviour {
      */
     public void WriteToJson(Player player)
     {
-        fileName = Application.dataPath + "/Resources/Profiles/" + player.name + "Data.json";
+        fileName = Application.persistentDataPath + "/Resources/Profiles/" + player.name + "Data.json";
 
         CheckFile();
 
@@ -102,7 +106,7 @@ public class JsonInterpreter : MonoBehaviour {
      */
     private void TestRead()
     {
-        Player readPlayer = ReadFromJson("TestPlayerOn");
+        Player readPlayer = ReadFromJson("TestPlayerOne");
 
         Debug.Log("Player name: " + readPlayer.name);
         Debug.Log("Player team: " + readPlayer.team);
