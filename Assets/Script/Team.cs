@@ -30,7 +30,12 @@ public class Team : NetworkBehaviour
     public GameObject CurrentPowerUp
     {
         get { return currentPowerUp; }
-        set { currentPowerUp = value; }
+        set
+        {
+            if (currentPowerUp != null)
+                currentPowerUp.GetComponent<PowerUp>().RemovePowerUp();
+            currentPowerUp = value;
+        }
     }
 
     public GameObject playerPrefab;
@@ -208,7 +213,10 @@ public class Team : NetworkBehaviour
     public void ResetTeam()
     {
         if (currentPowerUp != null)
+        {
             currentPowerUp.GetComponent<PowerUp>().RemovePowerUp();
+            currentPowerUp = null;
+        }
 
         if (currentRope)
             Destroy(currentRope);
