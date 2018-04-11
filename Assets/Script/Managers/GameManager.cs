@@ -114,7 +114,6 @@ public class GameManager : NetworkBehaviour
         //Initializes the profile list and then fills it
         profileList = new List<Profile>();
         createProfiles();
-        //testCreateProfiles();
 
         //Initializes the array of selected profiles
         //Chose 4 for 4 players
@@ -262,7 +261,8 @@ public class GameManager : NetworkBehaviour
                 playerName = playerName.Substring(0, playerName.Length - 9);
 
                 //Creates a new profile and adds it to the list
-                Profile newProfile = new Profile(playerName);
+                Profile newProfile = new Profile();
+                newProfile.name = playerName;
                 profileList.Add(newProfile);
             }
         }
@@ -274,8 +274,6 @@ public class GameManager : NetworkBehaviour
     public void addSelected(Profile profile, int index)
     {
         this.selectedProfiles[index] = profile;
-
-        //Debug.Log("Index: " + index + ", Name: " + selectedProfiles[index].name);
     }
     
     /**
@@ -285,17 +283,5 @@ public class GameManager : NetworkBehaviour
     public void resetSelected(int index)
     {
         this.selectedProfiles[index] = null;
-        Debug.Log(this.selectedProfiles[index]);
-    }
-
-    /**
-     * Small method to test createProfiles method
-     */
-    private void testCreateProfiles()
-    {
-        foreach(Profile profile in profileList)
-        {
-            Debug.Log(profile.name);
-        }
     }
 }
