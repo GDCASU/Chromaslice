@@ -53,7 +53,7 @@ public class Soccer : GameMode
         else if (name == "Team 1")
             team2Score++;
 
-        NetManager.GetInstance().SendScoreUpdate();
+        SendUpdate();
         GameManager.singleton.WriteToLog(name + " won the round with " + timeRemaining + " seconds remaining");
 
         base.AddScore(name);

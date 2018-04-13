@@ -21,15 +21,12 @@ public class SpawnPoint : NetworkBehaviour
 {
     public GameManager game;
 
-    void Start()
+    public override void OnStartServer()
     {
-        if (NetworkServer.active)
-        {
-            game = GameManager.singleton;
-            game.SetNumberOfPlayers(transform.childCount); //Tells GameManager number of teams to make
-            foreach(Transform t in transform)
-                RegisterTeamSpawn(t.GetSiblingIndex(), t.GetChild(0).position, t.GetChild(1).position);
-        }
+        game = GameManager.singleton;
+        game.SetNumberOfPlayers(transform.childCount); //Tells GameManager number of teams to make
+        foreach (Transform t in transform)
+            RegisterTeamSpawn(t.GetSiblingIndex(), t.GetChild(0).position, t.GetChild(1).position);
     }
 
     [Server]
