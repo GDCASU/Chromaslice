@@ -9,7 +9,8 @@ using UnityEngine;
  */
 
 // Kyle Aycock 11/17/17 - fixed an error having to do with unhandled zero-player case
-
+ 
+// Diego Wilde 3/27/18 improved camera smoothing
 public class CameraControl : MonoBehaviour
 {
 
@@ -58,7 +59,13 @@ public class CameraControl : MonoBehaviour
         this.transform.position = new Vector3(this.transform.position.x, yPosition, newZ) ;
 
         //Set the camera to the optimal focal point
-        camPos.LookAt(getAveragePlayerPos(), Vector3.up);
+        //camPos.LookAt(getAveragePlayerPos(), Vector3.up); //old
+
+        //DW: interpolate each rotation between the last focus and the new one; should provide 
+        //    smoother transitions when players are removed / added
+        Quaternion newRotation = Quaternion.LookRotation(getAveragePlayerPos() - camPos.position);
+        camPos.rotation = Quaternion.Slerp(camPos.rotation, newRotation, Time.deltaTime);
+
 
         lastPosition = getAveragePlayerPos();
         lastNearestZPos = getNearestPlayerZPos();
