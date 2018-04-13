@@ -43,7 +43,7 @@ using UnityEngine.SceneManagement;
 //Description:  Added the profile list and had it initialized within the Awake
 //              by using new method called createProfiles
 
-public class GameManager : NetworkBehaviour
+public class GameManager : MonoBehaviour
 {
     public static GameManager singleton;
 
@@ -66,14 +66,11 @@ public class GameManager : NetworkBehaviour
     //public int team2Score;
 
 
-    [SyncVar]
     public bool matchStarted = false;
     //public bool useTitleScreen;
 
-    [SyncVar]
     public bool countdownOver = false;
 
-    [SyncVar]
     public float countdownTimer;
 
 
@@ -85,17 +82,17 @@ public class GameManager : NetworkBehaviour
     private string filename;
 
     // Use this for initialization
-    void Awake()
+    void Start()
     {
-        Debug.Log("GameManager is Awake. NetID: " + GetComponent<NetworkIdentity>().netId);
         //make singleton
         if (singleton)
         {
             Destroy(gameObject);
+            Destroy(this);
             return;
         }
         singleton = this;
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(gameObject);
 
         //setup logging
         outputPath = Application.dataPath + "/gamelog.txt";
@@ -109,25 +106,13 @@ public class GameManager : NetworkBehaviour
         createProfiles();
         //testCreateProfiles();
 
-        //SetGameMode(typeof(Deathmatch));
+        SetGameMode(typeof(Deathmatch));
 
         //handle title screen skip in editor (currently unsupported until i get around to fixing it)
         //if (!useTitleScreen)
             //StartGame(SceneManager.GetActiveScene().name, maxRounds);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public override void OnStartClient()
-    {
-        Debug.Log("Spawned on client. NetID: " + GetComponent<NetworkIdentity>().netId);
-    }
-
-    [Server]
     public void KillTeam(GameObject player)
     {
         currentGame.KillTeam(player);
@@ -140,7 +125,6 @@ public class GameManager : NetworkBehaviour
     /// <param name="team">Team number</param>
     /// <param name="spawn1">Spawn point for player 1</param>
     /// <param name="spawn2">Spawn point for player 2</param>
-    [Server]
     public void SetSpawn(int team, Vector3 spawn1, Vector3 spawn2)
     {
         spawnPoints[team * 2] = spawn1;
@@ -152,7 +136,6 @@ public class GameManager : NetworkBehaviour
     /// Spawns the given team object, passing it necessary info
     /// </summary>
     /// <param name="num">Which team to spawn/param>
-    [Server]
     public void SpawnTeam(int num)
     {
         Debug.Log("Spawning team " + num);
@@ -165,7 +148,6 @@ public class GameManager : NetworkBehaviour
         NetManager.GetInstance().SpawnReadyPlayers(num);
     }
 
-    [Server]
     public void SetNumberOfPlayers(int num)
     {
         numberOfPlayers = num;
@@ -173,7 +155,6 @@ public class GameManager : NetworkBehaviour
         spawnPoints = new Vector3[num * 2];
     }
 
-    [Server]
     public void StartGame()
     {
         //NetworkServer.Spawn(gameObject);
@@ -183,13 +164,11 @@ public class GameManager : NetworkBehaviour
         WriteToLog("Starting new game, level: " + level + " out of " + maxRounds + " rounds");
     }
 
-    [Client]
     public void OnStartGame(NetworkMessage netMsg)
     {
         currentGame.BeginRound();
     }
 
-    [Server]
     public GameObject SpawnPlayer(Player ply)
     {
         return teams[ply.playerId/2].GetComponent<Team>().SpawnPlayer(ply);
@@ -207,18 +186,7 @@ public class GameManager : NetworkBehaviour
     public void SetGameMode(System.Type mode)
     {
         Destroy(GetComponent<GameMode>());
-
-        if (mode == typeof(Deathmatch))
-            currentGame = gameObject.AddComponent<Deathmatch>();
-
-        else if (mode == typeof(Soccer))
-            currentGame = gameObject.AddComponent<Soccer>();
-    }
-
-    [ClientRpc]
-    public void RpcResetClients()
-    {
-        NetManager.GetInstance().StopClient();
+        currentGame = (GameMode)gameObject.AddComponent(mode);
     }
 
     /**

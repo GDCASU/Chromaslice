@@ -136,7 +136,6 @@ public class Team : NetworkBehaviour
 
 
         newPlayer.transform.localScale = Vector3.zero;
-
         NetworkServer.Spawn(newPlayer);
         if (num == 1)
         {
@@ -280,6 +279,19 @@ public class Team : NetworkBehaviour
         if (player.GetComponentInChildren<ParticleSystem>() && player.GetComponentInChildren<ParticleSystem>().gameObject.name == invincibilityParticlePrefab.name + "(Clone)")
             return;
 
+        if (currentRope)
+            Destroy(currentRope);
+
+        // Players are simply deactivated and reactivated since deleting/respawning would complicate networking code
+        player.SetActive(false);
+
+        RpcKill(player);
+        GameManager.singleton.KillTeam(player);
+    }
+
+    [ClientRpc]
+    public void RpcKill(GameObject player)
+    {
         // Instantiate particle effects
         GameObject explosion = Instantiate(player.transform.root.name == "Team 0" ? deathParticlePrefabRed : deathParticlePrefabBlue, player.transform.position, Quaternion.identity);
         Destroy(explosion, 5.0f);
@@ -289,7 +301,5 @@ public class Team : NetworkBehaviour
 
         // Players are simply deactivated and reactivated since deleting/respawning would complicate networking code
         player.SetActive(false);
-
-        GameManager.singleton.KillTeam(player);
     }
 }

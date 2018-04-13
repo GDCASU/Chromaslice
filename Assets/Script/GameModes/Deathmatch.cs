@@ -56,7 +56,7 @@ public class Deathmatch : GameMode
                 if (t != team && team != null)
                 {
                     AddScore(t.name);
-                    NetManager.GetInstance().SendScoreUpdate();
+                    SendUpdate();
                     GameManager.singleton.WriteToLog(t.name + " won the round with " + timeRemaining + " seconds remaining");
                 }
             }

@@ -87,15 +87,6 @@ public class NetManager : NetworkManager
                         NetworkServer.AddPlayerForConnection(conn, GameManager.singleton.SpawnPlayer(GetPlayer(conn.connectionId, ply.controllerId)), ply.controllerId);
     }
 
-    public void SendScoreUpdate()
-    {
-        NetworkServer.SendToAll(ExtMsgType.Score, new ScoreMessage()
-        {
-            team1Score = GameManager.singleton.currentGame.Team1Score,
-            team2Score = GameManager.singleton.currentGame.Team2Score
-        });
-    }
-
     public override void OnServerDisconnect(NetworkConnection conn)
     {
         Log("Player " + conn.connectionId + " disconnected.");
@@ -115,9 +106,6 @@ public class NetManager : NetworkManager
     {
         localPlayers = new List<Player>();
         playerList = new List<Player>();
-
-        // reset the client connections when the server stops
-        GameManager.singleton.RpcResetClients();
 
         Log("Stopping server...");
         // reset the stuff that we need to reset here
@@ -190,15 +178,14 @@ public class NetManager : NetworkManager
         client.RegisterHandler(ExtMsgType.Ping, OnPing);
         client.RegisterHandler(ExtMsgType.PlayerInfo, OnReceivePlayerInfoClient);
         client.RegisterHandler(ExtMsgType.StartGame, OnStartGame);
-        client.RegisterHandler(ExtMsgType.Score, OnReceiveScore);
+        client.RegisterHandler(ExtMsgType.Gamemode, OnGamemodeUpdate);
         base.OnClientConnect(conn);
     }
 
-    public void OnReceiveScore(NetworkMessage netMsg)
+    public void OnGamemodeUpdate(NetworkMessage netMsg)
     {
-        ScoreMessage msg = netMsg.ReadMessage<ScoreMessage>();
-        //GameManager.singleton.team1Score = msg.team1Score;
-        //GameManager.singleton.team2Score = msg.team2Score;
+        GamemodeMessage msg = netMsg.ReadMessage<GamemodeMessage>();
+        GetComponent<GameManager>().currentGame.ReceiveUpdate(msg);
     }
 
     public void OnReceivePlayerInfoClient(NetworkMessage netMsg)
@@ -295,6 +282,20 @@ public class NetManager : NetworkManager
         }
     }
 
+    public class GamemodeMessage : MessageBase
+    {
+        public float team1Score;
+        public float team2Score;
+        public int gameRoundLimit;
+        public int currentRound;
+        public float timeLimit;
+        public bool gameActive;
+        public float timeRemaining;
+        public float timeBeforeRound;
+        public float timeBeforeNextRound;
+        public bool nextRoundTrigger;
+    }
+
     // creates extra message types used for derived message objects
     public class ExtMsgType
     {
@@ -302,5 +303,6 @@ public class NetManager : NetworkManager
         public static short Ping = MsgType.Highest + 2;
         public static short StartGame = MsgType.Highest + 3;
         public static short Score = MsgType.Highest + 4;
+        public static short Gamemode = MsgType.Highest + 5;
     }
 }

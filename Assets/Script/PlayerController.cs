@@ -115,6 +115,7 @@ public class PlayerController : NetworkBehaviour
 
         animator = GetComponent<Animator>();
         animator.enabled = false;
+        TriggerSpawn();
     }
 
 
