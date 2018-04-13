@@ -61,7 +61,7 @@ public class Rope : NetworkBehaviour
     private LineRenderer line;
 
     // Fields needed for collecting PowerUps
-    public GameObject powerUp;
+    //public GameObject powerUp;
     private int rotations;
     private bool collectedPowerUp;
 
@@ -100,7 +100,7 @@ public class Rope : NetworkBehaviour
         gameObject.layer = transform.parent.gameObject.layer;
         rotations = 0;
         collectedPowerUp = false;
-        powerUp = null;
+        //powerUp = null;
         projectile = null;
         hitProjectile = false;
         team = gameObject.GetComponentInParent<Team>();
@@ -238,12 +238,12 @@ public class Rope : NetworkBehaviour
                         anglesPositive.Insert(0, IsAnglePositive(start, newPoint, visiblePoints[1], n));
                         //Debug.Log("Adding new catch point at index 0" + " (1)");
 
-                        // If the hit point object is a PowerUp
-                        if (hit.collider.gameObject.GetComponent<PowerUp>())
-                        {
-                            powerUp = hit.collider.gameObject;
-                            CollisionWithPowerUp();
-                        }
+                        //// If the hit point object is a PowerUp
+                        //if (hit.collider.gameObject.GetComponent<PowerUp>())
+                        //{
+                        //    powerUp = hit.collider.gameObject;
+                        //    //CollisionWithPowerUp();
+                        //}
 
                         // If the hit point object is a Projectile
                         if (hit.collider.gameObject.GetComponent<Projectile>())
@@ -307,30 +307,30 @@ public class Rope : NetworkBehaviour
         
     }
 
-    // Function that determines how many times the rope is wrapped around a PowerUp
-    private void CollisionWithPowerUp()
-    {
-        if (visiblePoints.Length > 3)
-        {
-            float totalDist = 0.0f;
-            // Calculate the total distance between all the visiblePoints on the rope
-            for (int i = 1; i < visiblePoints.Length - 1; i++)
-            {
-                if (i + 1 != visiblePoints.Length - 1)
-                    totalDist += Vector3.Distance(visiblePoints[i], visiblePoints[i + 1]);
-            }
-            // Get the radius of the PowerUp object. For this to work, PowerUps must have a SphereCollider
-            float radius = powerUp.GetComponent<SphereCollider>().radius * powerUp.transform.localScale.y;
+    //// Function that determines how many times the rope is wrapped around a PowerUp
+    //private void CollisionWithPowerUp()
+    //{
+    //    if (visiblePoints.Length > 3)
+    //    {
+    //        float totalDist = 0.0f;
+    //        // Calculate the total distance between all the visiblePoints on the rope
+    //        for (int i = 1; i < visiblePoints.Length - 1; i++)
+    //        {
+    //            if (i + 1 != visiblePoints.Length - 1)
+    //                totalDist += Vector3.Distance(visiblePoints[i], visiblePoints[i + 1]);
+    //        }
+    //        // Get the radius of the PowerUp object. For this to work, PowerUps must have a SphereCollider
+    //        float radius = powerUp.GetComponent<SphereCollider>().radius * powerUp.transform.localScale.y;
 
-            // Math MAGIC. Calcultes the number of rotations by dividing the total distance of all the rope points by the distance(circumference) of the SphereObject
-            // where the rope is colliding with the Sphere.
-            rotations = (int)(totalDist / (Math.PI * (2 * (Math.Sqrt(Math.Pow(radius, 2) - Math.Pow(radius - Math.Abs(powerUp.transform.position.y - radius - .5), 2))))));
+    //        // Math MAGIC. Calcultes the number of rotations by dividing the total distance of all the rope points by the distance(circumference) of the SphereObject
+    //        // where the rope is colliding with the Sphere.
+    //        rotations = (int)(totalDist / (Math.PI * (2 * (Math.Sqrt(Math.Pow(radius, 2) - Math.Pow(radius - Math.Abs(powerUp.transform.position.y - radius - .5), 2))))));
 
-            // Need 1 rotation to collect the PowerUp
-            if (rotations > 0)
-                collectedPowerUp = true;
-        }
-    }
+    //        // Need 1 rotation to collect the PowerUp
+    //        if (rotations > 0)
+    //            collectedPowerUp = true;
+    //    }
+    //}
 
     private bool IsAnglePositive(Vector3 a, Vector3 b, Vector3 c, Vector3 n)
     {

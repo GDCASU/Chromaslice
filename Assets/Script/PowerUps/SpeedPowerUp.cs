@@ -38,11 +38,16 @@ public class SpeedPowerUp : PowerUp
         boostPercent = percent;
     }
 
+    protected override void OnTriggerEnter(Collider other)
+    {
+        player1Speed = other.GetComponentInParent<Team>().player1.GetComponent<PlayerController>().MaxSpeed;
+        player2Speed = other.GetComponentInParent<Team>().player2.GetComponent<PlayerController>().MaxSpeed;
+        base.OnTriggerEnter(other);
+    }
+
     // Update player speed with new values
     public override void Activate()
     {
-        player1Speed = Player1.GetComponent<PlayerController>().MaxSpeed;
-        player2Speed = Player2.GetComponent<PlayerController>().MaxSpeed;
         Player1.GetComponent<PlayerController>().MaxSpeed = CalculateNewValue(player1Speed, boostPercent);
         Player2.GetComponent<PlayerController>().MaxSpeed = CalculateNewValue(player2Speed, boostPercent);
         base.Activate();

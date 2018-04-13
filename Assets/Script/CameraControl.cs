@@ -37,11 +37,7 @@ public class CameraControl : MonoBehaviour
     //DW: Each frame changes the camera focus and position
     public void Update ()
     {
-        if (players == null || players.Length != 2 * (GameManager.singleton.teams.Length))
-        {
-            GetPlayers();
-            return;
-        }
+        GetPlayers();
 
         camPosVector = new Vector3(camPos.position.x, camPos.position.y, camPos.position.z);
         

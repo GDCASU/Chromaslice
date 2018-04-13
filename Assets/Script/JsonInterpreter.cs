@@ -13,11 +13,12 @@ using UnityEngine;
 //Date:         2/23/18
 //Description:  Made changes so that each player data is stored in
 //              their own json file rather than a single file
+//
+//Developer:    Nicholas Nguyen
+//Date:         3/30/18
+//Description:  Changed fileName to use persistant data path in the write to json file
 
 public class JsonInterpreter : MonoBehaviour {
-
-    private string data;
-    private string fileName;
 
     /*
      * Currently set to test the class
@@ -32,14 +33,14 @@ public class JsonInterpreter : MonoBehaviour {
      * Method that reads the json file for the specified
      * player and returns it
      */
-    public Player ReadFromJson(string playerName)
+    public static Player ReadFromJson(string playerName)
     {
-        fileName = Application.dataPath + "/Resources/Profiles/" + playerName + "Data.json";
+        string fileName = Application.persistentDataPath + "/Resources/Profiles/" + playerName + "Data.json";
 
         //Used try and catch to make sure file is found
         try
         {
-            data = File.ReadAllText(fileName);
+            string data = File.ReadAllText(fileName);
 
             return JsonUtility.FromJson<Player>(data);
         }
@@ -57,13 +58,13 @@ public class JsonInterpreter : MonoBehaviour {
      * 
      * Creates new file if this is a new player
      */
-    public void WriteToJson(Player player)
+    public static void WriteToJson(Player player)
     {
-        fileName = Application.dataPath + "/Resources/Profiles/" + player.name + "Data.json";
+        string fileName = Application.persistentDataPath + "/Resources/Profiles/" + player.name + "Data.json";
 
-        CheckFile();
+        CheckFile(fileName);
 
-        data = JsonUtility.ToJson(player);
+        string data = JsonUtility.ToJson(player);
 
         File.WriteAllText(fileName, data);
     }
@@ -71,7 +72,7 @@ public class JsonInterpreter : MonoBehaviour {
     /*
      * Method that creates a new file if the file does not exist
      */
-    private void CheckFile()
+    private static void CheckFile(string fileName)
     {
         if (!File.Exists(fileName))
         {
@@ -102,7 +103,7 @@ public class JsonInterpreter : MonoBehaviour {
      */
     private void TestRead()
     {
-        Player readPlayer = ReadFromJson("TestPlayerOn");
+        Player readPlayer = ReadFromJson("TestPlayerOne");
 
         Debug.Log("Player name: " + readPlayer.name);
         Debug.Log("Player team: " + readPlayer.team);
