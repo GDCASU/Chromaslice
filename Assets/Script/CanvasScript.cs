@@ -9,13 +9,14 @@ using UnityEngine.UI;
 
 public class CanvasScript : MonoBehaviour
 {
-    public Text teamScoreText1;
-    public Text tesmScoreText2;
-    public Text timer;
-    public Text speedp1;
-    public Text speedp2;
-    public Text points;
     public GameObject debugMenu;
+    public Sprite[] numberSet;
+
+    public Image team1Score;
+    public Image team2Score;
+    public Image minutes;
+    public Image tensSeconds;
+    public Image seconds;
 
     // Use this for initialization
     void Start()
@@ -36,15 +37,17 @@ public class CanvasScript : MonoBehaviour
         if (GameManager.singleton.currentGame != null && GameManager.singleton.currentGame.IsGameActive)
         {
             float time = GameManager.singleton.currentGame.TimeReamining;
-            timer.text = Mathf.FloorToInt(time / 60).ToString("00") + ":" + Mathf.FloorToInt(time % 60).ToString("00");
+            minutes.sprite = numberSet[(int)time / 60];
+            tensSeconds.sprite = numberSet[(int)((time % 60) / 10)];
+            seconds.sprite = numberSet[(int)((time % 60) % 10)];
 
-            teamScoreText1.text = GameManager.singleton.currentGame.Team1Score.ToString();
-            tesmScoreText2.text = GameManager.singleton.currentGame.Team2Score.ToString();
+            team1Score.sprite = numberSet[(int)GameManager.singleton.currentGame.Team1Score];
+            team2Score.sprite = numberSet[(int)GameManager.singleton.currentGame.Team2Score];
         }
 
         else
         {
-            timer.text = Mathf.FloorToInt(GameManager.singleton.currentGame.TimeReamining).ToString();
+            //timer.text = Mathf.FloorToInt(GameManager.singleton.currentGame.TimeReamining).ToString();
         }
     }
 }

@@ -38,7 +38,17 @@ using UnityEngine.SceneManagement;
 // Date:        11/17/17
 // Description: Turns out this wasn't networked properly, dunno why I thought it was
 
-public class GameManager : NetworkBehaviour
+//Developer:    Nicholas Nguyen
+//Date:         3/16/18
+//Description:  Added the profile list and had it initialized within the Awake
+//              by using new method called createProfiles
+
+//Developer:    Nicholas Nguyen
+//Date:         3/30/18
+//Description:  Small addition of profile array for the one's 
+//              that are currently selected. Methods for this were also added
+
+public class GameManager : MonoBehaviour
 {
     public static GameManager singleton;
 
@@ -54,7 +64,8 @@ public class GameManager : NetworkBehaviour
     public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
     public string level;
 
-
+    public List<Profile> profileList;
+    public Profile[] selectedProfiles;
 
     //[SyncVar]
     //public int team1Score;
@@ -62,14 +73,11 @@ public class GameManager : NetworkBehaviour
     //public int team2Score;
 
 
-    [SyncVar]
     public bool matchStarted = false;
     //public bool useTitleScreen;
 
-    [SyncVar]
     public bool countdownOver = false;
 
-    [SyncVar]
     public float countdownTimer;
 
 
@@ -78,19 +86,20 @@ public class GameManager : NetworkBehaviour
     private int firstTeamLayer;
     private string outputPath;
     public int activePlayers;
+    private string filename;
 
     // Use this for initialization
-    void Awake()
+    void Start()
     {
-        Debug.Log("GameManager is Awake. NetID: " + GetComponent<NetworkIdentity>().netId);
         //make singleton
         if (singleton)
         {
             Destroy(gameObject);
+            Destroy(this);
             return;
         }
         singleton = this;
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(gameObject);
 
         //setup logging
         outputPath = Application.dataPath + "/gamelog.txt";
@@ -99,25 +108,21 @@ public class GameManager : NetworkBehaviour
 
         activePlayers = 0;
 
-        //SetGameMode(typeof(Deathmatch));
+        //Initializes the profile list and then fills it
+        profileList = new List<Profile>();
+        createProfiles();
+
+        //Initializes the array of selected profiles
+        //Chose 4 for 4 players
+        selectedProfiles = new Profile[4];
+
+        SetGameMode(typeof(Deathmatch));
 
         //handle title screen skip in editor (currently unsupported until i get around to fixing it)
         //if (!useTitleScreen)
             //StartGame(SceneManager.GetActiveScene().name, maxRounds);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public override void OnStartClient()
-    {
-        Debug.Log("Spawned on client. NetID: " + GetComponent<NetworkIdentity>().netId);
-    }
-
-    [Server]
     public void KillTeam(GameObject player)
     {
         currentGame.KillTeam(player);
@@ -130,7 +135,6 @@ public class GameManager : NetworkBehaviour
     /// <param name="team">Team number</param>
     /// <param name="spawn1">Spawn point for player 1</param>
     /// <param name="spawn2">Spawn point for player 2</param>
-    [Server]
     public void SetSpawn(int team, Vector3 spawn1, Vector3 spawn2)
     {
         spawnPoints[team * 2] = spawn1;
@@ -142,7 +146,6 @@ public class GameManager : NetworkBehaviour
     /// Spawns the given team object, passing it necessary info
     /// </summary>
     /// <param name="num">Which team to spawn/param>
-    [Server]
     public void SpawnTeam(int num)
     {
         Debug.Log("Spawning team " + num);
@@ -155,7 +158,6 @@ public class GameManager : NetworkBehaviour
         NetManager.GetInstance().SpawnReadyPlayers(num);
     }
 
-    [Server]
     public void SetNumberOfPlayers(int num)
     {
         numberOfPlayers = num;
@@ -163,7 +165,6 @@ public class GameManager : NetworkBehaviour
         spawnPoints = new Vector3[num * 2];
     }
 
-    [Server]
     public void StartGame()
     {
         //NetworkServer.Spawn(gameObject);
@@ -173,13 +174,11 @@ public class GameManager : NetworkBehaviour
         WriteToLog("Starting new game, level: " + level + " out of " + maxRounds + " rounds");
     }
 
-    [Client]
     public void OnStartGame(NetworkMessage netMsg)
     {
         currentGame.BeginRound();
     }
 
-    [Server]
     public GameObject SpawnPlayer(Player ply)
     {
         return teams[ply.playerId/2].GetComponent<Team>().SpawnPlayer(ply);
@@ -197,17 +196,57 @@ public class GameManager : NetworkBehaviour
     public void SetGameMode(System.Type mode)
     {
         Destroy(GetComponent<GameMode>());
-
-        if (mode == typeof(Deathmatch))
-            currentGame = gameObject.AddComponent<Deathmatch>();
-
-        else if (mode == typeof(Soccer))
-            currentGame = gameObject.AddComponent<Soccer>();
+        currentGame = (GameMode)gameObject.AddComponent(mode);
     }
 
-    [ClientRpc]
-    public void RpcResetClients()
+    /**
+     * Fills the profile list with the json files found
+     * within the profile folder found within the resources folder
+     */
+    private void createProfiles()
     {
-        NetManager.GetInstance().StopClient();
+        //Directory where the profiles are stored
+        filename = Application.dataPath + "/Resources/Profiles/";
+        DirectoryInfo d = new DirectoryInfo(filename);
+
+        //Array of the files within the directory
+        FileInfo[] files = d.GetFiles();
+        //For each of the files it creates a new profile and stores it within the player list
+        foreach(FileInfo file in files)
+        {
+            //File directory of the profile
+            string playerFileName = file.ToString();
+
+            //If the file is a json file
+            if (playerFileName.EndsWith(".json"))
+            {
+                //These find the profile name from the directory
+                int nameStartIndex = playerFileName.LastIndexOf("\\") + 1;
+                string playerName = playerFileName.Substring(nameStartIndex);
+                playerName = playerName.Substring(0, playerName.Length - 9);
+
+                //Creates a new profile and adds it to the list
+                Profile newProfile = new Profile();
+                newProfile.name = playerName;
+                profileList.Add(newProfile);
+            }
+        }
+    }
+
+    /**
+     * Method that adds a profile to array of selected profiles
+     */
+    public void addSelected(Profile profile, int index)
+    {
+        this.selectedProfiles[index] = profile;
+    }
+    
+    /**
+     * Resets the Profile within the selectedProfiles array
+     * by making it null
+     */
+    public void resetSelected(int index)
+    {
+        this.selectedProfiles[index] = null;
     }
 }

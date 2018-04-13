@@ -50,6 +50,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4656542449677146}
   - component: {fileID: 114289918000951084}
+  - component: {fileID: 114957510799167440}
   m_Layer: 0
   m_Name: SpawnPoints
   m_TagString: Untagged
@@ -225,4 +226,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 488e22d5df73c7748be5aa352c568106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  game: {fileID: 114617112288123574, guid: 05576e5b4f8d50e4d98358b20a3f8755, type: 2}
+  game: {fileID: 0}
+--- !u!114 &114957510799167440
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1431161690092774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 218
+    i1: 118
+    i2: 194
+    i3: 17
+    i4: 75
+    i5: 77
+    i6: 172
+    i7: 36
+    i8: 89
+    i9: 69
+    i10: 106
+    i11: 166
+    i12: 65
+    i13: 110
+    i14: 48
+    i15: 192
+  m_ServerOnly: 1
+  m_LocalPlayerAuthority: 0

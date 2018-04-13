@@ -21,12 +21,6 @@ public class TitleMenu : MonoBehaviour
     private string selectedLevel;
     private int rounds;
 
-    public void Start()
-    {
-        // Deathmatch as default level
-        SelectGamemode(0);
-    }
-
     public void StartLocal()
     {
         // Select number of rounds

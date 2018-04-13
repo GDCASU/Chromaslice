@@ -110,6 +110,13 @@ public class PlayerController : NetworkBehaviour
         tempMaxSpeed = maxSpeed;
         tempMovementPower = 1;
         targetLock = Vector3.zero;
+<<<<<<< HEAD
+=======
+
+        animator = GetComponent<Animator>();
+        animator.enabled = false;
+        TriggerSpawn();
+>>>>>>> master
     }
 
 

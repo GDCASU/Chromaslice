@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+<<<<<<< HEAD
+=======
+using UnityEngine.SceneManagement;
+>>>>>>> master
 
 // Description: This class controls all functions of an active game and serves as the base class for all gamemodes
 // Author(s): Zachary Schmalz, (others to be credited)
@@ -52,18 +56,34 @@ public class GameMode : MonoBehaviour
 
     protected virtual void Update ()
     {
+<<<<<<< HEAD
+=======
+        // Only begin updates when scene has changhed to the level
+        if (!SceneManager.GetActiveScene().name.EndsWith("_Level"))
+            return;
+
+>>>>>>> master
         // If the level has a camera flyby animation
         if (camera == null)
         {
             camera = GameObject.FindGameObjectWithTag("MainCamera");
             if (camera.GetComponent<Animator>())
+            {
                 animationTimer = camera.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length;
+                SendUpdate();
+            }
         }
 
         // The camera is animating
         if (animationTimer > 0)
             animationTimer -= Time.deltaTime;
+<<<<<<< HEAD
 
+=======
+            if (animationTimer < 0)
+                animationTimer = 0;
+        }
+>>>>>>> master
         // The scene is actively open and executing
         else if (gameActive)
         {
@@ -95,10 +115,43 @@ public class GameMode : MonoBehaviour
             else if (IsRoundOver && !nextRoundTrigger)
             {
                 nextRoundTrigger = true;
+                SendUpdate();
                 KillTeam(null);
                 GameManager.singleton.WriteToLog("Time Limit Reached! Draw!");
             }
         }
+    }
+
+    public void SendUpdate()
+    {
+        NetManager.GamemodeMessage msg = new NetManager.GamemodeMessage
+        {
+            team1Score = team1Score,
+            team2Score = team2Score,
+            gameRoundLimit = gameRoundLimit,
+            currentRound = currentRound,
+            timeLimit = timeLimit,
+            gameActive = gameActive,
+            timeRemaining = timeRemaining,
+            timeBeforeRound = timeBeforeRound,
+            timeBeforeNextRound = timeBeforeNextRound,
+            nextRoundTrigger = nextRoundTrigger
+        };
+        NetworkServer.SendToAll(NetManager.ExtMsgType.Gamemode, msg);
+    }
+
+    public void ReceiveUpdate(NetManager.GamemodeMessage msg)
+    {
+        team1Score = msg.team1Score;
+        team2Score = msg.team2Score;
+        gameRoundLimit = msg.gameRoundLimit;
+        currentRound = msg.currentRound;
+        timeLimit = msg.timeLimit;
+        gameActive = msg.gameActive;
+        timeRemaining = msg.timeRemaining;
+        timeBeforeRound = msg.timeBeforeRound;
+        timeBeforeNextRound = msg.timeBeforeNextRound;
+        nextRoundTrigger = msg.nextRoundTrigger;
     }
 
     // Base behavior: Reset team to spawn
@@ -119,6 +172,7 @@ public class GameMode : MonoBehaviour
         timeBeforeNextRound = GameConstants.TimeBeforeNextRound;
         nextRoundTrigger = false;
         gameActive = true;
+        SendUpdate();
     }
 
     // Sub classes handle updating team scores, the base behavior handles transitioning to the next round (or game end)
@@ -133,6 +187,7 @@ public class GameMode : MonoBehaviour
         }
         else
             timeRemaining = GameConstants.TimeBeforeNextRound;
+        SendUpdate();
     }
 
     // Display the results of the match
@@ -155,14 +210,15 @@ public class GameMode : MonoBehaviour
         GameManager.singleton.activePlayers = 0;
 
         // Set the offline scene to "Title" then stop the server and switch to it
-        NetManager.GetInstance().offlineScene = "Title"; // change to server you want to change to
-        if (GameManager.singleton.isLocalPlayer)
+        if (!NetworkServer.active)
         {
             NetManager.GetInstance().StopClient();
         }
         else
         {
-            NetManager.GetInstance().StopServer();
+            NetManager.GetInstance().StopHost();
         }
+        SceneManager.LoadScene("Title");
+        GameManager.singleton.SetGameMode(GetType());
     }
 }

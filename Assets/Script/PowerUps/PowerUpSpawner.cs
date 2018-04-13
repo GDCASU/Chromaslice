@@ -29,7 +29,7 @@ public class PowerUpSpawner : MonoBehaviour
     // Fields that are always shown
     public SpawningMethod method;           // The spawning method of the Spawner
     public GameObject[] powerUpPrefabs;     // The prefabs of the powerups to create
-
+    
     // Required for display in the inspector
     public bool continuousSpawn;
     public float spawnInterval;
@@ -50,10 +50,13 @@ public class PowerUpSpawner : MonoBehaviour
     private GameObject currentPowerUp;
     private float intervalTimer;
 
+    private bool isActive;
+
 	void Start ()
     {
         currentPowerUp = null;
         intervalTimer = spawnInterval;
+        isActive = false;
 
         // Add all PowerUpStructures to an array
         structArray = new PowerUpStruct[powerUpPrefabs.Length];
@@ -61,36 +64,90 @@ public class PowerUpSpawner : MonoBehaviour
         structArray[1] = ropeStruct;
         structArray[2] = knockbackStruct;
         structArray[3] = invincibilityStruct;
+
+        setActive(false);
+        transform.localScale = Vector3.zero;
 	}
 	
 	void Update ()
     {
-		if(currentPowerUp == null)
+        if (GameManager.singleton.currentGame)
         {
-            if (intervalTimer > 0)
-                intervalTimer -= Time.deltaTime;
+            if (GameManager.singleton.currentGame.IsRoundActive)
+            {
+                if (currentPowerUp == null)
+                {
+                    if (intervalTimer > 0)
+                        intervalTimer -= Time.deltaTime;
 
-            // Interval timer has ended
+                    // Interval timer has ended
+                    else
+                    {
+                        // Random method
+                        if (method == SpawningMethod.Random)
+                        {
+                            ChooseRandomPowerUp();
+                        }
+
+                        // Single method
+                        else if (method == SpawningMethod.Single)
+                        {
+                            currentPowerUp = Instantiate(powerUpPrefabs[(int)selection], gameObject.transform);
+                            currentPowerUp.GetComponent<PowerUp>().SetData(structArray[(int)selection].param1, structArray[(int)selection].param2, structArray[(int)selection].param3);
+                            currentPowerUp.GetComponent<PowerUp>().powerUpSpawner = gameObject;
+                        }
+
+                        // Reset timer
+                        intervalTimer = spawnInterval;
+
+                        isActive = true;
+                        setActive(true);
+                    }
+                }
+
+                // Current powerup is not active
+                else
+                {
+                    currentPowerUp.transform.Rotate(Vector3.forward, 25 * Time.deltaTime);
+                }
+
+                // Spawn in animation
+                if (isActive && transform.localScale.x < 1)
+                {
+                    transform.localScale += Vector3.one * Time.deltaTime;
+                    if (transform.localScale.x > 1)
+                        transform.localScale = Vector3.one;
+                }
+
+                // Spawn out animation
+                if (!isActive && transform.localScale.x > 0)
+                {
+                    transform.localScale -= Vector3.one * Time.deltaTime;
+                    if (transform.localScale.x < 0)
+                        transform.localScale = Vector3.zero;
+                }
+            }
+
+            // If the round is not active, reset the spawner
             else
             {
-                // Random method
-                if (method == SpawningMethod.Random)
-                {
-                    ChooseRandomPowerUp();
-                }
-
-                // Single method
-                else if (method == SpawningMethod.Single)
-                {
-                    currentPowerUp = Instantiate(powerUpPrefabs[(int)selection], gameObject.transform);
-                    currentPowerUp.GetComponent<PowerUp>().SetData(structArray[(int)selection].param1, structArray[(int)selection].param2, structArray[(int)selection].param3);
-                }
-
-                // Reset timer
-                intervalTimer = spawnInterval;
+                Destroy(currentPowerUp);
+                setActive(false);
+                transform.localScale = Vector3.zero;
             }
         }
+
+        else
+        {
+            intervalTimer = spawnInterval;
+        }
 	}
+
+    public void CollectedPowerUp()
+    {
+        currentPowerUp = null;
+        setActive(false);
+    }
 
     // Chooses a random power-up that is allowed by the spawner
     private void ChooseRandomPowerUp()
@@ -104,5 +161,21 @@ public class PowerUpSpawner : MonoBehaviour
 
         // Set the custom data from the Inspector Property fields to the power-up's
         currentPowerUp.GetComponent<PowerUp>().SetData(structArray[random].param1, structArray[random].param2, structArray[random].param3);
+
+        currentPowerUp.GetComponent<PowerUp>().powerUpSpawner = gameObject;
+    }
+
+    // Change visibility of the spawner renderer
+    private void setActive(bool value)
+    {
+        isActive = value;
+
+        foreach (Collider c in gameObject.GetComponentsInChildren<Collider>())
+        {
+            if (c.gameObject.GetComponent<PowerUp>());
+
+            else
+                c.enabled = value;
+        }
     }
 }
