@@ -37,11 +37,7 @@ public class CameraControl : MonoBehaviour
     //DW: Each frame changes the camera focus and position
     public void Update ()
     {
-        if (players == null || players.Length != 2 * (GameManager.singleton.teams.Length))
-        {
-            GetPlayers();
-            return;
-        }
+        GetPlayers();
 
         camPosVector = new Vector3(camPos.position.x, camPos.position.y, camPos.position.z);
         
@@ -60,7 +56,7 @@ public class CameraControl : MonoBehaviour
         // this kind of panning is a little choppy; I think its something to do with transform.Translate
 
         float newZ = getNearestPlayerZPos() - deltaZ;
-        this.transform.position = new Vector3(this.transform.position.x, yPosition, newZ);
+        this.transform.position = new Vector3(this.transform.position.x, yPosition, newZ) ;
 
         //Set the camera to the optimal focal point
         //camPos.LookAt(getAveragePlayerPos(), Vector3.up); //old

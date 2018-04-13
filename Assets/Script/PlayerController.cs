@@ -90,6 +90,8 @@ public class PlayerController : NetworkBehaviour
     private float timeSinceSprint = 0;
     private float timeSinceDash = 0;
 
+    private Animator animator;
+
     // Property for affecting the maxSpeed of the players
     public float MaxSpeed
     {
@@ -110,6 +112,10 @@ public class PlayerController : NetworkBehaviour
         tempMaxSpeed = maxSpeed;
         tempMovementPower = 1;
         targetLock = Vector3.zero;
+
+        animator = GetComponent<Animator>();
+        animator.enabled = false;
+        TriggerSpawn();
     }
 
 
@@ -193,6 +199,12 @@ public class PlayerController : NetworkBehaviour
     public void SetTeam(int num)
     {
         team = num;
+    }
+
+    public void TriggerSpawn()
+    {
+        animator.enabled = true;
+        animator.SetTrigger("SpawnTrigger");
     }
 
 

@@ -107,6 +107,50 @@ public class Controls
         return powerUpButton.Get() == 1 || powerUpButtonAlt.Get() == 1;
     }
 
+    public static IEnumerator WaitForInput(ControlInput input, bool pos = true)
+    {
+        bool finished = false;
+        KeyCode[] keys = (KeyCode[])Enum.GetValues(typeof(KeyCode));
+        while(!finished) 
+        {
+            yield return 0; //wait one frame
+
+            if (Input.anyKeyDown)
+            {
+                foreach (KeyCode kc in keys)
+                {
+                    if (Input.GetKey(kc))
+                    {
+                        if (pos)
+                        {
+                            input.keyPos = kc;
+                        } else
+                        {
+                            input.keyNeg = kc;
+                        }
+                        input.axis = null;
+                        Debug.Log("Found key: " + kc.ToString());
+                        finished = true;
+                        yield break;
+                    }
+                }
+            }
+            foreach(string axis in axes.Values)
+            {
+                if(Input.GetAxis(axis) != 0)
+                {
+                    input.axis = GetAxisName(axis);
+                    input.keyPos = KeyCode.None;
+                    input.keyNeg = KeyCode.None;
+                    Debug.Log("Found axis: " + axis);
+                    finished = true;
+                    yield break;
+                }
+            }
+        }
+
+    }
+
     /// <summary>
     /// Saves the given controls to the config file. The slot it
     /// saves into is given by "c.number"

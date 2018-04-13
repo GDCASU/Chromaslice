@@ -34,7 +34,7 @@ public class JsonInterpreter : MonoBehaviour {
      */
     public Player ReadFromJson(string playerName)
     {
-        fileName = Application.dataPath + "/Resources/Profiles/" + playerName + "Data.json";
+        fileName = Application.persistentDataPath + "/Resources/Profiles/" + playerName + "Data.json";
 
         //Used try and catch to make sure file is found
         try
