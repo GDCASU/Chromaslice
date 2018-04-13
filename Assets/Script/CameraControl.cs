@@ -56,7 +56,7 @@ public class CameraControl : MonoBehaviour
         // this kind of panning is a little choppy; I think its something to do with transform.Translate
 
         float newZ = getNearestPlayerZPos() - deltaZ;
-        this.transform.position = new Vector3(this.transform.position.x, yPosition, newZ) ;
+        this.transform.position = new Vector3(this.transform.position.x, yPosition, newZ);
 
         //Set the camera to the optimal focal point
         //camPos.LookAt(getAveragePlayerPos(), Vector3.up); //old
