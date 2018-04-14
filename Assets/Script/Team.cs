@@ -196,16 +196,18 @@ public class Team : NetworkBehaviour
 
     public void ApplyColor(GameObject player, Color color)
     {
+		float tintAmount = .005f;
+
         Renderer[] rends = player.GetComponentsInChildren<Renderer>();
         foreach (Renderer r in rends)
             foreach (Material m in r.materials)
             {
                 if (m.HasProperty("_Color"))
-                    m.color = Color.Lerp(m.color, color, 0.005f);
+                    m.color = Color.Lerp(m.color, color, tintAmount);
                 else if (m.HasProperty("_TintColor"))
-                    m.SetColor("_TintColor", Color.Lerp(m.GetColor("_TintColor"), color, 0.005f));
+                    m.SetColor("_TintColor", Color.Lerp(m.GetColor("_TintColor"), color, tintAmount));
             }
-        player.GetComponentInChildren<Light>().color = Color.Lerp(player.GetComponentInChildren<Light>().color, color, 0.005f);
+        player.GetComponentInChildren<Light>().color = Color.Lerp(player.GetComponentInChildren<Light>().color, color, tintAmount);
     }
 
     // Removes current power up (if any), resets each player and adds invincibility particles for beginning of each round

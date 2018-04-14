@@ -65,9 +65,6 @@ using UnityEngine.Networking;
 public class PlayerController : NetworkBehaviour
 {
 
-    //Game attributes
-    public float numPlayers = 1; //is this even needed anymore?
-
     //Player attributes
     public float maxSpeed;
     public float bounceFactor;
