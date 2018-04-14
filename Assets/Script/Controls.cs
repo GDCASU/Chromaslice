@@ -99,7 +99,8 @@ public class Controls
 
     public bool GetDash()
     {
-        return dashButton.Get() == 1 || dashButtonAlt.Get() == 1;
+		return false;
+        //return dashButton.Get() == 1 || dashButtonAlt.Get() == 1;
     }
 
     public bool GetPowerUp()
