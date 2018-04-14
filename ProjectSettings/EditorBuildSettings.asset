@@ -15,12 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Online_Lobby.unity
     guid: 5e752b5f1b63b364f9118c40a79683f4
   - enabled: 1
-    path: Assets/Scenes/Basic_Level.unity
-    guid: c5574741d5fa74f4a8f35cb9906c8d38
-  - enabled: 1
-    path: Assets/Scenes/Donut_Level.unity
-    guid: f07316b38d844fa4e9a70acfb164b125
-  - enabled: 1
     path: Assets/Scenes/Rooftop_Level.unity
     guid: b04c57d416b1ee54ab31a4df035f8144
   - enabled: 1
@@ -30,23 +24,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Soccer_Level.unity
     guid: 07336b4dfefcafe45919098449c9c2df
   - enabled: 1
-    path: Assets/Scenes/Pillar_Level.unity
-    guid: 67434e4797676ec46a1381e24b4aaf63
-  - enabled: 1
-    path: Assets/Scenes/Skatepark_Level.unity
-    guid: c094339101c4ceb4090dd42949d32f56
-  - enabled: 1
-    path: Assets/Scenes/Train_Level.unity
+    path: Assets/Scenes/Train_level.unity
     guid: 4a899c2697b070544a09f1bb91df0fed
-  - enabled: 1
-    path: Assets/Scenes/Elevated_Level.unity
-    guid: 2c8d57d6bab1bbd40adeac9efdb01993
-  - enabled: 1
-    path: Assets/Scenes/Demo.unity
-    guid: bf730374ebd33e641aa0d1c47b085fcb
-  - enabled: 1
-    path: Assets/Scenes/Demo_Level.unity
-    guid: 24ffa2d5634cbb74cb218cf73318969c
   - enabled: 1
     path: Assets/Scenes/AI_Level.unity
     guid: e00e5f0b675bbd24fb37ae321d7215b9
