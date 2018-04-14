@@ -1746,7 +1746,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224240025599890536}
   m_Layer: 5
-  m_Name: UI
+  m_Name: UI_angle
   m_TagString: MainCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2192,13 +2192,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e511d1ed81d69e04fb10478aa84fb52d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamScoreText1: {fileID: 114048517367244482}
-  tesmScoreText2: {fileID: 114338676621148426}
-  timer: {fileID: 114868511064269778}
-  speedp1: {fileID: 114592454389114114}
-  speedp2: {fileID: 114698680090646484}
-  points: {fileID: 114493875649564424}
   debugMenu: {fileID: 1310918908375900}
+  numberSet: []
+  team1Score: {fileID: 0}
+  team2Score: {fileID: 0}
+  minutes: {fileID: 0}
+  tensSeconds: {fileID: 0}
+  seconds: {fileID: 0}
 --- !u!114 &114046826410514482
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2629,7 +2629,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3190b2937918f8143a3e197bdbbe4441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialDelay: 1
   displayDuration: 1
   one: {fileID: 21300000, guid: 54563d0af4e55f7449bd1b6dd651d70c, type: 3}
   two: {fileID: 21300000, guid: b3a0f6ee095e662439915099ddc31216, type: 3}
