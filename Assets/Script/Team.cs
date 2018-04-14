@@ -196,7 +196,7 @@ public class Team : NetworkBehaviour
 
     public void ApplyColor(GameObject player, Color color)
     {
-		float tintAmount = .005f;
+		float tintAmount = .006f;
 
         Renderer[] rends = player.GetComponentsInChildren<Renderer>();
         foreach (Renderer r in rends)

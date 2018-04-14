@@ -63,9 +63,9 @@ public class GameManager : MonoBehaviour
 
     public Color[,] colorPairs =
 		{ 
-			{ new Color(255, 0, 0), new Color(255, 50, 100) },
+			{ new Color(255, 0, 0), new Color(255, 0, 180) },
 			{ new Color(0, 0, 255), new Color(0, 255, 150) }
-		}; //red, orange, blue, cyan
+		}; //red, magenta, blue, greenblue
     public string level;
 
     public List<Profile> profileList;

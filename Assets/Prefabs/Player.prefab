@@ -605,12 +605,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 708930414c1917c44865bf6cadf8dc9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numPlayers: 1
-  maxSpeed: 40
+  maxSpeed: 35
   bounceFactor: 2
   sprintPower: 2
   sprintTime: 0.5
-  decelerationRate: 0.25
+  decelerationRate: 0.15
   dashPower: 3
   dashTime: 0.2
   dashCooldown: 1
