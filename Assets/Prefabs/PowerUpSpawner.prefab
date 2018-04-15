@@ -94,9 +94,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1562279197030180}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0.5, y: 0.5, z: 0.5, w: 0.5}
+  m_LocalPosition: {x: -35.6, y: 10.3, z: 0.03199768}
+  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 0.6666667}
   m_Children:
   - {fileID: 4297935481717866}
   - {fileID: 4153972955947136}
@@ -197,17 +197,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b2b7cbdcbc60a4185540d35fe03317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  method: 0
+  method: 1
   powerUpPrefabs:
   - {fileID: 1115685166643496, guid: ae03c7b72e1d50e4fa62cf913acf3276, type: 2}
   - {fileID: 1991271190471360, guid: 5f3da6eab2b5c9545bb0e9aabcd031de, type: 2}
   - {fileID: 1627938274008060, guid: 3283e3b9b91c09247b995a7a63215284, type: 2}
   - {fileID: 1566928358093644, guid: b7f5e8cc77cd169408c2213e4f47515f, type: 2}
-  modelParts:
-  - {fileID: 1599892782971834}
-  - {fileID: 1492227249684022}
   continuousSpawn: 1
-  spawnInterval: 5
+  spawnInterval: 10
   speedSelect: 1
   ropeSelect: 1
   knockbackSelect: 1
