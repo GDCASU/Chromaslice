@@ -13,6 +13,7 @@ public class TitleMenu : MonoBehaviour
 {
 
     //local game
+    public Text roundNumText;
     public Toggle[] roundSelect;
     public GameObject[] deathmatchLevelSelect;
     public GameObject[] soccerLevelSelect;
@@ -31,15 +32,8 @@ public class TitleMenu : MonoBehaviour
 
     public void StartLocal()
     {
-        // Select number of rounds
-        foreach (Toggle t in roundSelect)
-        {
-            if (t.isOn)
-            {
-                rounds = int.Parse(t.transform.parent.name);
-                break;
-            }
-        }
+        // Set the number of rounds
+        rounds = int.Parse(roundNumText.text);
 
         // Select levels from deathmatch panel
         if (DeathmatchPanel.activeSelf)
