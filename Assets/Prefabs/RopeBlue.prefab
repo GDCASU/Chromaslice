@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 120035396147854968}
   - component: {fileID: 114096110051306642}
   m_Layer: 0
-  m_Name: Rope
+  m_Name: RopeBlue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,7 +90,6 @@ MonoBehaviour:
   minRopeWidth: 0.05
   ropeStretchColor: {r: 1, g: 0, b: 0, a: 0.51}
   ropeLaxColor: {r: 0, g: 1, b: 0.17241383, a: 0.509}
-  powerUp: {fileID: 0}
   reformCooldown: 0
 --- !u!120 &120035396147854968
 LineRenderer:
@@ -101,6 +100,7 @@ LineRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 0
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
@@ -116,6 +116,7 @@ LineRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
