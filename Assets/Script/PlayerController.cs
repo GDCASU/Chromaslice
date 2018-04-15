@@ -119,9 +119,9 @@ public class PlayerController : NetworkBehaviour
     void LateUpdate()
     {
         //Sticks player to terrain
-        RaycastHit ground = new RaycastHit();
-        if (Physics.SphereCast(new Ray(transform.position + Vector3.up, Vector3.down), distanceToGround, out ground, 10f, LayerMask.GetMask("Terrain")))
-            transform.position = new Vector3(transform.position.x, transform.position.y - ground.distance + 1, transform.position.z);
+        //RaycastHit ground = new RaycastHit();
+        //if (Physics.SphereCast(new Ray(transform.position + Vector3.up, Vector3.down), distanceToGround, out ground, 10f, LayerMask.GetMask("Terrain")))
+            //transform.position = new Vector3(transform.position.x, transform.position.y - ground.distance + 1, transform.position.z);
     }
 
     void FixedUpdate()
