@@ -5,11 +5,11 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager singleton;
-
     public Sound[] sounds;
 
-    private Sound currentLevelMusic;
+    private List<Sound> currentLevelMusic;
 
+    // Set manager singleton
     private void Awake()
     {
         if (singleton == null)
@@ -34,21 +34,79 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    // Plays level music
-    public void PlayLevelMusic(string name)
+    void Start()
     {
-        if(currentLevelMusic != null)
-        {
-            currentLevelMusic.audioSource.Stop();
-        }
-        else
-        {
-            currentLevelMusic = System.Array.Find(sounds, sound => sound.name == name);
-        }
+        currentLevelMusic = new List<Sound>();
 
-        currentLevelMusic.audioSource.Play();
+        // Play theme song by default
+        ResetLevelMusic("ChromasliceTheme");
     }
 
+    // Clears all the old scene music and plays curent scene music. You can also choose to fade
+    public void ResetLevelMusic(string name = "", float fadeDuration = 0.0f)
+    {
+        StartCoroutine(FadeAudio(name, fadeDuration));
+    }
+
+    // For ambient looping sounds
+    public void AddSoundToLevel(string name)
+    {
+        Sound sound = System.Array.Find(sounds, s => s.name == name);
+        if (sound != null)
+        {
+            sound.audioSource.Play();
+            currentLevelMusic.Add(sound);
+        }
+    }
+
+    // Plays an instanced sound without adding to list
+    public void PlaySoundInstance(string name)
+    {
+        Sound s = System.Array.Find(sounds, sound => sound.name == name);
+
+        if (s != null && !s.audioSource.isPlaying)
+            s.audioSource.Play();
+    }
+
+    // Play a sound without adding to list
+    public void PlaySound(string name)
+    {
+        Sound s = System.Array.Find(sounds, sound => sound.name == name);
+        if (s != null)
+            s.audioSource.Play();
+    }
+
+    // Fade all the sounds in the scene out
+    IEnumerator FadeAudio(string name, float fadeDuration)
+    {
+        // Fade volume out
+        if (fadeDuration > 0)
+        {
+            while (currentLevelMusic.Count > 0 && currentLevelMusic[0].audioSource.volume > 0)
+            {
+                foreach (Sound s in currentLevelMusic)
+                    s.audioSource.volume -= s.volume * Time.deltaTime / fadeDuration;
+                yield return new WaitForEndOfFrame();
+            }
+        }
+
+        // Restore volume
+        foreach (Sound s in currentLevelMusic)
+        {
+            s.audioSource.Stop();
+            s.audioSource.volume = s.volume;
+        }
+
+        currentLevelMusic.Clear();
+
+        // Play the new sound
+        Sound sound = System.Array.Find(sounds, s => s.name == name);
+        if (sound != null)
+        {
+            sound.audioSource.Play();
+            currentLevelMusic.Add(sound);
+        }
+    }
 }
 
 [System.Serializable]

@@ -2861,7 +2861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3190b2937918f8143a3e197bdbbe4441, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayDuration: 0.75
+  displayDuration: 1
   one: {fileID: 21300000, guid: 54563d0af4e55f7449bd1b6dd651d70c, type: 3}
   two: {fileID: 21300000, guid: b3a0f6ee095e662439915099ddc31216, type: 3}
   three: {fileID: 21300000, guid: 65b7f5ce9815cb14faef8de7b083ff64, type: 3}

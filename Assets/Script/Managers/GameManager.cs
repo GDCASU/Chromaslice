@@ -242,4 +242,11 @@ public class GameManager : MonoBehaviour
     {
         this.selectedProfiles[index] = null;
     }
+
+    // Mainly for switching to Credits
+    public void SwitchScene(string scene)
+    {
+        SoundManager.singleton.ResetLevelMusic(scene, 1);
+        SceneManager.LoadScene(scene, LoadSceneMode.Single);
+    }
 }

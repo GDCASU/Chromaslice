@@ -24,12 +24,17 @@ public class fadeCamCredits : MonoBehaviour {
         if (timeCount < 2.0)
         {
             alpha = 1.0f -  timeCount * 0.5f;
-        } else
+        }
+        else
         {
             if (timeCount > 102 && timeCount < 107)
             {
+                if(alpha == 0)
+                    SoundManager.singleton.ResetLevelMusic("ChromasliceTheme", 6);
+
                 alpha = (timeCount - 102f) * 0.2f;
-            } else
+            }
+            else
             {
                 if (timeCount > 2.0f && timeCount < 104) alpha = 0.0f;
                 if (timeCount > 107f)

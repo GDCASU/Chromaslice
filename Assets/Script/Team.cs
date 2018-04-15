@@ -302,7 +302,8 @@ public class Team : NetworkBehaviour
     [ClientRpc]
     public void RpcKill(GameObject player)
     {
-        // Instantiate particle effects
+        // Instantiate particle effects and sound
+        SoundManager.singleton.PlaySound("ExplosionEffect");
         GameObject explosion = Instantiate(player.transform.root.name == "Team 0" ? deathParticlePrefabRed : deathParticlePrefabBlue, player.transform.position, Quaternion.identity);
         Destroy(explosion, 5.0f);
 
