@@ -24,8 +24,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Soccer_Level.unity
     guid: 07336b4dfefcafe45919098449c9c2df
   - enabled: 1
-    path: Assets/Scenes/Train_level.unity
-    guid: 4a899c2697b070544a09f1bb91df0fed
-  - enabled: 1
     path: Assets/Scenes/AI_Level.unity
     guid: e00e5f0b675bbd24fb37ae321d7215b9
+  - enabled: 1
+    path: Assets/Scenes/Train_Level.unity
+    guid: 4a899c2697b070544a09f1bb91df0fed
