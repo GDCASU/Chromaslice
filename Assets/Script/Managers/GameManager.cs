@@ -143,6 +143,7 @@ public class GameManager : MonoBehaviour
         teams[num].layer = firstTeamLayer + num;
         teams[num].GetComponent<Team>().SetSpawnPoints(spawnPoints[num * 2], spawnPoints[num * 2 + 1]);
         teams[num].GetComponent<Team>().SetColors(colorPairs[num, 0], colorPairs[num, 1]);
+        teams[num].GetComponent<Team>().SetTeamRope(num);
         NetworkServer.Spawn(teams[num]);
         NetManager.GetInstance().SpawnReadyPlayers(num);
     }

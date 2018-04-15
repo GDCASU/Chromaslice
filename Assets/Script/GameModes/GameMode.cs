@@ -54,7 +54,6 @@ public class GameMode : MonoBehaviour
 
     protected virtual void Update ()
     {
-        Debug.Log(SceneManager.GetActiveScene().name);
         // Only begin updates when scene has changhed to the level
         if (!SceneManager.GetActiveScene().name.EndsWith("_Level"))
             return;

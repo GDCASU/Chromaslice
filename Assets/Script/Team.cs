@@ -25,6 +25,10 @@ using UnityEngine.Networking;
 // Description: Changed variables to syncvars and reworked spawning/respawning
 //              to work with networking
 
+// Developer:   Nicholas Nguyen
+// Date:        4/14/18
+// Description: Made it so that red team uses a red rope and blue
+//              team uses the blue rope
 public class Team : NetworkBehaviour
 {
     public GameObject CurrentPowerUp
@@ -39,7 +43,6 @@ public class Team : NetworkBehaviour
     }
 
     public GameObject playerPrefab;
-    public GameObject ropePrefab;
     public GameObject invincibilityParticlePrefab;  // a prefab that has a particle system component
     public float ropeFormTime;
     public GameObject currentRope;
@@ -50,6 +53,11 @@ public class Team : NetworkBehaviour
     public GameObject deathParticlePrefabRed;
     public GameObject spawnParticlePrefabBlue;
     public GameObject deathParticlePrefabBlue;
+
+    public GameObject ropePrefab;
+    public GameObject[] ropes;
+
+    private int teamNum;
 
     [SyncVar]
     private Vector3 spawn1;
@@ -303,5 +311,13 @@ public class Team : NetworkBehaviour
 
         // Players are simply deactivated and reactivated since deleting/respawning would complicate networking code
         player.SetActive(false);
+    }
+
+    /**
+     * Sets the teamNum to the inputed num
+     */
+    public void SetTeamRope(int num)
+    {
+        this.ropePrefab = this.ropes[num];
     }
 }

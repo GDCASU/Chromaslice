@@ -86,7 +86,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1692480771552320, guid: 5647b08476264db4788883791609c8ad,
     type: 2}
-  ropePrefab: {fileID: 1618374010297264, guid: 7ab4d1e6b7e8c5542b530a950adfa081, type: 2}
   invincibilityParticlePrefab: {fileID: 1260787253499360, guid: 6c58453193176ba4cbd4331e276601de,
     type: 2}
   ropeFormTime: 1
@@ -101,5 +100,9 @@ MonoBehaviour:
     type: 2}
   deathParticlePrefabBlue: {fileID: 1578063337113730, guid: edeb246baada7074587ce86f5e3644df,
     type: 2}
+  ropePrefab: {fileID: 1618374010297264, guid: 7ab4d1e6b7e8c5542b530a950adfa081, type: 2}
+  ropes:
+  - {fileID: 1618374010297264, guid: 944dbbce299101b4f9c1956661a88f76, type: 2}
+  - {fileID: 1618374010297264, guid: 7ab4d1e6b7e8c5542b530a950adfa081, type: 2}
   controller1: 0
   controller2: 0
