@@ -37,7 +37,7 @@ public class GameMode : MonoBehaviour
     public int GameRoundLimit { get { return gameRoundLimit; } set { gameRoundLimit = value; } }
     public float Team1Score { get { return team1Score; } }
     public float Team2Score { get { return team2Score; } }
-    public bool IsGameOver { get { return currentRound >= gameRoundLimit; } }
+    public bool IsGameOver { get { return team1Score >= gameRoundLimit || team2Score >= gameRoundLimit; } }
 
     // Initiailize variables
     protected virtual void Start()
@@ -54,6 +54,7 @@ public class GameMode : MonoBehaviour
 
     protected virtual void Update ()
     {
+        Debug.Log(SceneManager.GetActiveScene().name);
         // Only begin updates when scene has changhed to the level
         if (!SceneManager.GetActiveScene().name.EndsWith("_Level"))
             return;

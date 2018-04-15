@@ -47,7 +47,6 @@ public class Lobby : MonoBehaviour {
             netManager.StartHost();
             started = true;
             GameManager.singleton.level = level.selectedText.text + "_Level";
-            GameManager.singleton.maxRounds = rounds.currentSelection + 1;
             netManager.ServerChangeScene("Online_Lobby");
         }
     }

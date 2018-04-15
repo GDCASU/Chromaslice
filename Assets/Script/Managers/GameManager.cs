@@ -57,10 +57,6 @@ public class GameManager : MonoBehaviour
     public GameObject[] teams;
     public GameMode currentGame;
 
-    public int maxRounds;
-    //public int currentRound;
-    public bool gameActive;
-
     public Color[,] colorPairs =
 		{ 
 			{ new Color(255, 0, 0), new Color(255, 0, 180) },
@@ -71,18 +67,7 @@ public class GameManager : MonoBehaviour
     public List<Profile> profileList;
     public Profile[] selectedProfiles;
 
-    //[SyncVar]
-    //public int team1Score;
-    //[SyncVar]
-    //public int team2Score;
-
-
-    public bool matchStarted = false;
     //public bool useTitleScreen;
-
-    public bool countdownOver = false;
-
-    public float countdownTimer;
 
 
     private int numberOfPlayers;
@@ -175,7 +160,7 @@ public class GameManager : MonoBehaviour
         currentGame.BeginRound();
         NetManager.GetInstance().ServerChangeScene(level);
         NetworkServer.SendToAll(NetManager.ExtMsgType.StartGame, new NetManager.PingMessage());
-        WriteToLog("Starting new game, level: " + level + " out of " + maxRounds + " rounds");
+        WriteToLog("Starting new game, level: " + level + " out of " + currentGame.GameRoundLimit + " rounds");
     }
 
     public void OnStartGame(NetworkMessage netMsg)
