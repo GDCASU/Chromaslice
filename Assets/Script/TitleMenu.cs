@@ -14,6 +14,7 @@ public class TitleMenu : MonoBehaviour
 
     //local game
     public Text roundNumText;
+    public Text currentLevelText;
     public Toggle[] roundSelect;
     public GameObject[] deathmatchLevelSelect;
     public GameObject[] soccerLevelSelect;
@@ -36,32 +37,33 @@ public class TitleMenu : MonoBehaviour
         rounds = int.Parse(roundNumText.text);
 
         // Select levels from deathmatch panel
-        if (DeathmatchPanel.activeSelf)
-        {
-            foreach (GameObject t in deathmatchLevelSelect)
-            {
-                if (t.GetComponentInChildren<Toggle>().isOn)
-                {
-                    selectedLevel = t.GetComponentInChildren<Text>().text;
-                    Debug.Log(t.GetComponentInChildren<Text>().text);
-                    break;
-                }
-            }
-        }
+//        if (DeathmatchPanel.activeSelf)
+//        {
+//            foreach (GameObject t in deathmatchLevelSelect)
+//            {
+//                if (t.GetComponentInChildren<Toggle>().isOn)
+//                {
+//                    selectedLevel = t.GetComponentInChildren<Text>().text;
+//                    Debug.Log(t.GetComponentInChildren<Text>().text);
+//                    break;
+//                }
+//            }
+//        }
+        selectedLevel = currentLevelText.text;
 
         // Select levels from soccer level
-        else if(SoccerPanel.activeSelf)
-        {
-            foreach (GameObject t in soccerLevelSelect)
-            {
-                if (t.GetComponentInChildren<Toggle>().isOn)
-                {
-                    selectedLevel = t.GetComponentInChildren<Text>().text;
-                    Debug.Log(t.GetComponentInChildren<Text>().text);
-                    break;
-                }
-            }
-        }
+//        else if(SoccerPanel.activeSelf)
+//        {
+//            foreach (GameObject t in soccerLevelSelect)
+//            {
+//                if (t.GetComponentInChildren<Toggle>().isOn)
+//                {
+//                    selectedLevel = t.GetComponentInChildren<Text>().text;
+//                    Debug.Log(t.GetComponentInChildren<Text>().text);
+//                    break;
+//                }
+//            }
+//        }
 
         NetManager.GetInstance().StartLocalGame();
         GameManager.singleton.level = selectedLevel + "_Level";
