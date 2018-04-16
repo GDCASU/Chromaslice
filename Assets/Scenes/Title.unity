@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.10041047, g: 0.09571456, b: 0.028758716, a: 1}
+  m_IndirectSpecularColor: {r: 0.10041026, g: 0.095714465, b: 0.028758703, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1171,7 +1171,55 @@ MonoBehaviour:
   - soundClip: {fileID: 8300000, guid: b874b7ec41d9deb409220f1bca36edc5, type: 3}
     name: Train_Level
     loop: 1
-    volume: 0.24
+    volume: 0.01
+    pitch: 1
+    audioSource: {fileID: 0}
+  - soundClip: {fileID: 8300000, guid: 9ea072a5fb2139b42ba841c9a450beff, type: 3}
+    name: Countdown_First
+    loop: 0
+    volume: 1
+    pitch: 1
+    audioSource: {fileID: 0}
+  - soundClip: {fileID: 8300000, guid: 08a3afaf5ab1db84493115d5e9fe87f7, type: 3}
+    name: Countdown_Last
+    loop: 0
+    volume: 1
+    pitch: 1
+    audioSource: {fileID: 0}
+  - soundClip: {fileID: 8300000, guid: f7da18b27f3374f4fb3aca42f87f9383, type: 3}
+    name: ExplosionEffect
+    loop: 0
+    volume: 1
+    pitch: 1
+    audioSource: {fileID: 0}
+  - soundClip: {fileID: 8300000, guid: 3844cffb409b7c04c955b2e640ec194a, type: 3}
+    name: FanEffect
+    loop: 1
+    volume: 0.5
+    pitch: 1
+    audioSource: {fileID: 0}
+  - soundClip: {fileID: 8300000, guid: bd09de4a9a936754ca5ecaabc78c7dba, type: 3}
+    name: PowerUpEffect
+    loop: 0
+    volume: 1
+    pitch: 1
+    audioSource: {fileID: 0}
+  - soundClip: {fileID: 8300000, guid: 2b23794b2dedc80488ea954567ce7a49, type: 3}
+    name: ChromasliceTheme
+    loop: 0
+    volume: 0.167
+    pitch: 1
+    audioSource: {fileID: 0}
+  - soundClip: {fileID: 8300000, guid: eb39a267e86b3aa49bd94f99940c5b43, type: 3}
+    name: MenuSelect
+    loop: 0
+    volume: 0.5
+    pitch: 1
+    audioSource: {fileID: 0}
+  - soundClip: {fileID: 8300000, guid: 05bba554b7d23084cbcb2ec360663960, type: 3}
+    name: Credits
+    loop: 0
+    volume: 0.5
     pitch: 1
     audioSource: {fileID: 0}
 --- !u!4 &24019879
@@ -17763,37 +17811,15 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 61606115}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1961532813}
+        m_MethodName: SwitchScene
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 431733228}
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 498626943}
-        m_MethodName: Select
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Credits
           m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,

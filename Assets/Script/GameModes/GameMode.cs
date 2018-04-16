@@ -55,7 +55,7 @@ public class GameMode : MonoBehaviour
     protected virtual void Update ()
     {
         // Only begin updates when scene has changhed to the level
-        if (!SceneManager.GetActiveScene().name.EndsWith("_Level"))
+        if (SceneManager.GetActiveScene().name != GameManager.singleton.level)
             return;
 
         // If the level has a camera flyby animation
@@ -82,6 +82,7 @@ public class GameMode : MonoBehaviour
             // Execute only once at the beginning of the countdown timer
             if (timeBeforeRound == GameConstants.TimeBeforeRound)
             {
+
                 // Reset/Trigger players + animations
                 for (int i = 0; i < GameManager.singleton.teams.Length; i++)
                     GameManager.singleton.teams[i].GetComponent<Team>().RpcResetTeam();
@@ -90,7 +91,11 @@ public class GameMode : MonoBehaviour
             // Wait for time before the round starts
             if (timeBeforeRound > 0)
             {
+                SoundManager.singleton.PlaySoundInstance("Countdown_First");
                 timeBeforeRound -= Time.deltaTime;
+
+                if (timeBeforeRound <= 0)
+                    SoundManager.singleton.PlaySound("Countdown_Last");
             }
 
             // Subtract time from the remaining time in the round
@@ -169,6 +174,7 @@ public class GameMode : MonoBehaviour
         {
             timeBeforeNextRound = GameConstants.TimeBeforeGameEnd;
             timeRemaining = timeBeforeNextRound;
+            SoundManager.singleton.ResetLevelMusic("ChromasliceTheme", timeBeforeNextRound);
         }
         else
             timeRemaining = GameConstants.TimeBeforeNextRound;

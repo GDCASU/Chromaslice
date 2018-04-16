@@ -6,20 +6,21 @@ using UnityEngine.EventSystems;
 public class UIController : MonoBehaviour 
 {
     public GameObject defaultButtonSelected;
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () 
     {
         // this won't work with networking, idk lol
-        if (Input.GetAxis("Vertical1") != 0 && EventSystem.current.currentSelectedGameObject == null)
+        if (Input.GetAxis("Vertical1") != 0)
         {
-            EventSystem.current.SetSelectedGameObject(defaultButtonSelected);   
+            if (EventSystem.current.currentSelectedGameObject == null)
+                EventSystem.current.SetSelectedGameObject(defaultButtonSelected);
+
+            SoundManager.singleton.PlaySoundInstance("MenuSelect");
+            Debug.Log("lol");
         }
-	}
+
+    }
 
     public void SetDefaultButton(GameObject button)
     {

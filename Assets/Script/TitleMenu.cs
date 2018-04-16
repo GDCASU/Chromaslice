@@ -68,7 +68,7 @@ public class TitleMenu : MonoBehaviour
         GameManager.singleton.currentGame.GameRoundLimit = rounds;
         GameManager.singleton.StartGame();
 
-        SoundManager.singleton.PlayLevelMusic(GameManager.singleton.level);
+        SoundManager.singleton.ResetLevelMusic(GameManager.singleton.level, 1);
     }
 
     public void StartOnline()

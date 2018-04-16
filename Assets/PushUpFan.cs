@@ -13,6 +13,8 @@ public class PushUpFan : MonoBehaviour
 		
 	void OnTriggerStay (Collider other)
 	{
+        SoundManager.singleton.PlaySoundInstance("FanEffect");
+
 		if (other.tag.Equals("Player") || other.tag.Equals("AIPlayer"))
 		{
 			Rigidbody rb = other.GetComponent<Rigidbody>();
