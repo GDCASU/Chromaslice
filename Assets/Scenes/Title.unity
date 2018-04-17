@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.10041073, g: 0.095714666, b: 0.028758684, a: 1}
+  m_IndirectSpecularColor: {r: 0.10041047, g: 0.09571456, b: 0.028758716, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -8283,14 +8283,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4e7e0169de15dd4ab2e4265cdb9e830, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentImage: {fileID: 1875083705}
-  images:
-  - {fileID: 21300000, guid: ff0bfa3dd88526f489f68e7400228993, type: 3}
-  textLabel: {fileID: 1253986496}
-  labels:
-  - Soccer
-  leftArrow: {fileID: 1286144271}
-  rightArrow: {fileID: 1783988706}
+  currentImage: {fileID: 0}
+  images: []
+  textLabel: {fileID: 0}
+  labels: []
+  leftArrow: {fileID: 0}
+  rightArrow: {fileID: 0}
 --- !u!1 &294538213
 GameObject:
   m_ObjectHideFlags: 0
@@ -19011,7 +19009,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.0040283203}
+  m_AnchoredPosition: {x: 0, y: -0.0041046143}
   m_SizeDelta: {x: 0, y: 28}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &666693202
@@ -45090,7 +45088,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roundNumText: {fileID: 814927870}
-  currentLevelText: {fileID: 300995832}
+  currentLevelText: {fileID: 0}
   roundSelect:
   - {fileID: 1209891590}
   - {fileID: 1819825787}
