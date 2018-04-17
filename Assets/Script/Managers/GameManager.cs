@@ -43,6 +43,11 @@ using UnityEngine.SceneManagement;
 //Description:  Added the profile list and had it initialized within the Awake
 //              by using new method called createProfiles
 
+//Developer:    Nicholas Nguyen
+//Date:         3/30/18
+//Description:  Small addition of profile array for the one's 
+//              that are currently selected. Methods for this were also added
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager singleton;
@@ -51,7 +56,6 @@ public class GameManager : MonoBehaviour
     public GameObject teamAiPrefab;
     public GameObject[] teams;
     public GameMode currentGame;
-    public List<Profile> profileList;
 
     public int maxRounds;
     //public int currentRound;
@@ -60,7 +64,8 @@ public class GameManager : MonoBehaviour
     public Color[,] colorPairs = { { new Color(255, 0, 0), new Color(255, 50, 0) }, { new Color(0, 0, 255), new Color(0, 150, 255) } }; //red, orange, blue, cyan
     public string level;
 
-
+    public List<Profile> profileList;
+    public Profile[] selectedProfiles;
 
     //[SyncVar]
     //public int team1Score;
@@ -106,7 +111,10 @@ public class GameManager : MonoBehaviour
         //Initializes the profile list and then fills it
         profileList = new List<Profile>();
         createProfiles();
-        //testCreateProfiles();
+
+        //Initializes the array of selected profiles
+        //Chose 4 for 4 players
+        selectedProfiles = new Profile[4];
 
         SetGameMode(typeof(Deathmatch));
 
@@ -218,20 +226,27 @@ public class GameManager : MonoBehaviour
                 playerName = playerName.Substring(0, playerName.Length - 9);
 
                 //Creates a new profile and adds it to the list
-                Profile newProfile = new Profile(playerName);
+                Profile newProfile = new Profile();
+                newProfile.name = playerName;
                 profileList.Add(newProfile);
             }
         }
     }
 
     /**
-     * Small method to test createProfiles method
+     * Method that adds a profile to array of selected profiles
      */
-    private void testCreateProfiles()
+    public void addSelected(Profile profile, int index)
     {
-        foreach(Profile profile in profileList)
-        {
-            Debug.Log(profile.name);
-        }
+        this.selectedProfiles[index] = profile;
+    }
+    
+    /**
+     * Resets the Profile within the selectedProfiles array
+     * by making it null
+     */
+    public void resetSelected(int index)
+    {
+        this.selectedProfiles[index] = null;
     }
 }
