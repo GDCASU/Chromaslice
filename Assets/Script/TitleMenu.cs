@@ -99,7 +99,7 @@ public class TitleMenu : MonoBehaviour
                 break;
         }
 
-    }
+    }       
 
     public void PopulateControls()
     {
