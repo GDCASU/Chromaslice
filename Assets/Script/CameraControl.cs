@@ -39,36 +39,40 @@ public class CameraControl : MonoBehaviour
     {
         GetPlayers();
 
-        camPosVector = new Vector3(camPos.position.x, camPos.position.y, camPos.position.z);
-        
-        // Pan the camera
-        Vector3 moveTo = Vector3.zero;
-        if (camPos.position.x < getAveragePlayerPos().x - deltaX)
+        if (players.Length > 0)
+        {
+
+            camPosVector = new Vector3(camPos.position.x, camPos.position.y, camPos.position.z);
+
+            // Pan the camera
+            Vector3 moveTo = Vector3.zero;
+            if (camPos.position.x < getAveragePlayerPos().x - deltaX)
                 moveTo = new Vector3((getAveragePlayerPos().x - deltaX) - camPos.position.x, 0.0f, 0.0f);
-        if (camPos.position.x > getAveragePlayerPos().x + deltaX)
+            if (camPos.position.x > getAveragePlayerPos().x + deltaX)
                 moveTo = new Vector3((getAveragePlayerPos().x + deltaX) - camPos.position.x, 0.0f, 0.0f);
-        //This code should work the same for forward / back panning, but it's pretty wack right now
+            //This code should work the same for forward / back panning, but it's pretty wack right now
 
-        if (lockAxis) // pins the camera to movement only in the x direction
-            camPos.Translate(moveTo, Space.World);
-        else
-            camPos.Translate(moveTo, camPos);
-        // this kind of panning is a little choppy; I think its something to do with transform.Translate
+            if (lockAxis) // pins the camera to movement only in the x direction
+                camPos.Translate(moveTo, Space.World);
+            else
+                camPos.Translate(moveTo, camPos);
+            // this kind of panning is a little choppy; I think its something to do with transform.Translate
 
-        float newZ = getNearestPlayerZPos() - deltaZ;
-        this.transform.position = new Vector3(this.transform.position.x, yPosition, newZ) ;
+            float newZ = getNearestPlayerZPos() - deltaZ;
+            this.transform.position = new Vector3(this.transform.position.x, yPosition, newZ);
 
-        //Set the camera to the optimal focal point
-        //camPos.LookAt(getAveragePlayerPos(), Vector3.up); //old
+            //Set the camera to the optimal focal point
+            //camPos.LookAt(getAveragePlayerPos(), Vector3.up); //old
 
-        //DW: interpolate each rotation between the last focus and the new one; should provide 
-        //    smoother transitions when players are removed / added
-        Quaternion newRotation = Quaternion.LookRotation(getAveragePlayerPos() - camPos.position);
-        camPos.rotation = Quaternion.Slerp(camPos.rotation, newRotation, Time.deltaTime);
+            //DW: interpolate each rotation between the last focus and the new one; should provide 
+            //    smoother transitions when players are removed / added
+            Quaternion newRotation = Quaternion.LookRotation(getAveragePlayerPos() - camPos.position);
+            camPos.rotation = Quaternion.Slerp(camPos.rotation, newRotation, Time.deltaTime);
 
 
-        lastPosition = getAveragePlayerPos();
-        lastNearestZPos = getNearestPlayerZPos();
+            lastPosition = getAveragePlayerPos();
+            lastNearestZPos = getNearestPlayerZPos();
+        }
     }
 
     //DW: This method gives us the midpoint between all players
