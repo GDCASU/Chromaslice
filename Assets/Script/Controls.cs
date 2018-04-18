@@ -275,8 +275,13 @@ public class Controls
     public static Controls GenerateDefaultControls(int controller)
     {
         Controls c = new Controls(controller);
-        c.horizAxis = new ControlInput("Horizontal" + controller);
-        c.vertAxis = new ControlInput("Vertical" + controller);
+				if(controller%2 == 0) {
+					c.horizAxis = new ControlInput("Horizontal" + controller);
+					c.vertAxis = new ControlInput("Vertical" + controller);
+				} else {
+					c.horizAxis = new ControlInput("Horizontal" + (controller-1) + ".5");
+					c.vertAxis = new ControlInput("Vertical" + (controller-1) + ".5");
+				}
         c.jumpButton = new ControlInput((KeyCode)Enum.Parse(typeof(KeyCode), "Joystick" + controller + "Button4"));
         c.dashButton = new ControlInput((KeyCode)Enum.Parse(typeof(KeyCode), "Joystick" + controller + "Button8"));
         c.powerUpButton = new ControlInput((KeyCode)Enum.Parse(typeof(KeyCode), "Joystick" + controller + "Button2"));
