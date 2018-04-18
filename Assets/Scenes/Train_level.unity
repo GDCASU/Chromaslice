@@ -558,6 +558,10 @@ Prefab:
       propertyPath: m_Name
       value: PowerUpSpawner (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1562279197030180, guid: 54ebf601fbf48044c8c517850979de80, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 54ebf601fbf48044c8c517850979de80, type: 2}
   m_IsPrefabParent: 0
@@ -1969,6 +1973,10 @@ Prefab:
     - target: {fileID: 4397975446570706, guid: 54ebf601fbf48044c8c517850979de80, type: 2}
       propertyPath: m_LocalScale.z
       value: 0.6666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 1562279197030180, guid: 54ebf601fbf48044c8c517850979de80, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 54ebf601fbf48044c8c517850979de80, type: 2}
