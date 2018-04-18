@@ -45,6 +45,8 @@ public class SoccerBall : MonoBehaviour
             Destroy(instance, 5.0f);
 
             hasScored = true;
+
+            SoundManager.singleton.PlaySound("ExplosionEffect");
         }
     }
 

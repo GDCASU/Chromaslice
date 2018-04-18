@@ -98,6 +98,8 @@ public class PowerUp : Interactable
         gameObject.GetComponent<MeshRenderer>().enabled = false;
 
         powerUpSpawner.GetComponent<PowerUpSpawner>().CollectedPowerUp();
+
+        SoundManager.singleton.PlaySound("PowerUpEffect");
     }
 
     // Activate the powerUp

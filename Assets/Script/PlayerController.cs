@@ -183,7 +183,10 @@ public class PlayerController : NetworkBehaviour
     {
         //Beyblade effect - sends both tops flying in the direction of the normal they collided with based on bounceFactor
         if (collision.gameObject.tag == "Player")
+        {
+            SoundManager.singleton.PlaySound("PlayerCollision");
             GetComponent<Rigidbody>().AddForce((collision.relativeVelocity * bounceFactor).magnitude * collision.contacts[0].normal, ForceMode.VelocityChange);
+        }
     }
 
     public void SetControls(int controller, bool debug = false)

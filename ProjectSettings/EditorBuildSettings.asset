@@ -29,3 +29,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Credits.unity
     guid: 37cd59a70b24d31449ed3f4acdf6fb34
+  - enabled: 1
+    path: Assets/Scenes/Alley_Level.unity
+    guid: 9f24b5698f9b27d46b79232a3472da9b
