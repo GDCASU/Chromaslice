@@ -69,11 +69,14 @@ public class SoundManager : MonoBehaviour
     }
 
     // Play a sound without adding to list
-    public void PlaySound(string name)
+    public void PlaySound(string name, float pitch = 1.0f)
     {
         Sound s = System.Array.Find(sounds, sound => sound.name == name);
         if (s != null)
+        {
+            s.audioSource.pitch = pitch;
             s.audioSource.Play();
+        }
     }
 
     // Fade all the sounds in the scene out

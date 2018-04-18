@@ -20,6 +20,8 @@ public class TitleMenu : MonoBehaviour
     public GameObject[] soccerLevelSelect;
     public GameObject DeathmatchPanel;
     public GameObject SoccerPanel;
+    public CarouselController carouselController;   // handles panel switching
+    public NavigationController navigationController; // handles navigation switching
 
     //controls
     public Dropdown selectedPlayer;
@@ -84,6 +86,12 @@ public class TitleMenu : MonoBehaviour
     {
         DeathmatchPanel.SetActive(option == 0);
         SoccerPanel.SetActive(option == 1);
+
+        if (carouselController != null && carouselController.Traverse != null)
+            carouselController.Traverse();
+
+        if (navigationController != null)
+            navigationController.UpdateNavigation();
 
         switch (option)
         {
@@ -180,6 +188,12 @@ public class TitleMenu : MonoBehaviour
         else
             powerUpButton.interactable = true;
         PopulateControls();
+    }
+
+    public void SwitchScene(string sceneName)
+    {
+        SoundManager.singleton.ResetLevelMusic(sceneName, 1);
+        SceneManager.LoadScene(sceneName);
     }
 
     public void ExitGame()

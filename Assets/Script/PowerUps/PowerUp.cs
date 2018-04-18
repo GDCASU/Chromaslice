@@ -109,13 +109,15 @@ public class PowerUp : Interactable
         if (isActive != true)
         {
             isActive = true;
+            SoundManager.singleton.PlaySound("PowerUpEffect", 2f);
+
         }
     }
 
     // Assign power-up data. 3 parameters is provided to pass in all required data for the powerup.
     // Some use all of them, some do not, and all of the current power-ups ovveride this method.
     public virtual void SetData(float param1 = 0, float param2 = 0, float param3 = 0)
-    {
+    {   
         spawnDelay = param1;
         activeLength = param2;
     }
