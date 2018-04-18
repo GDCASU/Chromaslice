@@ -25,7 +25,6 @@ public class TitleMenu : MonoBehaviour
     public Button dashButton;
     public Button powerUpButton;
     public Dropdown selectedMovement;
-    public Dropdown selectedController;
 
     private string selectedLevel;
     private int rounds;
@@ -113,14 +112,12 @@ public class TitleMenu : MonoBehaviour
         Controls c = Controls.LoadFromConfig(player);
         dashButton.GetComponentInChildren<Text>().text = c.dashButton.keyPos.ToString();
         powerUpButton.GetComponentInChildren<Text>().text = c.powerUpButton.keyPos.ToString();
-        string axis = Controls.axes[c.horizAxis.axis];
-        if (axis.EndsWith(".5"))
+        if (c.horizAxis.axis.EndsWith(".5"))
             selectedMovement.value = 1;
-        else if (axis.EndsWith(".8"))
+        else if (c.horizAxis.axis.EndsWith(".8"))
             selectedMovement.value = 2;
         else
             selectedMovement.value = 0;
-        selectedController.value = System.Int32.Parse(axis.Substring(10, 1)) - 1;
     }
 
     public void ChangeDashButton()
@@ -137,20 +134,19 @@ public class TitleMenu : MonoBehaviour
     {
         int player = selectedPlayer.value + 1;
         Controls c = Controls.LoadFromConfig(player);
-        int controller = selectedController.value + 1;
         switch(selectedMovement.value)
         {
             case 0:
-                c.horizAxis = new Controls.ControlInput("Horizontal" + controller);
-                c.vertAxis = new Controls.ControlInput("Vertical" + controller);
+                c.horizAxis = new Controls.ControlInput("Horizontal" + player);
+                c.vertAxis = new Controls.ControlInput("Vertical" + player);
                 break;
             case 1:
-                c.horizAxis = new Controls.ControlInput("Horizontal" + controller + ".5");
-                c.vertAxis = new Controls.ControlInput("Vertical" + controller + ".5");
+                c.horizAxis = new Controls.ControlInput("Horizontal" + player + ".5");
+                c.vertAxis = new Controls.ControlInput("Vertical" + player + ".5");
                 break;
             case 2:
-                c.horizAxis = new Controls.ControlInput("Horizontal" + controller + ".8");
-                c.vertAxis = new Controls.ControlInput("Vertical" + controller + ".8");
+                c.horizAxis = new Controls.ControlInput("Horizontal" + player + ".8");
+                c.vertAxis = new Controls.ControlInput("Vertical" + player + ".8");
                 break;
         }
 

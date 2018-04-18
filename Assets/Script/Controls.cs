@@ -45,7 +45,7 @@ public class Controls
 
     //The below is a sort of lookup table for converting between ugly Unity InputManager names
     //and nicer names for display in the config screen and in the actual config file itself
-    public static Dictionary<string, string> axes = new Dictionary<string, string>()
+    private static Dictionary<string, string> axes = new Dictionary<string, string>()
     {
         {"Joystick 1 Axis 1", "Horizontal1" },
         {"Joystick 2 Axis 1", "Horizontal2" },
@@ -55,10 +55,6 @@ public class Controls
         {"Joystick 2 Axis 4", "Horizontal2.5" },
         {"Joystick 3 Axis 4", "Horizontal3.5" },
         {"Joystick 4 Axis 4", "Horizontal4.5" },
-        {"Joystick 1 Axis 6", "Horizontal1.8" },
-        {"Joystick 2 Axis 6", "Horizontal2.8" },
-        {"Joystick 3 Axis 6", "Horizontal3.8" },
-        {"Joystick 4 Axis 6", "Horizontal4.8" },
         {"Joystick 1 Axis 2", "Vertical1" },
         {"Joystick 2 Axis 2", "Vertical2" },
         {"Joystick 3 Axis 2", "Vertical3" },
@@ -67,10 +63,6 @@ public class Controls
         {"Joystick 2 Axis 5", "Vertical2.5" },
         {"Joystick 3 Axis 5", "Vertical3.5" },
         {"Joystick 4 Axis 5", "Vertical4.5" },
-        {"Joystick 1 Axis 7", "Vertical1.8" },
-        {"Joystick 2 Axis 7", "Vertical2.8" },
-        {"Joystick 3 Axis 7", "Vertical3.8" },
-        {"Joystick 4 Axis 7", "Vertical4.8" }
     };
 
 
