@@ -275,7 +275,7 @@ public class Controls
     public static Controls GenerateDefaultControls(int controller)
     {
         Controls c = new Controls(controller);
-				if(controller%2 == 0) {
+				if((controller-1)%2 == 0) {
 					c.horizAxis = new ControlInput("Horizontal" + controller);
 					c.vertAxis = new ControlInput("Vertical" + controller);
 				} else {
