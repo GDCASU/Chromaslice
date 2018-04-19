@@ -55,7 +55,7 @@ public class GameMode : MonoBehaviour
     protected virtual void Update ()
     {
         // Only begin updates when scene has changhed to the level
-        if (SceneManager.GetActiveScene().name != GameManager.singleton.level)
+        if (SceneManager.GetActiveScene().name.ToLower() != GameManager.singleton.level.ToLower())
             return;
 
         // If the level has a camera flyby animation
